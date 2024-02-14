@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "./components/Header";
+import { Toaster } from "@/components/ui/toaster";
+// import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
+
+// const pretendard = localFont({ src: "fonts/Pretendard-Regular.woff2" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="flex flex-col w-screen h-screen">
+          <Header />
+          <div className="py-32 overflow-y-auto">{children}</div>
+        </div>
+        <Toaster />
+      </body>
     </html>
   );
 }
