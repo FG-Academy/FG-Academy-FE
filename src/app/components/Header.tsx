@@ -12,6 +12,7 @@ export default function Header() {
             className="-mr-1"
             width={180}
             height={180}
+            priority={true}
           />
         </div>
         <nav className="flex flex-wrap items-center justify-center text-base md:ml-auto">
