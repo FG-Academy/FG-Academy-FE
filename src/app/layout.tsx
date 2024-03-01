@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import { Toaster } from "@/components/ui/toaster";
+import { headers } from "next/headers";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from "react";
 // import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
