@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -134,7 +134,7 @@ export function InputForm() {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       console.log(JSON.stringify(data, null, 2));
-      const response = await fetch("http://localhost:3000/users/signUp", {
+      const response = await fetch("http://localhost:3000/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,13 +142,12 @@ export function InputForm() {
         body: JSON.stringify(data),
       });
       if (!response.ok) {
-        if (response.status === 409) {
+        if (response.status === 422) {
           // 409 Conflict 에러 처리
           toast({
             variant: "destructive",
             title: "이미 존재하는 이메일입니다.",
             description: "다른 이메일 주소를 사용해주세요.",
-            // action: <ToastAction altText="Try again">Try again</ToastAction>,
           });
         } else {
           // 그 외의 오류 처리
@@ -156,14 +155,15 @@ export function InputForm() {
             variant: "destructive",
             title: "오류가 발생했습니다.",
             description: "입력하신 정보를 확인 후 다시 한 번 시도해주세요.",
-            // action: <ToastAction altText="Try again">Try again</ToastAction>,
           });
         }
       } else {
         const data = await response.json();
-        console.log(data);
-        router.push("/");
-        // 성공 시 처리 로직, 예를 들어 페이지 이동이나 성공 알림 표시 등
+        toast({
+          title: "회원가입 성공",
+          description: "회원가입에 성공하였습니다.",
+        });
+        router.push("/login");
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
@@ -171,7 +171,6 @@ export function InputForm() {
         variant: "destructive",
         title: "네트워크 오류가 발생했습니다.",
         description: "잠시 후 다시 시도해주세요.",
-        // action: <ToastAction altText="Try again"></ToastAction>,
       });
     }
   };
@@ -194,21 +193,6 @@ export function InputForm() {
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name="birthDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-bold">
-                생년월일 <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="ex) 20001216" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <FormField
           control={form.control}
           name="birthDate"
