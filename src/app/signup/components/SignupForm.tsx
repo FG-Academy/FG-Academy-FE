@@ -159,7 +159,6 @@ export function InputForm() {
         }
       } else {
         const data = await response.json();
-        console.log(data);
         toast({
           title: "회원가입 성공",
           description: "회원가입에 성공하였습니다.",
