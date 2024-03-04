@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+// import Header from "./components/Header";
 import Header from "./components/Header";
-import { Toaster } from "@/components/ui/toaster";
+import Footer from "./components/Footer";
+import { Toaster } from "@/app/components/ui/toaster";
 import { headers } from "next/headers";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect } from "react";
@@ -27,8 +29,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex flex-col w-screen h-screen">
           <Header />
-          <div className="py-32 overflow-y-auto">{children}</div>
+          <main>
+            <div className="py-20 overflow-y-auto">{children}</div>
+          </main>
         </div>
+        <Footer />
         <Toaster />
       </body>
     </html>

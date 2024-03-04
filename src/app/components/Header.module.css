@@ -1,0 +1,14 @@
+/* styles.css 또는 Header.module.css */
+.menu-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s;
+}
+
+.menu-visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s;
+}
