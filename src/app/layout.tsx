@@ -29,11 +29,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex flex-col w-screen h-screen">
           <Header />
-          <main>
+          <main className="">
             <div className="py-20 overflow-y-auto">{children}</div>
           </main>
+          <Footer />
         </div>
-        <Footer />
+
         <Toaster />
       </body>
     </html>

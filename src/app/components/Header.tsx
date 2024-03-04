@@ -22,14 +22,16 @@ export default function Header() {
     <header className="font-Pretendard font-bold fixed inset-x-0 top-0 left-0 z-50 text-gray-700 bg-white border-b border-gray-200">
       <div className="container flex flex-row justify-between flex-wrap items-center p-5 mx-auto md:flex-row relative">
         <div className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
-          <Image
-            alt="logo"
-            src={logo}
-            className="-mr-1"
-            width={180}
-            height={180}
-            priority={true}
-          />
+          <Link href="/">
+            <Image
+              alt="logo"
+              src={logo}
+              className="-mr-1"
+              width={180}
+              height={180}
+              priority={true}
+            />
+          </Link>
         </div>
         <div className="md:hidden">
           <button onClick={() => setIsOpen(!isOpen)}>
@@ -41,7 +43,10 @@ export default function Header() {
               className="absolute w-full top-full left-0 right-0 bg-[#eeeeee]"
             >
               <div className="flex flex-col items-start space-y-4 p-5">
-                <Link className="w-full text-left hover:text-blue-900" href="#">
+                <Link
+                  className="w-full text-left hover:text-blue-900"
+                  href="/introduce"
+                >
                   아카데미 소개
                 </Link>
                 <Link className="w-full text-left hover:text-blue-900" href="#">
@@ -89,7 +94,7 @@ export default function Header() {
           )}
         </div>
         <nav className="hidden md:flex flex-wrap items-center justify-center text-base md:ml-auto">
-          <Link className="mr-5 hover:text-blue-900" href="#">
+          <Link className="mr-5 hover:text-blue-900" href="/introduce">
             아카데미 소개
           </Link>
           <Link className="mr-5 hover:text-blue-900" href="#">
