@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,10 +13,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@/app/components/ui/form";
+import { Input } from "@/app/components/ui/input";
+import { toast } from "@/app/components/ui/use-toast";
+import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
 import { useState } from "react";
 import {
   Select,
@@ -26,9 +26,9 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/app/components/ui/select";
 import { Department, Position } from "../types/type";
-import { ToastAction } from "@/components/ui/toast";
+import { ToastAction } from "@/app/components/ui/toast";
 import { useRouter } from "next/navigation";
 
 function getValues<T extends Record<string, any>>(obj: T) {

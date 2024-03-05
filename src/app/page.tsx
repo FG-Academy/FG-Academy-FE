@@ -1,6 +1,10 @@
 "use client";
 import { refreshToken } from "@/lib/refreshToken";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+
+import MainBanner from "../../public/images/main-banner02.jpg";
+import testCoureThumbnail from "../../public/images/testCoureThumbnail.jpeg";
 
 interface UserInfo {
   id: string;
@@ -59,9 +63,36 @@ export default function Home() {
   }, [accessToken]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      userIfno
-      {JSON.stringify(userInfo)}
+    <main className="flex h-full flex-col  ">
+      <section className="w-full h-full relative">
+        <Image src={MainBanner} alt="메인 배너 이미지" />
+      </section>
+      <section id="infoPart" className="md:container">
+        <div id="div1" className=" flex flex-col w-full items-center ">
+          <div id="div2" className="text-4xl font-sans font-medium py-6">
+            강의 목록
+          </div>
+        </div>
+        <div
+          id="div3"
+          className="flex flex-row justify-start w-full h-full mt-4"
+        >
+          <div
+            id="courseInfo1"
+            className=" w-full md:w-1/3 px-2 rounded-2xl shadow-lg"
+          >
+            <Image
+              className="rounded-md"
+              src={testCoureThumbnail}
+              alt="강의 썸네일"
+            />
+            <div className="p-4 text-lg">교사기초양육1 : 교리 및 기본신앙</div>
+            <button className="bg-white text-blue-600 border border-blue-600 w-full py-2 px-4 rounded-xl transition-colors duration-150 hover:bg-blue-600 hover:text-white">
+              강의 들으러 가기
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
