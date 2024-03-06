@@ -26,8 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="flex flex-col w-screen h-screen">
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <div className="flex flex-col w-screen min-h-screen">
           <Header />
           <main className="">
             <div className="py-20 overflow-y-auto">{children}</div>

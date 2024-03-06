@@ -49,7 +49,10 @@ export default function Header() {
                 >
                   아카데미 소개
                 </Link>
-                <Link className="w-full text-left hover:text-blue-900" href="#">
+                <Link
+                  className="w-full text-left hover:text-blue-900"
+                  href="/courses"
+                >
                   강의 목록
                 </Link>
                 {accessToken ? (
@@ -97,7 +100,7 @@ export default function Header() {
           <Link className="mr-5 hover:text-blue-900" href="/introduce">
             아카데미 소개
           </Link>
-          <Link className="mr-5 hover:text-blue-900" href="#">
+          <Link className="mr-5 hover:text-blue-900" href="/courses">
             강의목록
           </Link>
           {accessToken ? (

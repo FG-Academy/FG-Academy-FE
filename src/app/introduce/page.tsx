@@ -23,7 +23,7 @@ export default function IntroducePage() {
               id="div2"
               className="absolute top-0 left-0 w-full h-40 bg-black opacity-50 z-10"
             ></div>
-            <h2 className="absolute m-8 text-3xl text-start font-sans font-medium mb-4 text-white z-20">
+            <h2 className="absolute m-8 left-[12.5%] text-3xl text-start font-sans font-medium mb-4 text-white z-20">
               아카데미 소개
             </h2>
           </div>
@@ -40,7 +40,7 @@ export default function IntroducePage() {
               </div>
               <div className="flex flex-col m-8 w-full">
                 <p className="text-lg mb-4 text-gray-600">
-                  "한국교회 주일학교가 끝없는 추락하고 있다."
+                  &quot;한국교회 주일학교가 끝없는 추락하고 있다.&quot;
                   <br />이 명제는 누구도 부인할 수 없는 한국교회 주일학교의 현
                   주소라고 말할 수 있습니다.
                 </p>
