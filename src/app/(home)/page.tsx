@@ -3,8 +3,8 @@ import { refreshToken } from "@/lib/refreshToken";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import MainBanner from "../../public/images/main-banner02.jpg";
-import testCoureThumbnail from "../../public/images/testCoureThumbnail.jpeg";
+import MainBanner from "../../../public/images/main-banner02.jpg";
+import testCoureThumbnail from "../../../public/images/testCoureThumbnail.jpeg";
 
 interface UserInfo {
   id: string;

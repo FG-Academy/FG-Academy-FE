@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import IntroImage from "../../../public/images/introduceImage.jpeg";
-import IntroBackground from "../../../public/images/introBackground.jpg";
+import IntroImage from "../../../../public/images/introduceImage.jpeg";
+import IntroBackground from "../../../../public/images/introBackground.jpg";
 
 export default function IntroducePage() {
   const imageStyle = {
@@ -16,6 +16,9 @@ export default function IntroducePage() {
           <div className="relative flex flex-col justify-center w-full h-40">
             <Image
               src={IntroBackground}
+              // width={100}
+              // height={100}
+              // objectFit="cover"
               style={{ width: "100%", height: "160px", objectFit: "cover" }}
               alt="인트로 배경"
             />
@@ -23,7 +26,7 @@ export default function IntroducePage() {
               id="div2"
               className="absolute top-0 left-0 w-full h-40 bg-black opacity-50 z-10"
             ></div>
-            <h2 className="absolute m-8 left-[12.5%] text-3xl text-start font-sans font-medium mb-4 text-white z-20">
+            <h2 className="absolute m-8 text-3xl text-start font-sans font-medium mb-4 text-white z-20">
               아카데미 소개
             </h2>
           </div>
@@ -33,8 +36,10 @@ export default function IntroducePage() {
               <div className="flex m-12 w-1/3">
                 <Image
                   alt="Profile"
+                  width={0}
+                  height={0}
                   className="rounded-lg"
-                  src={IntroImage}
+                  src="/images/introduceImage.jpeg"
                   style={imageStyle}
                 />
               </div>
