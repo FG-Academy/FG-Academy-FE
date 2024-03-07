@@ -1,5 +1,8 @@
+import { Inter } from "next/font/google";
 import Image from "next/image";
-import CourseBackground from "../../../public/images/courseBackground.jpeg";
+// import CourseBackground from "../../../public/images/courseBackground.jpeg";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function CoursesLayout({
   children,
@@ -10,7 +13,9 @@ export default function CoursesLayout({
     <div>
       <div className="relative flex flex-col justify-center top-0 left-0 right-0 w-full h-[240px]">
         <Image
-          src={CourseBackground}
+          src="/images/courseBackground.jpeg"
+          width={0}
+          height={0}
           style={{ width: "100%", height: "240px", objectFit: "cover" }}
           alt="강의 목록 배경"
         />

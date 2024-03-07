@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import logo from "../../../public/images/logo_black.png";
+// import logo from "../../../public/images/logo_black.png";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useLoginStatus } from "@/hooks/useLoginStatus";
@@ -25,7 +25,7 @@ export default function Header() {
           <Link href="/">
             <Image
               alt="logo"
-              src={logo}
+              src="/images/logo_black.png"
               className="-mr-1"
               width={180}
               height={180}
@@ -51,7 +51,7 @@ export default function Header() {
                 </Link>
                 <Link
                   className="w-full text-left hover:text-blue-900"
-                  href="/courses"
+                  href="/course"
                 >
                   강의 목록
                 </Link>
@@ -100,7 +100,7 @@ export default function Header() {
           <Link className="mr-5 hover:text-blue-900" href="/introduce">
             아카데미 소개
           </Link>
-          <Link className="mr-5 hover:text-blue-900" href="/courses">
+          <Link className="mr-5 hover:text-blue-900" href="/course">
             강의목록
           </Link>
           {accessToken ? (

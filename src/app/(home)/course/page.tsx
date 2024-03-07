@@ -1,6 +1,6 @@
 import Image from "next/image";
-import testCoureThumbnail from "../../../public/images/testCoureThumbnail.jpeg";
-import CourseCard from "../components/ui/course-card"; // 강의 코스 목록을 가져올 경우 사용할 커스텀 컴포넌트
+// import testCoureThumbnail from "../../../public/images/testCoureThumbnail.jpeg";
+// import CourseCard from "../../../components/ui/course-card"; // 강의 코스 목록을 가져올 경우 사용할 커스텀 컴포넌트
 
 export default function CoursesPage() {
   //reactQuery로 데이터 fetch해서 가져온 후 강의목록 뿌리기
@@ -17,8 +17,10 @@ export default function CoursesPage() {
           className=" w-full md:w-1/4 px-2 ml-6 rounded-2xl shadow-lg"
         >
           <Image
+            width={100}
+            height={100}
             className="rounded-md"
-            src={testCoureThumbnail}
+            src="/images/testCoureThumbnail.jpeg"
             alt="강의 썸네일"
           />
           <div className="p-4 text-lg">교사기초양육1 : 교리 및 기본신앙</div>
