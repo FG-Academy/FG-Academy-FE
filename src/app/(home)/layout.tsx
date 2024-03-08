@@ -4,6 +4,7 @@ import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ReactQueryProviders from "@/lib/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +21,15 @@ export default function Layout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex flex-col w-screen min-h-screen">
-          <Header />
-          <main className="py-20 overflow-y-auto">{children}</main>
-          <Footer />
-        </div>
+        <ReactQueryProviders>
+          <div className="flex flex-col w-screen min-h-screen">
+            <Header />
+            <main className="py-20 overflow-y-auto">{children}</main>
+            <Footer />
+          </div>
 
-        <Toaster />
+          <Toaster />
+        </ReactQueryProviders>
       </body>
     </html>
   );
