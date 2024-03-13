@@ -45,7 +45,9 @@ const CourseCard: React.FC = ({}) => {
         <div
           key={ele.courseId}
           id="courseInfo1"
-          className="w-full p-2 mx-4 shadow-xl md:w-1/3 rounded-2xl"
+          // className="p-2 mx-4 shadow-xl  w-[410px] rounded-2xl"
+          // className="shadow-xl rounded-2xl max-w-[410px] w-full mx-auto"
+          className="min-w-0 flex-shrink-0 shadow-xl rounded-2xl max-w-[410px] w-full mx-auto"
         >
           <Image
             className="rounded-md"
@@ -56,7 +58,7 @@ const CourseCard: React.FC = ({}) => {
             alt="강의 썸네일"
             priority
           />
-          <div className="p-4 text-lg">{ele.title}</div>
+          <div className="p-4 text-lg ">{ele.title}</div>
 
           <button
             className="w-full px-4 py-2 text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white"

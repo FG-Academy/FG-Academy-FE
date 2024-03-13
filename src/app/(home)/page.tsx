@@ -68,15 +68,14 @@ export default function Home() {
       <section className="relative w-full h-full">
         <Image src={MainBanner} alt="메인 배너 이미지" />
       </section>
-      <section id="infoPart" className="md:container">
-        <div id="div1" className="flex flex-col items-center w-full ">
-          <div id="div2" className="py-6 font-sans text-4xl font-medium">
-            강의 목록
-          </div>
-        </div>
+      <section
+        id="infoPart"
+        className="flex justify-center w-full mx-auto h-max mt-28"
+      >
+        {/* 나중에 이 부분을 react Query를 통해 서버에서 데이터로 가져와서 map형식으로 뿌려줄 수 있도록 하자. */}
         <div
           id="div3"
-          className="flex flex-row justify-start w-full h-full mt-4"
+          className="grid grid-cols-1 gap-6 p-3 mx-20 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3"
         >
           <CourseCard />
         </div>
@@ -101,3 +100,17 @@ export default function Home() {
             </button>
           </div> */
 }
+
+// <section id="infoPart" className="md:container">
+//         <div id="div1" className="flex flex-col items-center w-full ">
+//           <div id="div2" className="py-6 font-sans text-4xl font-medium">
+//             강의 목록
+//           </div>
+//         </div>
+//         <div
+//           id="div3"
+//           className="flex flex-row justify-start w-full h-full mt-4"
+//         >
+//           <CourseCard />
+//         </div>
+//       </section>

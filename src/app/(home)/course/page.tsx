@@ -34,11 +34,18 @@ export default function CoursesPage() {
         </h2>
       </div>
       {/* body 부분 */}
-      <section id="infoPart" className="flex w-full mx-auto h-max mt-28 ">
+      <section
+        id="infoPart"
+        className="flex justify-center w-full mx-auto h-max mt-28"
+      >
         {/* 나중에 이 부분을 react Query를 통해 서버에서 데이터로 가져와서 map형식으로 뿌려줄 수 있도록 하자. */}
         <div
           id="div3"
-          className="flex flex-row justify-start w-full h-full p-3 mx-20"
+          // className="flex flex-row justify-start w-full h-full p-3 mx-20"
+          // className="grid grid-cols-1 gap-8 p-3 mx-20 md:grid-cols-3"
+          // className="grid grid-cols-1 gap-6 p-3 mx-20 sm:grid-cols-2 lg:grid-cols-3"
+          // className="grid grid-cols-1 gap-6 p-3 mx-20 sm:grid-cols-2 md:grid-cols-3"
+          className="grid grid-cols-1 gap-6 p-3 mx-20 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3"
         >
           <CourseCard />
         </div>
