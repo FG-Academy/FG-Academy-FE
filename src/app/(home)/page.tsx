@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import MainBanner from "../../../public/images/main-banner02.jpg";
-import testCoureThumbnail from "../../../public/images/testCoureThumbnail.jpeg";
+import testCoureThumbnail from "../../../public/images/testCourseThumbnail.jpeg";
+import CourseCard from "../../components/ui/course-card";
 
 interface UserInfo {
   id: string;
@@ -63,23 +64,30 @@ export default function Home() {
   }, [accessToken]);
 
   return (
-    <main className="flex h-full flex-col  ">
-      <section className="w-full h-full relative">
+    <main className="flex flex-col h-full ">
+      <section className="relative w-full h-full">
         <Image src={MainBanner} alt="메인 배너 이미지" />
       </section>
-      <section id="infoPart" className="md:container">
-        <div id="div1" className=" flex flex-col w-full items-center ">
-          <div id="div2" className="text-4xl font-sans font-medium py-6">
-            강의 목록
-          </div>
-        </div>
+      <section
+        id="infoPart"
+        className="flex justify-center w-full mx-auto h-max mt-28"
+      >
+        {/* 나중에 이 부분을 react Query를 통해 서버에서 데이터로 가져와서 map형식으로 뿌려줄 수 있도록 하자. */}
         <div
           id="div3"
-          className="flex flex-row justify-start w-full h-full mt-4"
+          className="grid grid-cols-1 gap-6 p-3 mx-20 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3"
         >
-          <div
+          <CourseCard />
+        </div>
+      </section>
+    </main>
+  );
+}
+
+{
+  /* <div
             id="courseInfo1"
-            className=" w-full md:w-1/3 px-2 rounded-2xl shadow-lg"
+            className="w-full px-2 shadow-lg md:w-1/3 rounded-2xl"
           >
             <Image
               className="rounded-md"
@@ -87,12 +95,22 @@ export default function Home() {
               alt="강의 썸네일"
             />
             <div className="p-4 text-lg">교사기초양육1 : 교리 및 기본신앙</div>
-            <button className="bg-white text-blue-600 border border-blue-600 w-full py-2 px-4 rounded-xl transition-colors duration-150 hover:bg-blue-600 hover:text-white">
+            <button className="w-full px-4 py-2 text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white">
               강의 들으러 가기
             </button>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
+          </div> */
 }
+
+// <section id="infoPart" className="md:container">
+//         <div id="div1" className="flex flex-col items-center w-full ">
+//           <div id="div2" className="py-6 font-sans text-4xl font-medium">
+//             강의 목록
+//           </div>
+//         </div>
+//         <div
+//           id="div3"
+//           className="flex flex-row justify-start w-full h-full mt-4"
+//         >
+//           <CourseCard />
+//         </div>
+//       </section>
