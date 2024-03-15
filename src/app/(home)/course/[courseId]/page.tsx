@@ -4,7 +4,7 @@ import testCoureThumbnail from "../../../../../public/images/testCourseThumbnail
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
-import LectureList from "@/components/ui/lecture-list";
+import LectureList from "@/app/(home)/course/[courseId]/components/lecture-list";
 
 function createMarkup(text: string) {
   const paragraphs = text.split("\n\n");
@@ -23,7 +23,7 @@ export default function CourseDetailPage({
   console.log(courseId);
 
   const [isShown, setIsShown] = useState<number>(1);
-  const [isTaking, setIsTaking] = useState<boolean>(false);
+  const [isTaking, setIsTaking] = useState<boolean>(true);
 
   // nav 바 메뉴 클릭시 작동 여부
   const handleClick = (ele: number) => {

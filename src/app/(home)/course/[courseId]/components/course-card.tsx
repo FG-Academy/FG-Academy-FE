@@ -23,7 +23,7 @@ interface Course {
   status: string;
 }
 
-import testCoureThumbnail from "../../../public/images/testCourseThumbnail.jpeg";
+import testCoureThumbnail from "../../../../../../public/images/testCourseThumbnail.jpeg";
 
 const CourseCard: React.FC = ({}) => {
   const router = useRouter();
