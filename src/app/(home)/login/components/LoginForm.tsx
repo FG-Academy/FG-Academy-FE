@@ -56,6 +56,7 @@ export default function LoginForm() {
   }
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    console.log("야 이건 들어가냐");
     try {
       const response = await login(data);
 

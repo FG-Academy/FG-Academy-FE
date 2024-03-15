@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import MainBanner from "../../../public/images/main-banner02.jpg";
 import testCoureThumbnail from "../../../public/images/testCourseThumbnail.jpeg";
-import CourseCard from "../../components/ui/course-card";
+import CourseCard from "./course/[courseId]/components/course-card";
 
 interface UserInfo {
   id: string;
@@ -23,7 +23,7 @@ export default function Home() {
 
     let response;
     for (let attempt = 0; attempt < 2; attempt++) {
-      response = await fetch("http://localhost:3000/users", {
+      response = await fetch("http://localhost:3000/users/profile", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,

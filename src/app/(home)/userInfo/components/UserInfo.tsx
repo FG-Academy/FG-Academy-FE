@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -27,9 +27,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Department, Position } from "../types/type";
+import { Department, Position, UserProfile } from "../types/type";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 function getValues<T extends Record<string, any>>(obj: T) {
   return Object.values(obj) as [(typeof obj)[keyof T]];
@@ -70,79 +71,100 @@ const positions = [
 type Department = (typeof Department)[keyof typeof Department];
 type Position = (typeof Position)[keyof typeof Position];
 
-const FormSchema = z
-  .object({
-    name: z.string().min(2, {
-      message: "이름은 2글자 이상이어야 합니다.",
+const FormSchema = z.object({
+  name: z.string().min(2, {
+    message: "이름은 2글자 이상이어야 합니다.",
+  }),
+  email: z.string().min(1, { message: "필수 입력 항목입니다." }).email({
+    message: "이메일 형식이 올바르지 않습니다.",
+  }),
+  birthDate: z.string().min(8, {
+    message: "올바른 생년월일 8자를 입력해주세요.",
+  }),
+  phoneNumber: z.string().min(10, {
+    message: "핸드폰 번호 11자리를 입력해주세요.",
+  }),
+  churchName: z.enum(["fg", "others"]),
+  departmentName: z.enum(getValues(Department), {
+    errorMap: () => ({
+      message: "부서명을 선택해주세요.",
     }),
-    email: z.string().min(1, { message: "필수 입력 항목입니다." }).email({
-      message: "이메일 형식이 올바르지 않습니다.",
+  }),
+  position: z.enum(getValues(Position), {
+    errorMap: () => ({
+      message: "직분을 선택해주세요.",
     }),
-    birthDate: z.string().min(8, {
-      message: "올바른 생년월일 8자를 입력해주세요.",
-    }),
-    // birthDate: z.string().pipe(z.coerce.date()),
-    password: z.string().min(8, {
-      message: "비밀번호는 영문, 숫자를 포함하여 8자 이상이어야 합니다.",
-    }),
-    passwordVerify: z.string(),
-    phoneNumber: z.string().min(10, {
-      message: "핸드폰 번호 11자리를 입력해주세요.",
-    }),
-    churchName: z.enum(["fg", "others"]),
-    departmentName: z.enum(getValues(Department), {
-      errorMap: () => ({
-        message: "부서명을 선택해주세요.",
-      }),
-    }),
-    position: z.enum(getValues(Position), {
-      errorMap: () => ({
-        message: "직분을 선택해주세요.",
-      }),
-    }),
-    yearsOfService: z.coerce
-      .number({ invalid_type_error: "숫자 형식의 값을 적어주세요." })
-      .nonnegative("0 이상의 값을 적어주세요.")
-      .lte(100, "100 이하의 값을 적어주세요."),
-  })
-  .refine(({ password, passwordVerify }) => password === passwordVerify, {
-    message: "비밀번호가 일치하지 않습니다.",
-    path: ["passwordVerify"],
-  });
+  }),
+  yearsOfService: z.coerce
+    .number({ invalid_type_error: "숫자 형식의 값을 적어주세요." })
+    .nonnegative("0 이상의 값을 적어주세요.")
+    .lte(100, "100 이하의 값을 적어주세요."),
+});
 
 type ChurchName = "fg" | "others";
 
+const token = localStorage.getItem("accessToken");
+
+function useImportUserProfile() {
+  const { isPending, error, data } = useQuery<UserProfile>({
+    queryKey: ["userInfo"],
+    queryFn: () =>
+      fetch("http://localhost:3000/users/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((res) => res.json()),
+  });
+
+  return { isPending, error, data };
+}
+
 export function InputForm() {
   const router = useRouter();
+  const { isPending, error, data } = useImportUserProfile();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      email: "",
-      birthDate: "",
-      password: "",
-      passwordVerify: "",
-      phoneNumber: "",
-      churchName: "fg",
-      // departmentName: Department.ETC,
-      // position: Position.ETC,
-      yearsOfService: 0,
+      name: data?.name,
+      email: data?.email,
+      birthDate: data?.birthDate,
+      phoneNumber: data?.phoneNumber,
+      churchName: data?.churchName,
+      yearsOfService: data?.yearsOfService,
     },
   });
 
+  useEffect(() => {
+    if (data) {
+      // 생년월일 형식 변경
+      console.log(data.birthDate);
+      const birthDate = new Date(data.birthDate).toISOString().split("T")[0];
+
+      form.reset({
+        ...form.getValues(), // 현재 폼의 값을 유지하면서
+        name: data.name,
+        email: data.email,
+        birthDate: birthDate,
+        phoneNumber: data.phoneNumber,
+        churchName: data.churchName,
+        yearsOfService: data.yearsOfService,
+      });
+    }
+  }, [data, form]);
+
+  if (!data) return <p>로딩 중...</p>;
+  if (error) return <p>오류가 발생했습니다: {error.message}</p>;
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      // console.log(JSON.stringify(data, null, 2));
-      // passwordVerify 프로퍼티를 제거한 나머지 데이터를 bodyData에 옮김
-      const { passwordVerify, ...bodyData } = data;
-      // console.log(JSON.stringify(bodyData, null, 2));
-      const response = await fetch("http://localhost:3000/auth/sign-up", {
+      console.log(JSON.stringify(data));
+      const response = await fetch("http://localhost:3000/users/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(bodyData),
+        body: JSON.stringify(data),
       });
       if (!response.ok) {
         if (response.status === 422) {
@@ -163,10 +185,10 @@ export function InputForm() {
       } else {
         const data = await response.json();
         toast({
-          title: "회원가입 성공",
-          description: "회원가입에 성공하였습니다.",
+          title: "회원정보 변경 성공",
+          description: "회원정보 변경에 성공했습니다.",
         });
-        router.push("/login");
+        router.push("/userInfo");
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
@@ -180,7 +202,11 @@ export function InputForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/5 space-y-6">
+      <form
+        id="userInfo"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-2/5 space-y-6"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -255,36 +281,6 @@ export function InputForm() {
         />
         <FormField
           control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-bold">
-                비밀번호 <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="passwordVerify"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base font-bold">
-                비밀번호 확인 <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>
@@ -338,7 +334,11 @@ export function InputForm() {
               <FormLabel className="text-base font-bold">
                 부서명 <span className="text-red-500">*</span>
               </FormLabel>
-              <Select {...field} onValueChange={field.onChange}>
+              <Select
+                {...field}
+                onValueChange={field.onChange}
+                defaultValue={data.departmentName}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="부서명 선택" />
                 </SelectTrigger>
@@ -365,7 +365,11 @@ export function InputForm() {
               <FormLabel className="text-base font-bold">
                 직분 <span className="text-red-500">*</span>
               </FormLabel>
-              <Select {...field} onValueChange={field.onChange}>
+              <Select
+                {...field}
+                onValueChange={field.onChange}
+                defaultValue={data.position}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="직분 선택" />
                 </SelectTrigger>
@@ -404,8 +408,8 @@ export function InputForm() {
           )}
         />
 
-        <Button className="w-full" type="submit">
-          회원가입
+        <Button className="w-full" type="submit" id="userInfo">
+          회원 정보 수정하기
         </Button>
       </form>
     </Form>

@@ -12,11 +12,15 @@ export default function Header() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  function Logout() {
+    localStorage.removeItem("accessToken");
+    setAccessToken(null);
+  }
   // accessToken 초기화
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     setAccessToken(token);
-  }, []);
+  }, [accessToken]);
 
   return (
     <header className="fixed inset-x-0 top-0 left-0 z-50 text-gray-700 bg-white border-b border-gray-200 font-Pretendard">
@@ -71,23 +75,24 @@ export default function Header() {
                     </Link>
                     <Link
                       className="w-full text-left hover:text-blue-900"
-                      href="#"
+                      href="/"
+                      onClick={Logout}
                     >
                       로그아웃
                     </Link>
                     <Link
                       className="w-full text-left hover:text-blue-900"
-                      href="#"
+                      href="/userInfo"
                     >
                       회원정보
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link className="mr-5 hover:text-blue-900" href="#">
+                    <Link className="mr-5 hover:text-blue-900" href="/login">
                       로그인
                     </Link>
-                    <Link className="mr-5 hover:text-blue-900" href="#">
+                    <Link className="mr-5 hover:text-blue-900" href="/signup">
                       회원가입
                     </Link>
                   </>
@@ -111,19 +116,23 @@ export default function Header() {
               <Link className="mr-5 hover:text-blue-900" href="#">
                 질문과 답변
               </Link>
-              <Link className="mr-5 hover:text-blue-900" href="#">
+              <Link
+                className="mr-5 hover:text-blue-900"
+                href="/"
+                onClick={Logout}
+              >
                 로그아웃
               </Link>
-              <Link className="mr-5 hover:text-blue-900" href="#">
+              <Link className="mr-5 hover:text-blue-900" href="/userInfo">
                 회원정보
               </Link>
             </>
           ) : (
             <>
-              <Link className="mr-5 hover:text-blue-900" href="#">
+              <Link className="mr-5 hover:text-blue-900" href="/login">
                 로그인
               </Link>
-              <Link className="mr-5 hover:text-blue-900" href="#">
+              <Link className="mr-5 hover:text-blue-900" href="/signup">
                 회원가입
               </Link>
             </>

@@ -7,7 +7,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
-import CourseCard from "../../../components/ui/course-card";
+import CourseCard from "./[courseId]/components/course-card";
 
 export default function CoursesPage() {
   //reactQuery로 데이터 fetch해서 가져온 후 강의목록 뿌리기
