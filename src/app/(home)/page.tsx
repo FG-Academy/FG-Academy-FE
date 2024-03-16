@@ -64,7 +64,7 @@ export default function Home() {
   }, [accessToken]);
 
   return (
-    <main className="flex flex-col h-full ">
+    <main className="flex flex-col h-full">
       <section className="relative w-full h-full">
         <Image src={MainBanner} alt="메인 배너 이미지" />
       </section>
