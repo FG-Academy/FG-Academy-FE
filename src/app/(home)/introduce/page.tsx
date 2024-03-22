@@ -33,7 +33,7 @@ export default function IntroducePage() {
 
           <div id="introText">
             <div className="p-16 pr-48 flex flex-row w-full h-auto">
-              <div className="flex w-1/3 m-12">
+              <div className="flex w-[480px] m-12">
                 <Image
                   alt="Profile"
                   className="rounded-lg animate-slide-in"

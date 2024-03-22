@@ -12,6 +12,7 @@ import { IProgressResult } from "@/model/progress";
 import { getProgress } from "../lib/getProgress";
 import Loading from "../loading";
 import { updateCompleted } from "../lib/updateCompleted";
+import { useSession } from "next-auth/react";
 
 type Props = {
   courseId: number;
@@ -19,10 +20,8 @@ type Props = {
 };
 
 export default function LectureVideo({ courseId, lectureId }: Props) {
-  // const queryClient = useQueryClient();
-  // useEffect(() => {
-  //   queryClient.invalidateQueries({ queryKey: ["progress", courseId] });
-  // }, []);
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
 
   const {
     isPending,
@@ -30,11 +29,13 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     data: lectures,
   } = useQuery<Lecture[]>({
     queryKey: ["lectures", courseId],
-    queryFn: () => getLectures(courseId),
+    queryFn: () => getLectures(courseId, accessToken),
+    enabled: !!accessToken,
   });
   const { data: progress } = useQuery<IProgressResult>({
     queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId),
+    queryFn: () => getProgress(courseId, accessToken),
+    enabled: !!accessToken,
   });
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -59,10 +60,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
       setSeconds(progress?.lectureProgresses[lectureId - 1].progress);
     }
   }, [progress, lectureId, setSeconds]);
-
-  useEffect(() => {
-    console.log(progress);
-  }, [progress]);
 
   // TODO: 얘는 탭 닫을 때 경고창 뜨는 건데 이때 PATCH 보내도록 하는 방식 고려 중
 
@@ -193,7 +190,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     event.target.unMute();
     event.target.pauseVideo();
     const videoDuration = parseInt(event.target.getDuration());
-    console.log("setseconds in onready", seconds);
     event.target.seekTo(seconds);
     setDuration(videoDuration);
   };

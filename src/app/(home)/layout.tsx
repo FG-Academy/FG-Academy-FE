@@ -4,8 +4,6 @@ import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ReactQueryProviders from "@/components/ReactQueryProvider";
-// import { auth } from "@/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +17,11 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await auth();
   return (
     <>
       <div className="flex flex-col w-screen min-h-screen">
         <Header />
-        <main className="py-20 overflow-y-auto">{children}</main>
+        <main className="flex-auto py-20 overflow-y-auto">{children}</main>
         <Footer />
       </div>
       <Toaster />

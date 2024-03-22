@@ -180,7 +180,11 @@ export function InputForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/5 space-y-6">
+      <form
+        autoComplete="off"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-2/5 space-y-6"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -190,7 +194,11 @@ export function InputForm() {
                 이름 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="이름을 입력해주세요." {...field} />
+                <Input
+                  autoComplete="off"
+                  placeholder="이름을 입력해주세요."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -247,7 +255,11 @@ export function InputForm() {
                 이메일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="이메일을 입력해주세요." {...field} />
+                <Input
+                  // autoComplete="off"
+                  placeholder="이메일을 입력해주세요."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -262,7 +274,7 @@ export function InputForm() {
                 비밀번호 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input autoComplete="new-password" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -338,9 +350,17 @@ export function InputForm() {
               <FormLabel className="text-base font-bold">
                 부서명 <span className="text-red-500">*</span>
               </FormLabel>
-              <Select {...field} onValueChange={field.onChange}>
+              <Select
+                value={field.value}
+                name={field.name}
+                onValueChange={field.onChange}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="부서명 선택" />
+                  <SelectValue
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    placeholder="부서명 선택"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -365,9 +385,17 @@ export function InputForm() {
               <FormLabel className="text-base font-bold">
                 직분 <span className="text-red-500">*</span>
               </FormLabel>
-              <Select {...field} onValueChange={field.onChange}>
+              <Select
+                value={field.value}
+                name={field.name}
+                onValueChange={field.onChange}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="직분 선택" />
+                  <SelectValue
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    placeholder="직분 선택"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
