@@ -1,10 +1,11 @@
-export async function getProgress(courseId: number) {
+export async function getProgress(courseId: number, accessToken: string) {
   const response = await fetch(
-    `http://localhost:3000/courses/${courseId}/lectures/progress?userId=1`,
+    `http://localhost:3000/courses/${courseId}/lectures/progress`,
     {
       next: {
         tags: ["progress"],
       },
+      headers: { authorization: `Bearer ${accessToken}` },
       credentials: "include",
     }
   );

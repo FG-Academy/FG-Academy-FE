@@ -11,27 +11,31 @@ import { IProgressResult } from "@/model/progress";
 import { getProgress } from "../lib/getProgress";
 import { usePathname } from "next/navigation";
 import Loading from "../loading";
+import { useSession } from "next-auth/react";
 
 type Props = {
   courseId: number;
   lectureId: number;
 };
 export default function MainHeader({ courseId, lectureId }: Props) {
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
+
   const lectures = useQuery<Lecture[]>({
     queryKey: ["lectures", courseId],
-    queryFn: () => getLectures(courseId),
+    queryFn: () => getLectures(courseId, accessToken),
+    enabled: !!accessToken,
   });
   const progress = useQuery<IProgressResult>({
     queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId),
+    queryFn: () => getProgress(courseId, accessToken),
+    enabled: !!accessToken,
   });
 
   const pathname = usePathname();
 
   const { duration } = useDurationStore((state) => state);
   const seconds = useSecondsStore((state) => state.seconds);
-
-  // console.log(`duration: ${duration}, seconds: ${seconds}`);
 
   if (!lectures.data || !progress.data) {
     return <Loading />;
@@ -56,8 +60,8 @@ export default function MainHeader({ courseId, lectureId }: Props) {
         <div className="absolute right-4">
           {Math.round(seconds / 60)}분/
           {Math.round(duration / 60)}분(
-          {`${Math.floor((seconds / (duration - 1)) * 100)}%`})
-          {/* {`${(Math.floor(seconds / 60) / Math.round(duration / 60)) * 100}%`}) */}
+          {/* {`${Math.floor((seconds / 60 / (duration / 60)) * 100)}%`}) */}
+          {`${(Math.floor(seconds / 60) / Math.round(duration / 60)) * 100}%`})
         </div>
       )}
     </div>

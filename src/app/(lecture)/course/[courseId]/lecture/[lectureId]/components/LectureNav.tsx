@@ -26,6 +26,7 @@ import { Course } from "@/model/course";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Loading from "../loading";
+import { useSession } from "next-auth/react";
 
 type Props = {
   courseId: number;
@@ -33,17 +34,23 @@ type Props = {
 };
 
 export default function LectureNav({ courseId, lectureId }: Props) {
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
+
   const { data: progress } = useQuery<IProgressResult>({
     queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId),
+    queryFn: () => getProgress(courseId, accessToken),
+    enabled: !!accessToken,
   });
   const { data: course } = useQuery<Course>({
     queryKey: ["courses", courseId],
-    queryFn: () => getCourses(courseId),
+    queryFn: () => getCourses(courseId, accessToken),
+    enabled: !!accessToken,
   });
   const { data: lectures } = useQuery<Lecture[]>({
     queryKey: ["lectures", courseId],
-    queryFn: () => getLectures(courseId),
+    queryFn: () => getLectures(courseId, accessToken),
+    enabled: !!accessToken,
   });
   // const { data: quizzes } = useQuery<Lecture[]>({
   //   queryKey: ["quizzes", courseId],

@@ -11,13 +11,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { useAuthStore } from "@/store/useAuthStore";
-// import { setCookie } from "@/util/cookieUtil";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { setCookie } from "cookies-next";
+import { signIn } from "next-auth/react";
 
 const FormSchema = z.object({
   nameBirthId: z.string().min(1, {
@@ -30,9 +28,6 @@ const FormSchema = z.object({
 
 export default function LoginForm() {
   const router = useRouter();
-  // const { accessToken, setAccessToken, setAuthentication } = useAuthStore(
-  //   (state) => state
-  // );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -43,36 +38,21 @@ export default function LoginForm() {
     },
   });
 
-  async function login(data: z.infer<typeof FormSchema>) {
-    const response = await fetch("http://localhost:3000/auth/sign-in", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    return response;
-  }
-
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log("야 이건 들어가냐");
     try {
-      const response = await login(data);
-
-      if (!response.ok) {
+      const response = await signIn("credentials", {
+        nameBirthId: data.nameBirthId,
+        password: data.password,
+        redirect: false,
+      });
+      if (response?.error) {
         toast({
           variant: "destructive",
-          title: "아이디나 비밀번호가 틀립니다.",
-          description: "정보를 다시 한 번 확인해주세요.",
+          title: "아이디와 비밀번호가 일치하지 않습니다.",
+          description: "아이디와 비밀번호를 다시 한 번 확인해주세요.",
         });
       } else {
-        const data = await response.json();
-        console.log(data);
-        localStorage.setItem("accessToken", data.accessToken);
-        // setAccessToken(data.accessToken);
-        // setCookie("refreshToken", data.refreshToken);
-        router.push("/");
+        router.replace("/");
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);

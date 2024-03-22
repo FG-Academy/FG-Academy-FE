@@ -1,8 +1,9 @@
-export async function getCourses(courseId: number) {
+export async function getCourses(courseId: number, accessToken: string) {
   const response = await fetch(`http://localhost:3000/courses/${courseId}`, {
     next: {
       tags: ["courses"],
     },
+    headers: { authorization: `Bearer ${accessToken}` },
     credentials: "include",
   });
 
