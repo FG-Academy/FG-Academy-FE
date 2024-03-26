@@ -21,7 +21,7 @@ export default async function Layout({
     <>
       <div className="flex flex-col w-screen min-h-screen">
         <Header />
-        <main className="flex-auto py-20 overflow-y-auto">{children}</main>
+        <main className="flex-auto mt-[80px] overflow-y-auto">{children}</main>
         <Footer />
       </div>
       <Toaster />

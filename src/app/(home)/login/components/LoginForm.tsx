@@ -65,11 +65,11 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-4/5 flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center justify-center w-full px-1">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-2/5 space-y-6"
+          className="w-full space-y-6"
         >
           <FormField
             control={form.control}
