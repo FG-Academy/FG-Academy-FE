@@ -8,6 +8,9 @@ import LectureNav from "./components/LectureNav";
 import { getLectures } from "./lib/getLectures";
 import { getProgress } from "./lib/getProgress";
 import { getCourses } from "./lib/getCourses";
+import { Toast } from "@/components/ui/toast";
+import { useSession } from "next-auth/react";
+import { auth } from "@/auth";
 
 type Props = {
   params: { courseId: number; lectureId: number };
@@ -15,19 +18,21 @@ type Props = {
 };
 export default async function LectureLayout({ children, params }: Props) {
   const { courseId, lectureId } = params;
+  const session = await auth();
+  const accessToken = session?.user.accessToken as string;
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["lectures", courseId],
-    queryFn: () => getLectures(courseId),
+    queryFn: () => getLectures(courseId, accessToken),
   });
   await queryClient.prefetchQuery({
     queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId),
+    queryFn: () => getProgress(courseId, accessToken),
   });
   await queryClient.prefetchQuery({
     queryKey: ["courses", courseId],
-    queryFn: () => getCourses(courseId),
+    queryFn: () => getCourses(courseId, accessToken),
   });
   const dehydratedState = dehydrate(queryClient);
 

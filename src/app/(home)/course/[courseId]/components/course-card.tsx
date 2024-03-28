@@ -60,15 +60,16 @@ const CourseCard: React.FC = ({}) => {
             priority
           />
           <div className="p-4 text-lg ">{ele.title}</div>
-
-          <button
-            className="w-full px-4 py-2 text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white"
-            onClick={() => {
-              router.push(`/course/${ele.courseId}`);
-            }}
-          >
-            강의 들으러 가기
-          </button>
+          <div className="py-2">
+            <button
+              className="w-full px-4 py-2 text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white"
+              onClick={() => {
+                router.push(`/course/${ele.courseId}`);
+              }}
+            >
+              강의 들으러 가기
+            </button>
+          </div>
         </div>
       ))}
     </>

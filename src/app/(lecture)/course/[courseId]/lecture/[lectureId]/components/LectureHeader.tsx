@@ -60,8 +60,8 @@ export default function MainHeader({ courseId, lectureId }: Props) {
         <div className="absolute right-4">
           {Math.round(seconds / 60)}분/
           {Math.round(duration / 60)}분(
-          {/* {`${Math.floor((seconds / 60 / (duration / 60)) * 100)}%`}) */}
-          {`${(Math.floor(seconds / 60) / Math.round(duration / 60)) * 100}%`})
+          {`${Math.floor((seconds / 60 / (duration / 60)) * 100)}%`})
+          {/* {`${(Math.floor(seconds / 60) / Math.round(duration / 60)) * 100}%`}) */}
         </div>
       )}
     </div>
