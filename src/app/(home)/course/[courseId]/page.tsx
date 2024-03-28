@@ -1,10 +1,14 @@
 "use client";
 import Image from "next/image";
 import testCoureThumbnail from "../../../../../public/images/testCourseThumbnail.jpeg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import LectureList from "@/app/(home)/course/[courseId]/components/lecture-list";
+import { getLectures } from "../../../(lecture)/course/[courseId]/lecture/[lectureId]/lib/getLectures";
+import { Lecture } from "@/model/lecture";
+import { useSession } from "next-auth/react";
+import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 
 function createMarkup(text: string) {
   const paragraphs = text.split("\n\n");
@@ -18,12 +22,14 @@ function createMarkup(text: string) {
 export default function CourseDetailPage({
   params: { courseId },
 }: {
-  params: { courseId: string };
+  params: { courseId: number };
 }) {
-  console.log(courseId);
+  // console.log(courseId);
 
   const [isShown, setIsShown] = useState<number>(1);
   const [isTaking, setIsTaking] = useState<boolean>(true);
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
 
   // nav 바 메뉴 클릭시 작동 여부
   const handleClick = (ele: number) => {
@@ -38,9 +44,24 @@ export default function CourseDetailPage({
       }),
   });
 
-  console.log(data);
+  // const lectures = useQuery<Lecture[]>({
+  //   queryKey: ["lectures", courseId],
+  //   queryFn: () => getLectures(courseId, accessToken),
+  //   enabled: !!accessToken,
+  // });
 
-  if (isPending) return "로딩 중...";
+  const { data: lectures } = useQuery<Lecture[]>({
+    queryKey: ["lectures", courseId],
+    queryFn: () => getLectures(courseId, accessToken),
+    enabled: !!accessToken,
+  });
+
+  console.log("data");
+  console.log(data);
+  console.log("lectures");
+  console.log(lectures);
+
+  if (isPending) return <Loading />;
 
   if (error) return "An error has occurred: " + error.message;
 
@@ -143,7 +164,7 @@ export default function CourseDetailPage({
               <h1 className="font-mono text-2xl font-bold">강의 목록</h1>
             </div>
             <div className="w-full h-auto mt-4 ">
-              <LectureList />
+              <LectureList lectures={lectures} />
             </div>
           </div>
           <div className="flex items-start flex-auto w-5/12 p-6 ">

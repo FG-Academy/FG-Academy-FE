@@ -31,6 +31,8 @@ import { Department, Position, UserProfile } from "../types/type";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 
 function getValues<T extends Record<string, any>>(obj: T) {
   return Object.values(obj) as [(typeof obj)[keyof T]];
@@ -103,15 +105,14 @@ const FormSchema = z.object({
 
 type ChurchName = "fg" | "others";
 
-const token = localStorage.getItem("accessToken");
-
-function useImportUserProfile() {
+function useImportUserProfile(accessToken: string) {
   const { isPending, error, data } = useQuery<UserProfile>({
     queryKey: ["userInfo"],
     queryFn: () =>
       fetch("http://localhost:3000/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }).then((res) => res.json()),
+    enabled: !!accessToken,
   });
 
   return { isPending, error, data };
@@ -119,32 +120,37 @@ function useImportUserProfile() {
 
 export function InputForm() {
   const router = useRouter();
-  const { isPending, error, data } = useImportUserProfile();
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
+  const { isPending, error, data } = useImportUserProfile(accessToken);
+  // console.log(data);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      name: data?.name,
-      email: data?.email,
-      birthDate: data?.birthDate,
-      phoneNumber: data?.phoneNumber,
-      churchName: data?.churchName,
-      yearsOfService: data?.yearsOfService,
+      name: "",
+      email: "",
+      birthDate: "",
+      phoneNumber: "",
+      churchName: "fg",
+      // departmentName: Department.ETC,
+      // position: Position.ETC,
+      yearsOfService: 0,
     },
   });
 
   useEffect(() => {
     if (data) {
       // 생년월일 형식 변경
-      console.log(data.birthDate);
-      const birthDate = new Date(data.birthDate).toISOString().split("T")[0];
+      // console.log(data.birthDate);
+      // const birthDate = new Date(data.birthDate).toISOString().split("T")[0];
 
       form.reset({
         ...form.getValues(), // 현재 폼의 값을 유지하면서
         name: data.name,
         email: data.email,
-        birthDate: birthDate,
+        birthDate: data.birthDate,
         phoneNumber: data.phoneNumber,
         churchName: data.churchName,
         yearsOfService: data.yearsOfService,
@@ -152,7 +158,7 @@ export function InputForm() {
     }
   }, [data, form]);
 
-  if (!data) return <p>로딩 중...</p>;
+  if (!data) return <Loading />;
   if (error) return <p>오류가 발생했습니다: {error.message}</p>;
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
@@ -162,7 +168,7 @@ export function InputForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(data),
       });
@@ -203,7 +209,7 @@ export function InputForm() {
   return (
     <Form {...form}>
       <form
-        id="userInfo"
+        autoComplete="off"
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-2/5 space-y-6"
       >
@@ -216,7 +222,12 @@ export function InputForm() {
                 이름 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="이름을 입력해주세요." {...field} />
+                <Input
+                  autoComplete="off"
+                  placeholder="이름을 입력해주세요."
+                  defaultValue={data.name}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -233,6 +244,7 @@ export function InputForm() {
               <FormControl>
                 <Input
                   placeholder="ex) 19901216"
+                  defaultValue={data.birthDate}
                   {...field}
                   value={field.value}
                   onChange={(e) => {
@@ -273,12 +285,18 @@ export function InputForm() {
                 이메일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="이메일을 입력해주세요." {...field} />
+                <Input
+                  // autoComplete="off"
+                  placeholder="이메일을 입력해주세요."
+                  defaultValue={data.email}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="phoneNumber"
@@ -288,7 +306,7 @@ export function InputForm() {
                 핸드폰 번호 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input defaultValue={data.phoneNumber} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -305,7 +323,7 @@ export function InputForm() {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue="fg"
+                  defaultValue={data.churchName}
                   className="flex flex-col space-y-1"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
@@ -335,12 +353,17 @@ export function InputForm() {
                 부서명 <span className="text-red-500">*</span>
               </FormLabel>
               <Select
-                {...field}
+                value={field.value}
+                name={field.name}
                 onValueChange={field.onChange}
                 defaultValue={data.departmentName}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="부서명 선택" />
+                  <SelectValue
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    placeholder="부서명 선택"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -366,12 +389,17 @@ export function InputForm() {
                 직분 <span className="text-red-500">*</span>
               </FormLabel>
               <Select
-                {...field}
+                value={field.value}
+                name={field.name}
                 onValueChange={field.onChange}
                 defaultValue={data.position}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="직분 선택" />
+                  <SelectValue
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    placeholder="직분 선택"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -408,8 +436,8 @@ export function InputForm() {
           )}
         />
 
-        <Button className="w-full" type="submit" id="userInfo">
-          회원 정보 수정하기
+        <Button className="w-full" type="submit">
+          회원정보 수정하기
         </Button>
       </form>
     </Form>

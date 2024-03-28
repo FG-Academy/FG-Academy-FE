@@ -71,7 +71,7 @@ export default function Header() {
                       className="w-full text-left hover:text-blue-900"
                       href="/"
                       onClick={() => {
-                        signOut();
+                        signOut({ callbackUrl: "/" });
                       }}
                     >
                       로그아웃
@@ -116,7 +116,7 @@ export default function Header() {
                 className="mr-5 hover:text-blue-900"
                 href="/"
                 onClick={() => {
-                  signOut();
+                  signOut({ callbackUrl: "/" });
                 }}
               >
                 로그아웃

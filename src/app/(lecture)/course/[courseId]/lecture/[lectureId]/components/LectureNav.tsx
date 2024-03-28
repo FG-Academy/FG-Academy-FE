@@ -16,17 +16,18 @@ import {
 import Link from "next/link";
 import { getLectures } from "../lib/getLectures";
 import { Lecture } from "@/model/lecture";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { getProgress } from "../lib/getProgress";
 import { IProgressResult } from "@/model/progress";
 import { FaCircleCheck } from "react-icons/fa6";
 import { getCourses } from "../lib/getCourses";
 import { Course } from "@/model/course";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
+import { toast } from "@/components/ui/use-toast";
 
 type Props = {
   courseId: number;
@@ -36,6 +37,8 @@ type Props = {
 export default function LectureNav({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
+  const searchParams = useSearchParams();
+  const isHere = searchParams.get("quizIndex") as string;
 
   const { data: progress } = useQuery<IProgressResult>({
     queryKey: ["progress", courseId],
@@ -64,6 +67,10 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   if (!lectures || !progress || !course) {
     return <Loading />;
   }
+
+  const realLecture = lectures.find(
+    (lecture) => lecture.lectureId === +lectureId
+  );
 
   // 완료한 마지막 강의 번호를 찾습니다.
   const lastCompletedLectureIndex = progress.lectureProgresses
@@ -124,7 +131,8 @@ export default function LectureNav({ courseId, lectureId }: Props) {
       <Accordion
         className="flex flex-col justify-center bg-gray-100 border-y-2"
         type="single"
-        defaultValue={lectures[lectureId - 1].title}
+        // defaultValue={lectures[lectureId - 1].title}
+        defaultValue={realLecture?.title}
         collapsible
       >
         {lectures.map((lecture, index) => {
@@ -150,7 +158,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                       !(
                         pathname.includes("multiple") ||
                         pathname.includes("descriptive")
-                      ) && +lectureId === index + 1
+                      ) && +lectureId === lecture.lectureId
                         ? "bg-blue-100 font-semibold"
                         : ""
                     }`}
@@ -179,21 +187,34 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                         <Link
                           key={quiz.quizId}
                           href={`/course/${lecture.courseId}/lecture/${
-                            lecture.lectureNumber
+                            lecture.lectureId
                           }/${
                             quiz.quizType === "multiple"
                               ? "multiple"
                               : "descriptive"
-                          }`}
+                          }?quizIndex=${quiz.quizIndex}`}
                           className={`p-4 px-6 cursor-pointer flex flex-row items-center justify-start space-x-2 hover:text-blue-500 ${
                             ((quiz.quizType === "multiple" &&
-                              pathname.includes("multiple")) ||
+                              +isHere === quiz.quizIndex) ||
                               (quiz.quizType === "descriptive" &&
                                 pathname.includes("descriptive"))) &&
-                            +lectureId === index + 1
+                            +lectureId === lecture.lectureId
                               ? "bg-blue-100 font-semibold"
                               : ""
                           }`}
+                          //! 강의 진행에 따라서 강의를 다 수강하지 않은 경우, 퀴즈도 이동을 못함
+                          onClick={(e) => {
+                            if (isClickable) {
+                              e.preventDefault();
+                              toast({
+                                title: "먼저 강의를 수강완료해주세요",
+                                variant: "destructive",
+                                duration: 2000,
+                              });
+
+                              return false;
+                            }
+                          }}
                         >
                           <div className="w-[24px]">
                             <MessageCircleQuestion size={24} />
@@ -208,7 +229,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                               size={24}
                               // TODO: 퀴즈용으로 바꾸기
                               className={`${
-                                progress.lectureProgresses[index].completed
+                                quiz.quizSubmits.length > 0
                                   ? "text-blue-500"
                                   : "text-gray-300"
                               }`}
