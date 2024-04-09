@@ -38,7 +38,6 @@ import {
   UserProfile,
 } from "@/app/(home)/userInfo/types/type";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
-import UseQueryClient from "@/components/UseQueryClientRender";
 import { dateFormat } from "@/lib/dateFormat";
 
 function getValues<T extends Record<string, any>>(obj: T) {

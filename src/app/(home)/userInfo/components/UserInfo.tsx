@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
+import { dateFormat } from "@/lib/dateFormat";
 
 function getValues<T extends Record<string, any>>(obj: T) {
   return Object.values(obj) as [(typeof obj)[keyof T]];
@@ -105,6 +106,22 @@ const FormSchema = z.object({
 
 type ChurchName = "fg" | "others";
 
+interface User {
+  userId: number;
+  name: string;
+  birthDate: string;
+  email: string;
+  phoneNumber: string;
+  churchName: string;
+  departmentName: string;
+  position: string;
+  yearsOfService: number;
+}
+
+type Props = {
+  userInfo: User;
+};
+
 function useImportUserProfile(accessToken: string) {
   const { isPending, error, data } = useQuery<UserProfile>({
     queryKey: ["userInfo"],
@@ -118,48 +135,53 @@ function useImportUserProfile(accessToken: string) {
   return { isPending, error, data };
 }
 
-export function InputForm() {
+export function UserInfo({ userInfo }: Props) {
   const router = useRouter();
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
-  const { isPending, error, data } = useImportUserProfile(accessToken);
+  // const { isPending, error, data } = useImportUserProfile(accessToken);
   // console.log(data);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      email: "",
-      birthDate: "",
-      phoneNumber: "",
-      churchName: "fg",
-      // departmentName: Department.ETC,
-      // position: Position.ETC,
-      yearsOfService: 0,
+      name: userInfo.name,
+      email: userInfo.email,
+      birthDate: dateFormat(new Date(userInfo.birthDate as string)),
+      phoneNumber: userInfo.phoneNumber,
+      churchName: userInfo.churchName as ChurchName,
+      departmentName: userInfo.departmentName as Department,
+      position: userInfo.position as Position,
+      yearsOfService: userInfo.yearsOfService,
+      // name: "",
+      // email: "",
+      // birthDate: "",
+      // phoneNumber: "",
+      // churchName: "fg",
+      // // departmentName: Department.ETC,
+      // // position: Position.ETC,
+      // yearsOfService: 0,
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      // 생년월일 형식 변경
-      // console.log(data.birthDate);
-      // const birthDate = new Date(data.birthDate).toISOString().split("T")[0];
+  // useEffect(() => {
+  //   if (data) {
+  //     // 생년월일 형식 변경
+  //     // console.log(data.birthDate);
+  //     // const birthDate = new Date(data.birthDate).toISOString().split("T")[0];
 
-      form.reset({
-        ...form.getValues(), // 현재 폼의 값을 유지하면서
-        name: data.name,
-        email: data.email,
-        birthDate: data.birthDate,
-        phoneNumber: data.phoneNumber,
-        churchName: data.churchName,
-        yearsOfService: data.yearsOfService,
-      });
-    }
-  }, [data, form]);
-
-  if (!data) return <Loading />;
-  if (error) return <p>오류가 발생했습니다: {error.message}</p>;
+  //     form.reset({
+  //       ...form.getValues(), // 현재 폼의 값을 유지하면서
+  //       name: data.name,
+  //       email: data.email,
+  //       birthDate: dateFormat(new Date(data.birthDate)),
+  //       phoneNumber: data.phoneNumber,
+  //       churchName: data.churchName,
+  //       yearsOfService: data.yearsOfService,
+  //     });
+  //   }
+  // }, [data, form]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
@@ -225,7 +247,7 @@ export function InputForm() {
                 <Input
                   autoComplete="off"
                   placeholder="이름을 입력해주세요."
-                  defaultValue={data.name}
+                  // defaultValue={data.name}
                   {...field}
                 />
               </FormControl>
@@ -244,7 +266,7 @@ export function InputForm() {
               <FormControl>
                 <Input
                   placeholder="ex) 19901216"
-                  defaultValue={data.birthDate}
+                  // defaultValue={data.birthDate}
                   {...field}
                   value={field.value}
                   onChange={(e) => {
@@ -288,7 +310,7 @@ export function InputForm() {
                 <Input
                   // autoComplete="off"
                   placeholder="이메일을 입력해주세요."
-                  defaultValue={data.email}
+                  // defaultValue={data.email}
                   {...field}
                 />
               </FormControl>
@@ -306,7 +328,7 @@ export function InputForm() {
                 핸드폰 번호 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input defaultValue={data.phoneNumber} {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -323,7 +345,7 @@ export function InputForm() {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={data.churchName}
+                  defaultValue={userInfo.churchName}
                   className="flex flex-col space-y-1"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
@@ -353,10 +375,10 @@ export function InputForm() {
                 부서명 <span className="text-red-500">*</span>
               </FormLabel>
               <Select
-                value={field.value}
+                // value={field.value}
                 name={field.name}
                 onValueChange={field.onChange}
-                defaultValue={data.departmentName}
+                defaultValue={userInfo.departmentName}
               >
                 <SelectTrigger>
                   <SelectValue
@@ -389,10 +411,10 @@ export function InputForm() {
                 직분 <span className="text-red-500">*</span>
               </FormLabel>
               <Select
-                value={field.value}
+                // value={field.value}
                 name={field.name}
                 onValueChange={field.onChange}
-                defaultValue={data.position}
+                defaultValue={userInfo.position}
               >
                 <SelectTrigger>
                   <SelectValue
