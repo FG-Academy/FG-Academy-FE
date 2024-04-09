@@ -1,12 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect } from "react";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { useRouter } from "next/navigation";
 
