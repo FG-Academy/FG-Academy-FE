@@ -8,7 +8,7 @@ import Link from "next/link";
 import { FaCirclePlay } from "react-icons/fa6";
 import { MdOutlineQuiz } from "react-icons/md";
 
-type Lecture = {
+interface Lecture {
   lectureId: number;
   courseId: number;
   lectureNumber: number;
@@ -20,7 +20,7 @@ type Lecture = {
   updatedAt: string;
   quizzes: any[]; // Define more specifically if you have a structure for quizzes
   lectureTimeRecords: any[]; // Define more specifically if you have a structure for lectureTimeRecords
-};
+}
 
 export default function LectureList({ lectures }: Lecture) {
   return (

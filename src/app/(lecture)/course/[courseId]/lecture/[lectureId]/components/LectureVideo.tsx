@@ -21,7 +21,7 @@ type Props = {
 
 export default function LectureVideo({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
-  const accessToken = session?.user.accessToken;
+  const accessToken = session?.user.accessToken as string;
 
   const {
     isPending,
@@ -56,7 +56,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
 
   useEffect(() => {
     if (progress) {
-      // console.log("set seconds", seconds);
       setSeconds(progress?.lectureProgresses[lectureId - 1].progress);
     }
   }, [progress, lectureId, setSeconds]);
@@ -118,13 +117,21 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
         // console.log("increase");
         const currentSeconds = useSecondsStore.getState().seconds;
         if (currentSeconds >= duration - 1) {
-          updateCompleted(1, actualLecture?.lectureId as number);
-          saveSeconds(currentSeconds, 1, actualLecture?.lectureId as number);
+          updateCompleted(actualLecture?.lectureId as number, accessToken);
+          saveSeconds(
+            currentSeconds,
+            actualLecture?.lectureId as number,
+            accessToken
+          );
           // queryClient.invalidateQueries({ queryKey: ["progress", courseId] });
         }
-        if (currentSeconds % 60 === 0) {
+        if (currentSeconds % 60 === 0 && !(seconds > duration)) {
           // console.log("1분 경과");
-          saveSeconds(currentSeconds, 1, actualLecture?.lectureId as number);
+          saveSeconds(
+            currentSeconds,
+            actualLecture?.lectureId as number,
+            accessToken
+          );
         }
       }, 1 * 1000);
     }
@@ -190,6 +197,7 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     event.target.unMute();
     event.target.pauseVideo();
     const videoDuration = parseInt(event.target.getDuration());
+    // 쿠키에 저장되는 문제가 있어서 정상적으로 작동하지 않을 때도 있음(쿠키 삭제하셈)
     event.target.seekTo(seconds);
     setDuration(videoDuration);
   };

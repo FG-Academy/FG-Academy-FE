@@ -1,16 +1,20 @@
+import { auth } from "@/auth";
+
 // 데이터 저장 함수
-export const updateCompleted = async (userId: number, lectureId: number) => {
+export const updateCompleted = async (
+  lectureId: number,
+  accessToken: string
+) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/users/${userId}/completed`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ lectureId }),
-      }
-    );
+    const response = await fetch(`http://localhost:3000/users/completed`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({ lectureId }),
+    });
     if (!response.ok) {
       throw new Error("Failed to update status 'completed'");
     }
