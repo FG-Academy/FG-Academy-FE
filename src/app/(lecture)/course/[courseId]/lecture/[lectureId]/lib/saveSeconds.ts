@@ -1,8 +1,10 @@
+import { auth } from "@/auth";
+
 // 데이터 저장 함수
 export const saveSeconds = async (
   seconds: number,
-  userId: number,
-  lectureId: number
+  lectureId: number,
+  accessToken: string
 ) => {
   try {
     const response = await fetch(
@@ -11,8 +13,9 @@ export const saveSeconds = async (
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ minutes: seconds, userId, lectureId }),
+        body: JSON.stringify({ minutes: seconds, lectureId }),
       }
     );
     if (!response.ok) {

@@ -32,7 +32,7 @@ export default function Multiple() {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
   const searchParams = useSearchParams();
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = useQueryClient();
 
   const search = parseInt(searchParams.get("quizIndex") as string);
 
@@ -117,6 +117,10 @@ export default function Multiple() {
     if (response.ok) {
       // 서버로부터 성공적인 응답을 받았을 때
 
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
+      });
+
       toast({
         title: "답변 제출을 완료 했습니다.",
         duration: 10000,
@@ -148,6 +152,7 @@ export default function Multiple() {
           </div>
         ),
       });
+
       // 만약 퀴즈 제출이 중복이거나 실패할 경우
     } else if (response.status === 400) {
       const message = await response.json();

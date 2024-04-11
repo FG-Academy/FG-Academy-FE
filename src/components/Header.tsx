@@ -57,7 +57,7 @@ export default function Header() {
                   <>
                     <Link
                       className="w-full text-left hover:text-blue-900"
-                      href="#"
+                      href="/myDashboard"
                     >
                       내 강의실
                     </Link>
@@ -106,7 +106,7 @@ export default function Header() {
           </Link>
           {session ? (
             <>
-              <Link className="mr-5 hover:text-blue-900" href="#">
+              <Link className="mr-5 hover:text-blue-900" href="/myDashboard">
                 내 강의실
               </Link>
               <Link className="mr-5 hover:text-blue-900" href="#">

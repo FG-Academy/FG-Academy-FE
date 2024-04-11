@@ -116,7 +116,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
           </p>
           <p>
             진도율 : {progress.completedCount}강/{lectures.length}강 (
-            {(progress.completedCount / lectures.length) * 100}%)
+            {Math.floor((progress.completedCount / lectures.length) * 100)}%)
           </p>
           <Progress
             value={(progress.completedCount / lectures.length) * 100}
@@ -141,6 +141,11 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             progress.lectureProgresses[index].completed ||
             index === lastCompletedLectureIndex + 1 ||
             index === 0;
+
+          // const isClickable2 =
+          //   progress.lectureProgresses[index].completed ||
+          //   index === lastCompletedLectureIndex ||
+          //   index === 0;
           return (
             <AccordionItem
               disabled={!isClickable}
@@ -204,7 +209,14 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                           }`}
                           //! 강의 진행에 따라서 강의를 다 수강하지 않은 경우, 퀴즈도 이동을 못함
                           onClick={(e) => {
-                            if (isClickable) {
+                            // console.log(isClickable);
+                            if (
+                              !(
+                                progress.lectureProgresses[index].completed ||
+                                index === lastCompletedLectureIndex ||
+                                index === 0
+                              )
+                            ) {
                               e.preventDefault();
                               toast({
                                 title: "먼저 강의를 수강완료해주세요",

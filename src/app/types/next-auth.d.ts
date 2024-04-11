@@ -17,6 +17,7 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
+      name: string;
       accessToken: any & DefaultSession["user"];
     };
     accessToken: string;
