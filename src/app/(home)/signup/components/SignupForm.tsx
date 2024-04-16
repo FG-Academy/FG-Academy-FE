@@ -27,9 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Department, Position } from "../types/type";
-import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { Department, Position } from "../../userInfo/types/type";
 
 function getValues<T extends Record<string, any>>(obj: T) {
   return Object.values(obj) as [(typeof obj)[keyof T]];
@@ -67,8 +66,6 @@ const positions = [
   { value: Position.TEACHER, label: "교사" },
   { value: Position.ETC, label: "기타" },
 ];
-type Department = (typeof Department)[keyof typeof Department];
-type Position = (typeof Position)[keyof typeof Position];
 
 const FormSchema = z
   .object({
@@ -109,8 +106,6 @@ const FormSchema = z
     message: "비밀번호가 일치하지 않습니다.",
     path: ["passwordVerify"],
   });
-
-type ChurchName = "fg" | "others";
 
 export function InputForm() {
   const router = useRouter();

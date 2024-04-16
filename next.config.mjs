@@ -4,11 +4,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "localhost:3000",
+        hostname: "localhost",
+        port: "3000",
       },
     ],
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
 };
 
 export default nextConfig;

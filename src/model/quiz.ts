@@ -12,7 +12,7 @@ interface QuizAnswer {
 interface QuizSubmit {
   id: number;
   userId: number;
-  multipleAnswer: number;
+  multipleAnswer: number | null;
   submittedAnswer: string | null;
   feedbackComment: string | null;
   status: number;
@@ -24,10 +24,10 @@ export interface Quiz {
   quizId: number;
   quizType: string;
   quizIndex: number;
-  quizAnswers: QuizAnswer[];
   question: string;
   status: string;
   createdAt: string;
   updatedAt: string;
+  quizAnswers: QuizAnswer[];
   quizSubmits: QuizSubmit[];
 }

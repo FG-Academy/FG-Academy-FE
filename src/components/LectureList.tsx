@@ -4,25 +4,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Lecture } from "@/model/lecture";
 import Link from "next/link";
 import { FaCirclePlay } from "react-icons/fa6";
 import { MdOutlineQuiz } from "react-icons/md";
 
-interface Lecture {
-  lectureId: number;
-  courseId: number;
-  lectureNumber: number;
-  title: string;
-  videoLink: string;
-  attachmentFile: string | null; // Assuming it can be null since other examples have it as null
-  status: "active"; // This can be expanded if there are more statuses
-  createdAt: string;
-  updatedAt: string;
-  quizzes: any[]; // Define more specifically if you have a structure for quizzes
-  lectureTimeRecords: any[]; // Define more specifically if you have a structure for lectureTimeRecords
-}
+type Props = {
+  lectures: Lecture[];
+};
 
-export default function LectureList({ lectures }: Lecture) {
+export default function LectureList({ lectures }: Props) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {lectures?.map((ele: Lecture, index: number) => (

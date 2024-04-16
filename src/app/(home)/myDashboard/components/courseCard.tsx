@@ -18,14 +18,14 @@ interface DashboardProps {
 }
 
 export default function CourseCardDashboard({ data }: DashboardProps) {
-  console.log(">>>>>>");
-  console.log(data);
+  // console.log(">>>>>>");
+  // console.log(data);
   const router = useRouter();
 
   return (
     // 내용들은 API로 정보 가져와서 각자 배치하기
-    <div>
-      <Card className="flex-shrink-0 shadow-xl rounded-2xl max-w-[350px] w-full">
+    <div className="h-full">
+      <Card className="h-full flex flex-col justify-between flex-shrink-0 shadow-xl rounded-2xl max-w-[350px] w-full">
         <CardHeader>
           <CardTitle className="text-xl">{data.title}</CardTitle>
           <CardDescription>{data.curriculum}</CardDescription>

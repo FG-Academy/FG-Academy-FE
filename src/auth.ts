@@ -30,7 +30,10 @@ export const {
         return token;
       } else {
         // access token 만료되어 토큰 재발급
-        console.log("=========== access token 만료 토큰 재발급 ===========");
+        console.log(
+          "=========== access token 만료 토큰 재발급 =========== refresh: ",
+          token
+        );
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh-token`,
@@ -45,7 +48,7 @@ export const {
           );
           const newTokens = await response.json();
 
-          if (!response.ok) throw newTokens.accessToken;
+          if (!response.ok) throw response.body;
 
           return {
             ...token,
