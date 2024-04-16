@@ -1,4 +1,4 @@
-import MainDashBoard from "./components/dashboard";
+import MainDashBoard from "./components/MainDashBoard2";
 
 export default function DashboardPage() {
   return (

@@ -10,6 +10,7 @@ import {
   getPaginationRowModel,
   FilterFn,
   getFilteredRowModel,
+  ColumnResizeMode,
 } from "@tanstack/react-table";
 
 import {
@@ -20,8 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
-import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus, Search } from "lucide-react";
 import {
   RankingInfo,
   rankItem,
@@ -30,43 +31,21 @@ import {
 import useOpenDialogStore from "@/store/useOpenDialogStore";
 import DebouncedInput from "../../users/components/DebouncedInput";
 import { DataTablePagination } from "../../users/components/DataTablePagination";
-
-declare module "@tanstack/react-table" {
-  interface FilterFns {
-    fuzzy: FilterFn<unknown>;
-  }
-  interface FilterMeta {
-    itemRank: RankingInfo;
-  }
-}
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-interface User {
-  userId: number;
-  name: string;
-  birthDate: string;
-  email: string;
-  phoneNumber: string;
-  churchName: string;
-  departmentName: string;
-  position: string;
-  yearsOfService: number;
-}
-
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
 
-  // Store the itemRank info
   addMeta({
     itemRank,
   });
 
-  // Return if the item should be filtered in/out
   return itemRank.passed;
 };
 
@@ -75,11 +54,19 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "createdAt",
+      desc: true,
+    },
+  ]);
   const [rowSelection, setRowSelection] = useState({});
-  const [userInfo, setUserInfo] = useState<User | undefined>();
+  const [columnResizeMode, setColumnResizeMode] =
+    useState<ColumnResizeMode>("onChange");
 
   const { open, setOpen } = useOpenDialogStore((state) => state);
+
+  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -88,19 +75,18 @@ export function DataTable<TData, TValue>({
       fuzzy: fuzzyFilter,
     },
     getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    getFilteredRowModel: getFilteredRowModel(),
+    columnResizeDirection: "ltr",
+    columnResizeMode: "onChange", //change column resize mode to "onChange"
     globalFilterFn: fuzzyFilter,
     initialState: {
       columnVisibility: {
-        birthDate: false,
-        userId: false,
-        email: false,
-        phoneNumber: false,
+        createdAt: false,
       },
     },
     state: {
@@ -111,25 +97,42 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col flex-1 justify-between overflow-y-auto">
+    <div className="flex flex-col justify-between flex-1 overflow-y-auto">
       <div className="flex flex-col justify-start overflow-y-auto">
-        <div className="relative justify-start items-center w-full h-full flex mr-auto flex-1 md:grow-0 mb-6">
-          <Search className="z-10 absolute top-1 left-2 h-6 w-6 text-muted-foreground" />
-          <DebouncedInput
-            value={globalFilter ?? ""}
-            onChange={(value) => setGlobalFilter(String(value))}
-            type="search"
-            placeholder="검색..."
-            className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
-          />
+        <div className="relative flex items-center justify-between flex-1 w-full h-full mb-6 mr-auto md:grow-0">
+          <div>
+            <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
+            <DebouncedInput
+              value={globalFilter ?? ""}
+              onChange={(value) => setGlobalFilter(String(value))}
+              type="search"
+              placeholder="검색..."
+              className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
+            />
+          </div>
+          <Button
+            className="bg-blue-700"
+            onClick={() => {
+              router.push("/admin/videos/register");
+            }}
+          >
+            새 강의 추가
+            <Plus className="w-4 h-4 ml-2 text-white" />
+          </Button>
         </div>
-        <Table className="relative container justify-start mx-auto py-2 overflow-y-auto">
-          <TableHeader className="sticky top-0 bg-white">
+        <Table
+          className={`relative container w-[${table.getCenterTotalSize()}px] justify-start mx-auto py-2 overflow-y-auto`}
+        >
+          <TableHeader className="sticky top-0 bg-gray-100">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className={`w-[${header.getSize()}px] `}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -148,24 +151,12 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    setUserInfo({
-                      userId: row.getValue("userId"),
-                      name: row.getValue("name"),
-                      birthDate: row.getValue("birthDate"),
-                      email: row.getValue("email"),
-                      phoneNumber: row.getValue("phoneNumber"),
-                      churchName: row.getValue("churchName"),
-                      departmentName: row.getValue("departmentName"),
-                      position: row.getValue("position"),
-                      yearsOfService: row.getValue("yearsOfService"),
-                    });
-                    // setUserId(parseInt(row.getValue("userId")));
-                    setOpen(true);
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell className="cursor-pointer" key={cell.id}>
+                    <TableCell
+                      className={`cursor-pointer w-[${cell.column.getSize()}]`}
+                      key={cell.id}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

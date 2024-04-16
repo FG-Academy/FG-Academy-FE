@@ -1,7 +1,7 @@
 export async function getAllUsers(accessToken: string) {
   const response = await fetch(`http://localhost:3000/users`, {
     next: {
-      tags: ["users"],
+      tags: ["allUsers"],
     },
     credentials: "include",
     headers: { authorization: `Bearer ${accessToken}` },

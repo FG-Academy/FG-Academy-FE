@@ -19,9 +19,9 @@ export default async function Layout({
 }>) {
   return (
     <>
-      <div className="flex flex-col w-screen min-h-screen">
+      <div className="flex flex-col min-w-screen min-h-screen">
         <Header />
-        <main className="flex-auto mt-[80px] overflow-y-auto">{children}</main>
+        <main className="flex-auto overflow-y-auto">{children}</main>
         <Footer />
       </div>
       <Toaster />

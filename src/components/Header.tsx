@@ -1,23 +1,30 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMenu } from "react-icons/io5";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: session } = useSession();
+  const { data: session, status, update } = useSession();
+  const router = useRouter();
 
   // TODO: 렌더링이 왤케 많이 되지?
-  // useEffect(() => {
-  //   console.log(session);
-  // }, [session]);
+  useEffect(() => {
+    // 세션에서 에러 감지 시 로그인 페이지로 리다이렉트
+    if (session && session.error === "RefreshAccessTokenError") {
+      signOut();
+    }
+  }, [session]);
+
+  if (status === "loading") return <p>Loading...</p>;
 
   return (
-    <header className="fixed inset-x-0 top-0 left-0 z-50 text-gray-700 bg-white border-b border-gray-200 font-Pretendard">
+    <header className=" inset-x-0 sticky top-0 left-0 z-50 text-gray-700 bg-white border-b border-gray-200 font-Pretendard">
       <div className="container relative flex flex-row flex-wrap items-center justify-between p-5 mx-auto md:flex-row">
         <div className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
           <Link href="/">

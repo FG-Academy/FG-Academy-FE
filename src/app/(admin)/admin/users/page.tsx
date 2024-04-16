@@ -1,23 +1,16 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { getAllUsers } from "./lib/getAllUsers";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { DataTable } from "./components/DataTable";
-import { User } from "@/model/user";
 import { columns } from "./components/columns";
 import { useSession } from "next-auth/react";
+import { useFetchAllUserListQuery } from "@/hooks/useUserQuery";
 
 export default function Page() {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
-  const { data: allUsers } = useQuery<User>({
-    queryKey: ["allUsers"],
-    queryFn: () => getAllUsers(accessToken),
-    enabled: !!accessToken,
-  });
+  const { data: allUsers } = useFetchAllUserListQuery(accessToken);
 
   if (!allUsers) {
     return <Loading />;

@@ -8,223 +8,69 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Department, Position, UserProfile } from "../types/type";
-import { ToastAction } from "@/components/ui/toast";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { dateFormat } from "@/lib/dateFormat";
-
-function getValues<T extends Record<string, any>>(obj: T) {
-  return Object.values(obj) as [(typeof obj)[keyof T]];
-}
-
-const departments = [
-  { value: Department.FETAL, label: "태아부" },
-  { value: Department.INFANT, label: "영아부" },
-  { value: Department.TODDLER, label: "유아부" },
-  { value: Department.KINDERGARTEN, label: "유치부" },
-  { value: Department.ELEMENTARYYOUNG, label: "유년부" },
-  { value: Department.ELEMENTARY, label: "초등부" },
-  { value: Department.JUNIOR, label: "소년부" },
-  { value: Department.MIDDLE, label: "중등부" },
-  { value: Department.MIDDLEHIGH, label: "중고등부" },
-  { value: Department.HIGH, label: "고등부" },
-  { value: Department.GONGREUNGYOUNGKINDER, label: "공릉영유치부" },
-  { value: Department.GONGREUNGELEMENTARYYOUNG, label: "공릉유년부" },
-  { value: Department.GONGREUNGELEMENTARY, label: "공릉초등부" },
-  { value: Department.GONGREUNGMIDDLE, label: "공릉중등부" },
-  { value: Department.GONGREUNGHIGH, label: "공릉고등부" },
-  { value: Department.ENGLISHYOUNGKINDER, label: "영어영유치부" },
-  { value: Department.ENGLISHELEMENTARYYOUNG, label: "영어유년부" },
-  { value: Department.ENGLISHELEMENTARY, label: "영어초등부" },
-  { value: Department.ENGLISHMIDDLEHIGH, label: "영어중고등부" },
-  { value: Department.LOVE, label: "사랑부" },
-  { value: Department.YOUTH, label: "청년부" },
-  { value: Department.ETC, label: "기타" },
-];
-
-const positions = [
-  { value: Position.PASTOR, label: "목사" },
-  { value: Position.EVANGELIST, label: "전도사" },
-  { value: Position.ELDER, label: "장로" },
-  { value: Position.TEACHER, label: "교사" },
-  { value: Position.ETC, label: "기타" },
-];
-type Department = (typeof Department)[keyof typeof Department];
-type Position = (typeof Position)[keyof typeof Position];
-
-const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: "이름은 2글자 이상이어야 합니다.",
-  }),
-  email: z.string().min(1, { message: "필수 입력 항목입니다." }).email({
-    message: "이메일 형식이 올바르지 않습니다.",
-  }),
-  birthDate: z.string().min(8, {
-    message: "올바른 생년월일 8자를 입력해주세요.",
-  }),
-  phoneNumber: z.string().min(10, {
-    message: "핸드폰 번호 11자리를 입력해주세요.",
-  }),
-  churchName: z.enum(["fg", "others"]),
-  departmentName: z.enum(getValues(Department), {
-    errorMap: () => ({
-      message: "부서명을 선택해주세요.",
-    }),
-  }),
-  position: z.enum(getValues(Position), {
-    errorMap: () => ({
-      message: "직분을 선택해주세요.",
-    }),
-  }),
-  yearsOfService: z.coerce
-    .number({ invalid_type_error: "숫자 형식의 값을 적어주세요." })
-    .nonnegative("0 이상의 값을 적어주세요.")
-    .lte(100, "100 이하의 값을 적어주세요."),
-});
-
-type ChurchName = "fg" | "others";
-
-interface User {
-  userId: number;
-  name: string;
-  birthDate: string;
-  email: string;
-  phoneNumber: string;
-  churchName: string;
-  departmentName: string;
-  position: string;
-  yearsOfService: number;
-}
+import { useUserMutation } from "../lib/useUserMutation";
+import { ProfileUpdateFormSchema } from "../lib/profileFormSchema";
+import { departments, positions, userLevelOptions } from "../types/type";
+import { UserProfileResponse } from "@/hooks/useUserQuery";
+import { transformDate } from "@/lib/utils";
 
 type Props = {
-  userInfo: User;
+  userInfo: UserProfileResponse;
 };
 
-function useImportUserProfile(accessToken: string) {
-  const { isPending, error, data } = useQuery<UserProfile>({
-    queryKey: ["userInfo"],
-    queryFn: () =>
-      fetch("http://localhost:3000/users/profile", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }).then((res) => res.json()),
-    enabled: !!accessToken,
-  });
-
-  return { isPending, error, data };
-}
-
 export function UserInfo({ userInfo }: Props) {
-  const router = useRouter();
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
-  // const { isPending, error, data } = useImportUserProfile(accessToken);
-  // console.log(data);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof ProfileUpdateFormSchema>>({
+    resolver: zodResolver(ProfileUpdateFormSchema),
     mode: "onChange",
     defaultValues: {
-      name: userInfo.name,
-      email: userInfo.email,
+      ...userInfo,
       birthDate: dateFormat(new Date(userInfo.birthDate as string)),
-      phoneNumber: userInfo.phoneNumber,
-      churchName: userInfo.churchName as ChurchName,
-      departmentName: userInfo.departmentName as Department,
-      position: userInfo.position as Position,
-      yearsOfService: userInfo.yearsOfService,
-      // name: "",
-      // email: "",
-      // birthDate: "",
-      // phoneNumber: "",
-      // churchName: "fg",
-      // // departmentName: Department.ETC,
-      // // position: Position.ETC,
-      // yearsOfService: 0,
     },
   });
+  const {
+    handleSubmit,
+    formState: { dirtyFields },
+  } = form;
 
-  // useEffect(() => {
-  //   if (data) {
-  //     // 생년월일 형식 변경
-  //     // console.log(data.birthDate);
-  //     // const birthDate = new Date(data.birthDate).toISOString().split("T")[0];
+  const { mutate } = useUserMutation();
 
-  //     form.reset({
-  //       ...form.getValues(), // 현재 폼의 값을 유지하면서
-  //       name: data.name,
-  //       email: data.email,
-  //       birthDate: dateFormat(new Date(data.birthDate)),
-  //       phoneNumber: data.phoneNumber,
-  //       churchName: data.churchName,
-  //       yearsOfService: data.yearsOfService,
-  //     });
-  //   }
-  // }, [data, form]);
+  const onSubmit = async (data: z.infer<typeof ProfileUpdateFormSchema>) => {
+    console.log(data);
+    type UserData = z.infer<typeof ProfileUpdateFormSchema>;
+    type UpdateData = { [K in keyof UserData]: UserData[K] };
+    const updatedData: any = {};
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    try {
-      console.log(JSON.stringify(data));
-      const response = await fetch("http://localhost:3000/users/profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        if (response.status === 422) {
-          // 409 Conflict 에러 처리
-          toast({
-            variant: "destructive",
-            title: "이미 존재하는 이메일입니다.",
-            description: "다른 이메일 주소를 사용해주세요.",
-          });
-        } else {
-          // 그 외의 오류 처리
-          toast({
-            variant: "destructive",
-            title: "오류가 발생했습니다.",
-            description: "입력하신 정보를 확인 후 다시 한 번 시도해주세요.",
-          });
-        }
-      } else {
-        const data = await response.json();
-        toast({
-          title: "회원정보 변경 성공",
-          description: "회원정보 변경에 성공했습니다.",
-        });
-        router.push("/userInfo");
+    Object.keys(dirtyFields).forEach((key) => {
+      const fieldKey = key as keyof UserData; // 'key'를 'UserData'의 키로 타입 단언
+      if (dirtyFields[fieldKey] && data[fieldKey] !== undefined) {
+        updatedData[fieldKey] = data[fieldKey];
       }
-    } catch (error) {
-      console.error("There was a problem with your fetch operation:", error);
-      toast({
-        variant: "destructive",
-        title: "네트워크 오류가 발생했습니다.",
-        description: "잠시 후 다시 시도해주세요.",
-      });
+    });
+
+    if (Object.keys(updatedData).length > 0) {
+      mutate({ accessToken, data: updatedData });
+    } else {
+      console.log("No fields have been changed.");
     }
   };
 
@@ -257,6 +103,27 @@ export function UserInfo({ userInfo }: Props) {
         />
         <FormField
           control={form.control}
+          name="level"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base font-bold">
+                레벨 <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  disabled
+                  autoComplete="off"
+                  readOnly
+                  // className="bg-gray-200"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="birthDate"
           render={({ field }) => (
             <FormItem>
@@ -271,25 +138,7 @@ export function UserInfo({ userInfo }: Props) {
                   value={field.value}
                   onChange={(e) => {
                     const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                    let formattedInput;
-
-                    if (cleanInput.length <= 4) {
-                      // 연도 입력 중
-                      formattedInput = cleanInput;
-                    } else if (cleanInput.length <= 6) {
-                      // 월 입력 중
-                      formattedInput = `${cleanInput.slice(
-                        0,
-                        4
-                      )}-${cleanInput.slice(4)}`;
-                    } else {
-                      // 일 입력 중
-                      formattedInput = `${cleanInput.slice(
-                        0,
-                        4
-                      )}-${cleanInput.slice(4, 6)}-${cleanInput.slice(6, 8)}`;
-                    }
-
+                    const formattedInput = transformDate(cleanInput);
                     field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
                   }}
                 />

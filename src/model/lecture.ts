@@ -13,6 +13,7 @@ export interface Lecture {
   updatedAt: string;
   // isComplete: boolean;
   // course: Course;
+  lectureTimeRecords: LectureTimeRecord[];
   quizzes: Quiz[];
 }
 
@@ -23,4 +24,13 @@ interface LecturesObject {
 export interface ILecture {
   lectures: LecturesObject;
   length: number;
+}
+
+export interface LectureTimeRecord {
+  userId: number;
+  lectureId: number;
+  playTime: number;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

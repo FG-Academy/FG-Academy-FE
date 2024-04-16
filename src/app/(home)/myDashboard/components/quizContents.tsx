@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/dialog";
 
 import { QuizList } from "@/model/dashboard";
-import { CheckIcon, XIcon } from "./svg";
+// import { CheckIcon, XIcon } from "./svg";
 import QuizDetail from "./quizDetail";
+import { Check, X } from "lucide-react";
 
 interface dataProps {
   data: QuizList;
@@ -28,9 +29,9 @@ export default function QuizContents({ data }: dataProps) {
           {/*  퀴즈 리스트 요소 = 반복되는 컴포넌트 */}
           <div className="flex items-center gap-4 border rounded-lg p-4">
             {data.isAnswer === true ? (
-              <CheckIcon className="w-6 h-6" />
+              <Check className="w-6 h-6" />
             ) : (
-              <XIcon className="w-6 h-6" />
+              <X className="w-6 h-6" />
             )}
             <div className="grid gap-1">
               <h2 className="font-semibold">{data.question} </h2>
