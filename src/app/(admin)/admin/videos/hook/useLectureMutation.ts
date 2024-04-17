@@ -2,35 +2,24 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { LectureFormSchema } from "../lib/LecturesFormSchema";
 
-// type UserPatchRequest = {
-//   accessToken: string;
-//   // data: z.infer<typeof CourseFormSchema>;
-//   data: FormData;
-// };
-
-export function useCourseLectureMutation(
-  accessToken: string,
-  courseId: number
-) {
+export function useLectureMutation(accessToken: string, courseId: number) {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
 
   return useMutation({
-    mutationKey: ["updateCourseByAdmin"],
-    mutationFn: async (data: FormData) => {
-      data.forEach((value, key) => {
-        console.log(key, value);
-      });
+    mutationKey: ["updateLectureByAdmin"],
+    mutationFn: async (data: z.infer<typeof LectureFormSchema>) => {
       const response = await fetch(
-        `http://localhost:3000/admin/courses/${courseId}`,
+        `http://localhost:3000/admin/courses/${courseId}/lectures`,
         {
-          method: "PATCH",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
-          body: data,
+          body: JSON.stringify(data),
         }
       );
       if (!response.ok) {
