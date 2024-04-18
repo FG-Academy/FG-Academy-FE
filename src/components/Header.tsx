@@ -14,12 +14,12 @@ export default function Header() {
   const router = useRouter();
 
   // TODO: 렌더링이 왤케 많이 되지?
-  useEffect(() => {
-    // 세션에서 에러 감지 시 로그인 페이지로 리다이렉트
-    if (session && session.error === "RefreshAccessTokenError") {
-      signOut();
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   // 세션에서 에러 감지 시 로그인 페이지로 리다이렉트
+  //   if (session && session.error === "RefreshAccessTokenError") {
+  //     signOut();
+  //   }
+  // }, [session]);
 
   if (status === "loading") return <p>Loading...</p>;
 

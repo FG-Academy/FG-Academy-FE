@@ -27,20 +27,24 @@ import { transformDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChangeEvent, useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCourseEditMutation } from "../../hook/useCourseEditMutation";
 import Image from "next/image";
 import { dateFormat } from "@/lib/dateFormat";
 import CourseLectureEdit from "./CourseLectureEdit";
+import { useFetchOneAdminCourseListQuery } from "@/hooks/useCourseQuery";
+import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 
 type Props = {
   courseInfo: AdminCourse;
 };
 
-export default function CourseEdit({ courseInfo }: Props) {
+export default function CourseEdit() {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
-  // console.log(courseInfo);
+
+  const searchParams = useSearchParams();
+  const courseId = parseInt(searchParams.get("cid") as string);
 
   const router = useRouter();
 
@@ -49,6 +53,11 @@ export default function CourseEdit({ courseInfo }: Props) {
   });
   const [imageFile, setImageFile] = useState<File>();
   const [enabled, setEnabled] = useState(false);
+
+  const { data: courseInfo } = useFetchOneAdminCourseListQuery(
+    accessToken,
+    courseId
+  );
 
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
@@ -138,6 +147,10 @@ export default function CourseEdit({ courseInfo }: Props) {
 
   if (!enabled) {
     return null;
+  }
+
+  if (!courseInfo) {
+    return <Loading />;
   }
 
   return (

@@ -1,5 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+
+type NullableSession = Session | DefaultSession | null;
 
 export const {
   handlers: { GET, POST },
@@ -7,6 +9,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  trustHost: true,
   pages: {
     signIn: "/login",
     newUser: "/signup",
@@ -64,6 +67,14 @@ export const {
     },
     // Session 관련 action 시 호출되는 callback
     session({ session, token }) {
+      // token에 error 속성이 있으면 null을 반환
+      // if (token.error) {
+      //   console.error(
+      //     "Session creation failed due to token error:",
+      //     token.error
+      //   );
+      //   return null;
+      // }
       session.user = token as any;
       return session;
     },
@@ -73,6 +84,8 @@ export const {
     CredentialsProvider({
       async authorize(credentials) {
         // signIn 호출 시 동작
+        console.log(credentials);
+        console.log(process.env.NEXT_PUBLIC_BASE_URL);
         const authResponse = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/auth/sign-in`,
           {
@@ -87,6 +100,7 @@ export const {
             credentials: "include",
           }
         );
+        // console.log(authResponse);
 
         if (!authResponse.ok) {
           console.log("return null");
