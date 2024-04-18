@@ -8,7 +8,7 @@ export const saveSeconds = async (
 ) => {
   try {
     const response = await fetch(
-      "http://localhost:3000/users/save-lecture-record",
+      `${process.env.NEXT_PUBLIC_API_URL}/users/save-lecture-record`,
       {
         method: "POST",
         headers: {

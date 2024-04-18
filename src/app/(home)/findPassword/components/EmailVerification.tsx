@@ -107,7 +107,7 @@ export default function EmailVerification() {
 
   const fetchSendEmail = async () => {
     const response = await fetch(
-      `http://localhost:3000/users/email?email=${email}`
+      `${process.env.NEXT_PUBLIC_API_URL}/users/email?email=${email}`
     );
 
     if (!response.ok) {

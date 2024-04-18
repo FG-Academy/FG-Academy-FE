@@ -42,15 +42,18 @@ export default function EmailForm2() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setEmail(values.email);
-    const response = await fetch("http://localhost:3000/users/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/email`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+        }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to save duration");
@@ -77,7 +80,7 @@ export default function EmailForm2() {
   const handleEmailVerification = async () => {
     setLoading(true);
     const response = await fetch(
-      `http://localhost:3000/users/email?email=${email}`
+      `${process.env.NEXT_PUBLIC_API_URL}/users/email?email=${email}`
     );
 
     if (!response.ok) {

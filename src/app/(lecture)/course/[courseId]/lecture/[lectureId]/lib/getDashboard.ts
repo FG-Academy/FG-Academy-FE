@@ -1,5 +1,5 @@
 export async function getDashboard(accessToken: string) {
-  const response = await fetch(`http://localhost:3000/dashboard`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard`, {
     headers: { authorization: `Bearer ${accessToken}` },
     credentials: "include",
   });

@@ -103,7 +103,7 @@ export default function Multiple() {
 
     // quizSubmits에 저장
     const response = await fetch(
-      `http://localhost:3000/quizzes/${courseId}/${lectureId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/quizzes/${courseId}/${lectureId}`,
       {
         method: "POST",
         credentials: "include",

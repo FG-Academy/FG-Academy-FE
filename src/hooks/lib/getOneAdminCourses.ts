@@ -3,7 +3,7 @@ export async function getOneAdminCourses(
   courseId: number
 ) {
   const response = await fetch(
-    `http://localhost:3000/admin/courses/${courseId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/courses/${courseId}`,
     {
       next: {
         tags: ["oneAdminCourses"],

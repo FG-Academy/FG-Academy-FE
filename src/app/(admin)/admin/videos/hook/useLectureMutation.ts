@@ -12,7 +12,7 @@ export function useLectureMutation(accessToken: string, courseId: number) {
     mutationKey: ["updateLectureByAdmin"],
     mutationFn: async (data: z.infer<typeof LectureFormSchema>) => {
       const response = await fetch(
-        `http://localhost:3000/admin/courses/${courseId}/lectures`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/courses/${courseId}/lectures`,
         {
           method: "POST",
           headers: {

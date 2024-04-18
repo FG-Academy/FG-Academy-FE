@@ -132,13 +132,16 @@ export function InputForm() {
       // passwordVerify 프로퍼티를 제거한 나머지 데이터를 bodyData에 옮김
       const { passwordVerify, ...bodyData } = data;
       // console.log(JSON.stringify(bodyData, null, 2));
-      const response = await fetch("http://localhost:3000/auth/sign-up", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bodyData),
+        }
+      );
       if (!response.ok) {
         if (response.status === 422) {
           // 409 Conflict 에러 처리

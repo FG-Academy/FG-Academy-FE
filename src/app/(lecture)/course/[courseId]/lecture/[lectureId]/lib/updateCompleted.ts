@@ -6,15 +6,18 @@ export const updateCompleted = async (
   accessToken: string
 ) => {
   try {
-    const response = await fetch(`http://localhost:3000/users/completed`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
-      body: JSON.stringify({ lectureId }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/completed`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ lectureId }),
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to update status 'completed'");
     }

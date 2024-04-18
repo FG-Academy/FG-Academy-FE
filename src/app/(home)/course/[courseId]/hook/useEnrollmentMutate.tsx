@@ -15,7 +15,7 @@ export function useEnrollmentMutate(courseId: number, accessToken: string) {
     mutationKey: ["registerEnrollment"],
     mutationFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/courses/${courseId}/enrollment`,
+        `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/enrollment`,
         {
           // next: {
           //   tags: ["enrollment"],

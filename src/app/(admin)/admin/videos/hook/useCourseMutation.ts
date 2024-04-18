@@ -19,13 +19,16 @@ export function useCourseMutation() {
     mutationKey: ["updateCourseByAdmin"],
     mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
       console.log(data);
-      const response = await fetch(`http://localhost:3000/courses`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: data,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/courses`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: data,
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json(); // 에러 메시지를 포함할 수 있는 응답의 본문
         throw {

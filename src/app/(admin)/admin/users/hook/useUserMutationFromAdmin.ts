@@ -21,14 +21,17 @@ export function useUserMutationFromAdmin() {
     mutationKey: ["updateUserProfileByAdmin"],
     mutationFn: async ({ accessToken, data, userId }: UserPatchRequest) => {
       console.log(data);
-      const response = await fetch(`http://localhost:3000/users/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json(); // 에러 메시지를 포함할 수 있는 응답의 본문
         throw {

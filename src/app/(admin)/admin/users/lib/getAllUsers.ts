@@ -1,5 +1,5 @@
 export async function getAllUsers(accessToken: string) {
-  const response = await fetch(`http://localhost:3000/users`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
     next: {
       tags: ["allUsers"],
     },

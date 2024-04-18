@@ -41,16 +41,19 @@ export default function ResetPassword() {
   const { email, setUiState } = useResetPasswordStore((state) => state);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const response = await fetch("http://localhost:3000/users/password", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password: data.password,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/password`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password: data.password,
+        }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to save duration");

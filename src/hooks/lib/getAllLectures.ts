@@ -1,6 +1,6 @@
 export async function getAllLectures(courseId: number, accessToken: string) {
   const response = await fetch(
-    `http://localhost:3000/courses/${courseId}/lectures`,
+    `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/lectures`,
     {
       next: {
         tags: ["lectures"],

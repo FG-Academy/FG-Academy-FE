@@ -18,7 +18,7 @@ RUN npm run build
 ENV NODE_ENV production
 ENV PORT 80
 ENV AUTH_SECRET YzQc0Xv71rFTPAFixXHsPSo57XVdXa9osnatKRtf+/c=
-ENV NEXT_PUBLIC_BASE_URL http://localhost:3000
+ENV NEXT_PUBLIC_BASE_URL http://43.202.237.172:3000
 
 # Expose the port that the application will run on
 EXPOSE 80

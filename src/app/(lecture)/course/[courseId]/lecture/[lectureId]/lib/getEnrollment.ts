@@ -1,6 +1,6 @@
 export async function getEnrollment(courseId: number, accessToken: string) {
   const response = await fetch(
-    `http://localhost:3000/courses/${courseId}/enrollment`,
+    `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/enrollment`,
     {
       next: {
         tags: ["enrollment"],

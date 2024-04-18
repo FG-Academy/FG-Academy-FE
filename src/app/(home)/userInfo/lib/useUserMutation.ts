@@ -17,18 +17,21 @@ export function useUserMutation() {
     mutationKey: ["updateUserProfile"],
     mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
       console.log(data);
-      const response = await fetch(`http://localhost:3000/users/profile`, {
-        next: {
-          tags: ["updateUserProfile"],
-        },
-        credentials: "include",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-          "content-type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
+        {
+          next: {
+            tags: ["updateUserProfile"],
+          },
+          credentials: "include",
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+            "content-type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json(); // 에러 메시지를 포함할 수 있는 응답의 본문
         throw {

@@ -1,6 +1,6 @@
 export async function getProgress(courseId: number, accessToken: string) {
   const response = await fetch(
-    `http://localhost:3000/courses/${courseId}/lectures/progress`,
+    `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/lectures/progress`,
     {
       next: {
         tags: ["progress"],

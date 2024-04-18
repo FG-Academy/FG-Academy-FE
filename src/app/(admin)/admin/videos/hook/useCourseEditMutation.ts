@@ -20,7 +20,7 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
         console.log(key, value);
       });
       const response = await fetch(
-        `http://localhost:3000/admin/courses/${courseId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/courses/${courseId}`,
         {
           method: "PATCH",
           headers: {
