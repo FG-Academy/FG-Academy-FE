@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { User } from "@/model/user";
+import { User, UserProfile } from "@/model/user";
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "./lib/getAllUsers";
 import { getUserProfile } from "./lib/getUserProfile";
@@ -64,7 +64,7 @@ export const useFetchUserProfileByIdQuery = (
     enabled?: boolean;
   }
 ) => {
-  return useQuery<UserProfileResponse>({
+  return useQuery<UserProfile>({
     queryKey: ["users", userId],
     queryFn: () => getOneUser(accessToken, userId),
     enabled: !!accessToken,
