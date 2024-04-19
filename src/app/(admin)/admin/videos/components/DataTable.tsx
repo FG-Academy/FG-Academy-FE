@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
   const [columnResizeMode, setColumnResizeMode] =
     useState<ColumnResizeMode>("onChange");
 
-  const { open, setOpen } = useOpenDialogStore((state) => state);
+  // const { open, setOpen } = useOpenDialogStore((state) => state);
 
   const router = useRouter();
 

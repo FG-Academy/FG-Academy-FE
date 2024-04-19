@@ -2,36 +2,33 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import {
-  ProfileFormSchema,
-  ProfileUpdateFormSchema,
-} from "@/app/(home)/userInfo/lib/profileFormSchema";
-import useOpenDialogStore from "@/store/useOpenDialogStore";
+import { ProfileFormSchema } from "../lib/profileFormSchema";
 
 type UserPatchRequest = {
   accessToken: string;
-  data: z.infer<typeof ProfileUpdateFormSchema>;
-  userId: number;
+  data: z.infer<typeof ProfileFormSchema>;
 };
 
-export function useUserMutationFromAdmin() {
+export function useUserMutation() {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
 
-  const { setOpen } = useOpenDialogStore((state) => state);
-
   return useMutation({
-    mutationKey: ["updateUserProfileByAdmin"],
-    mutationFn: async ({ accessToken, data, userId }: UserPatchRequest) => {
+    mutationKey: ["updateUserProfile"],
+    mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
       console.log(data);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
         {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+          next: {
+            tags: ["updateUserProfile"],
           },
+          credentials: "include",
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+            "content-type": "application/json",
+          },
+          method: "POST",
           body: JSON.stringify(data),
         }
       );
@@ -47,17 +44,20 @@ export function useUserMutationFromAdmin() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["users"],
+        queryKey: ["userProfile"],
       });
-      setOpen(false);
+      queryClient.invalidateQueries({
+        queryKey: ["allUsers"],
+      });
       toast({
         title: "회원정보 변경 성공",
         description: "회원정보 변경에 성공했습니다.",
       });
+      router.push("/userInfo");
     },
     onError: (error: any) => {
       // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력
-      if (error.status === 409) {
+      if (error.status === 422) {
         toast({
           variant: "destructive",
           title: "이미 존재하는 이메일입니다.",

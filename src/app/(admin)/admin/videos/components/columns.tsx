@@ -3,31 +3,33 @@
 import { formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { SortingHeader } from "../../users/components/SortingHeader";
-import { AdminCourse } from "@/model/course";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { MainCoursesResponse } from "@/hooks/useCourseQuery";
 
-export const videoColumns: ColumnDef<AdminCourse>[] = [
+export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
   {
     accessorKey: "createdAt",
     cell: (info) => info.getValue(),
     enableHiding: true,
   },
   {
-    accessorKey: "thumbnailImage",
+    accessorKey: "thumbnailImagePath",
     header: ({ column }) => {
       return <SortingHeader column={column} title="이미지" />;
     },
     cell: ({ row }) => {
+      // console.log(row.getValue("thumbnailImagePath"));
       return (
         <Image
           className="rounded-md"
           width={100}
           height={100}
-          src="/images/testCourseThumbnail.jpeg"
+          src={`${process.env.NEXT_PUBLIC_API_URL}${row.getValue(
+            "thumbnailImagePath"
+          )}`}
           alt="강의 썸네일"
           priority
         />

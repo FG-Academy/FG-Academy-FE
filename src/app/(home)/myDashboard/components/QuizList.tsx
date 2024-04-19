@@ -6,10 +6,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import QuizContents from "./quizContents";
 import { useFetchQuizListQuery } from "@/hooks/useQuizeQuery";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
+import QuizDetailContents from "./QuizDetailContents";
 
 export default function QuizList({}) {
   let maxPageNumberLimit = 5;
@@ -76,16 +76,16 @@ export default function QuizList({}) {
     <div className="flex-1 p-4">
       <div className="mb-4">
         <h3 className="text-2xl font-semibold">퀴즈 피드백</h3>
-        <p className="mt-4 text-gray-500 font-light">
+        <div className="mt-4 text-gray-500 font-light">
           내가 제출한 퀴즈와 채점 현황을 확인해보세요
-        </p>
+        </div>
         <div className="flex space-x-2 mt-4 border-b-2 rounded-md"></div>
       </div>
 
       <div className="flex w-full flex-col">
         {currentQuizzes?.map((ele, index) => (
           <div key={index}>
-            <QuizContents data={ele} />
+            <QuizDetailContents data={ele} />
           </div>
         ))}
         <Pagination>

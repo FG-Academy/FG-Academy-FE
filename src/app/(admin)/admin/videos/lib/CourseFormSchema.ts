@@ -30,23 +30,41 @@ export const CourseFormSchema = z.object({
 });
 
 export const AdminCourseFormSchema = z.object({
-  title: z.string().min(1, {
-    message: "코스 이름은 1글자 이상이어야 합니다.",
-  }),
-  description: z.string().min(1, {
-    message: "코스 이름은 1글자 이상이어야 합니다.",
-  }),
-  curriculum: z.string().min(1, { message: "필수 입력 항목입니다." }),
-  openDate: z.string().min(10, {
-    message: "올바른 시작일자 8자를 입력해주세요.",
-  }),
-  finishDate: z.string().min(10, {
-    message: "올바른 마감일자 8자를 입력해주세요.",
-  }),
-  level: z.string().min(1, {
-    message: "코스 이름은 1글자 이상이어야 합니다.",
-  }),
-  thumbnailImage: z.any(),
+  title: z
+    .string()
+    .min(1, {
+      message: "코스 이름은 1글자 이상이어야 합니다.",
+    })
+    .optional(),
+  description: z
+    .string()
+    .min(1, {
+      message: "코스 이름은 1글자 이상이어야 합니다.",
+    })
+    .optional(),
+  curriculum: z
+    .string()
+    .min(1, { message: "필수 입력 항목입니다." })
+    .optional(),
+  openDate: z
+    .string()
+    .min(10, {
+      message: "올바른 시작일자 8자를 입력해주세요.",
+    })
+    .optional(),
+  finishDate: z
+    .string()
+    .min(10, {
+      message: "올바른 마감일자 8자를 입력해주세요.",
+    })
+    .optional(),
+  level: z
+    .string()
+    .min(1, {
+      message: "코스 이름은 1글자 이상이어야 합니다.",
+    })
+    .optional(),
+  thumbnailImage: z.any().optional(),
   // .refine((files) => {
   //   return files?.[0]?.size <= MAX_FILE_SIZE;
   // }, `Max image size is 5MB.`)
@@ -54,14 +72,14 @@ export const AdminCourseFormSchema = z.object({
   //   (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
   //   "Only .jpg, .jpeg, .png and .webp formats are supported."
   // ),
-  lectures: z.array(
-    z.object({
-      lectureId: z.number().optional(),
-      title: z.string().min(1, {
-        message: "강의 제목은 1글자 이상이어야 합니다.",
-      }),
-      videoLink: z.string().optional(), // 설명은 선택적으로 입력 가능하게 설정
-      lectureNumber: z.number().optional(),
-    })
-  ),
+  // lectures: z.array(
+  //   z.object({
+  //     lectureId: z.number().optional(),
+  //     title: z.string().min(1, {
+  //       message: "강의 제목은 1글자 이상이어야 합니다.",
+  //     }),
+  //     videoLink: z.string().optional(), // 설명은 선택적으로 입력 가능하게 설정
+  //     lectureNumber: z.number().optional(),
+  //   })
+  // ),
 });

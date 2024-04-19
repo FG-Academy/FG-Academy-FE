@@ -17,7 +17,7 @@ export default function Page() {
   }
 
   return (
-    <div className="px-10 p-4 w-full min-h-screen">
+    <div className="px-10 p-4 w-full max-h-screen">
       <div className="text-2xl mb-4">강의 관리</div>
       <div className="flex flex-col p-2 h-[646px]">
         <DataTable columns={videoColumns} data={courses} />

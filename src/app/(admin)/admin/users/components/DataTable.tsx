@@ -189,17 +189,6 @@ export function DataTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
                       setUserId(row.getValue("userId"));
-                      // setUserInfo({
-                      //   userId: row.getValue("userId"),
-                      //   name: row.getValue("name"),
-                      //   birthDate: row.getValue("birthDate"),
-                      //   email: row.getValue("email"),
-                      //   phoneNumber: row.getValue("phoneNumber"),
-                      //   churchName: row.getValue("churchName"),
-                      //   departmentName: row.getValue("departmentName"),
-                      //   position: row.getValue("position"),
-                      //   yearsOfService: row.getValue("yearsOfService"),
-                      // });
                       setOpen(true);
                     }}
                   >

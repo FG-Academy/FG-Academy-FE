@@ -6,9 +6,7 @@ import { useFetchEnrollmentQuery } from "@/hooks/useEnrollmentQuery";
 import { useFetchAllLectureListQuery } from "@/hooks/useLectureQuery";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import testCoureThumbnail from "../../../../../../public/images/testCourseThumbnail.jpeg";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import LectureList from "@/components/LectureList";
 import { createMarkup } from "../lib/createMarkup";
 import { Progress } from "@/components/ui/progress";
@@ -44,7 +42,7 @@ export default function CourseDetail({ courseId }: Props) {
             className="rounded justify-center"
             width={700}
             height={700}
-            src="http://localhost:3000/testCourseThumbnail.jpeg"
+            src={`${process.env.NEXT_PUBLIC_API_URL}${course.thumbnailImagePath}`}
             alt="썸네일 이미지"
             priority
             style={{

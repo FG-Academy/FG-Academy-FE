@@ -25,11 +25,12 @@ import {
 } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
 import { dateFormat } from "@/lib/dateFormat";
-import { useUserMutation } from "../lib/useUserMutation";
+import { useUserMutation } from "../hook/useUserMutation";
 import { ProfileUpdateFormSchema } from "../lib/profileFormSchema";
 import { departments, positions, userLevelOptions } from "../types/type";
 import { UserProfileResponse } from "@/hooks/useUserQuery";
 import { transformDate } from "@/lib/utils";
+import { toast } from "@/components/ui/use-toast";
 
 type Props = {
   userInfo: UserProfileResponse;
@@ -48,16 +49,13 @@ export function UserInfo({ userInfo }: Props) {
     },
   });
   const {
-    handleSubmit,
     formState: { dirtyFields },
   } = form;
 
   const { mutate } = useUserMutation();
 
   const onSubmit = async (data: z.infer<typeof ProfileUpdateFormSchema>) => {
-    console.log(data);
     type UserData = z.infer<typeof ProfileUpdateFormSchema>;
-    type UpdateData = { [K in keyof UserData]: UserData[K] };
     const updatedData: any = {};
 
     Object.keys(dirtyFields).forEach((key) => {
@@ -70,6 +68,10 @@ export function UserInfo({ userInfo }: Props) {
     if (Object.keys(updatedData).length > 0) {
       mutate({ accessToken, data: updatedData });
     } else {
+      toast({
+        title: "수정된 정보가 없습니다.",
+        description: "정보를 수정 후 다시 시도해주세요.",
+      });
       console.log("No fields have been changed.");
     }
   };
@@ -131,17 +133,7 @@ export function UserInfo({ userInfo }: Props) {
                 생년월일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="ex) 19901216"
-                  // defaultValue={data.birthDate}
-                  {...field}
-                  value={field.value}
-                  onChange={(e) => {
-                    const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                    const formattedInput = transformDate(cleanInput);
-                    field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                  }}
-                />
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -3,7 +3,7 @@
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import CourseCardDashboard from "./courseCard";
+import CourseCardDashboard from "./CourseCardDashboard";
 import {
   Carousel,
   CarouselContent,
@@ -25,9 +25,9 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { useEffect, useMemo, useState } from "react";
 import { Dashboard, QuizList, courseDetail } from "@/model/dashboard";
-import QuizContents from "./quizContents";
 import { useFetchDashboardQuery } from "@/hooks/useDashboard";
 import { useFetchQuizListQuery } from "@/hooks/useQuizeQuery";
+import QuizContents from "./QuizContents";
 
 export default function MainDashBoard() {
   const [cardclassName, setCardClassName] = useState("basis-auto");

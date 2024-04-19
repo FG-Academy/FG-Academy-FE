@@ -3,6 +3,7 @@ import { getAllAdminCourses } from "./lib/getAllAdminCourses";
 import { getAllCourses } from "./lib/getAllCourses";
 import { getOneAdminCourses } from "./lib/getOneAdminCourses";
 import { getOneCourse } from "./lib/getOneCourse";
+import { AdminCourse } from "@/model/course";
 
 export interface MainCoursesResponse {
   courseId: number;
@@ -42,7 +43,7 @@ export const useFetchAllAdminCourseListQuery = (
   accessToken: string,
   options?: { enabled?: boolean }
 ) => {
-  return useQuery({
+  return useQuery<MainCoursesResponse[]>({
     queryKey: ["courses", "admin"],
     queryFn: () => getAllAdminCourses(accessToken),
     enabled: !!accessToken,
@@ -54,7 +55,7 @@ export const useFetchOneAdminCourseListQuery = (
   courseId: number,
   options?: { enabled?: boolean }
 ) => {
-  return useQuery({
+  return useQuery<AdminCourse>({
     queryKey: ["course", "admin", courseId],
     queryFn: () => getOneAdminCourses(accessToken, courseId),
     enabled: !!accessToken,

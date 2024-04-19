@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import CourseCardDashboard from "./courseCard";
+import CourseCardDashboard from "./CourseCardDashboard";
 import { useState } from "react";
 import { courseDetail } from "@/model/dashboard";
 
@@ -26,8 +26,8 @@ export default function CourseList({
   const [isSelectedComplete, setIsSelectedComplete] = useState(false);
 
   return (
-    <div className=" w-full p-6 space-y-4 justify-center items-center">
-      <div className="space-y-2 p-2">
+    <div className=" w-full p-6 space-y-4 justify-center bg-blue-50 items-center">
+      <div className="space-y-2 p-2 w-full">
         <h3 className="text-2xl font-semibold">전체 강의</h3>
         <div className="space-x-2">
           <Button
@@ -55,24 +55,29 @@ export default function CourseList({
         </div>
       </div>
 
-      <Carousel
-        opts={{
-          align: "start",
-        }}
-        className="w-full flex flex-row justify-center"
-      >
-        <CarouselContent>
-          {isSelectedComplete
-            ? completedCoursesRender(completedCourses, cardclassName)
-            : remainingCourses?.map((ele, index) => (
-                <CarouselItem key={index} className={`${cardclassName}`}>
-                  <CourseCardDashboard data={ele} />
-                </CarouselItem>
-              ))}
-        </CarouselContent>
-        <CarouselNext className="right-0" />
-        <CarouselPrevious className="left-0" />
-      </Carousel>
+      <div className="bg-yellow-50 p-6">
+        <Carousel
+          opts={{
+            align: "start",
+          }}
+          className="w-full bg-emerald-50 flex flex-row justify-center"
+        >
+          <CarouselContent className="bg-red-50 p-10 w-full">
+            {isSelectedComplete
+              ? completedCoursesRender(completedCourses, cardclassName)
+              : remainingCourses?.map((ele, index) => (
+                  <CarouselItem
+                    key={index}
+                    className={`basis-1/2 -ml-2 ${cardclassName}`}
+                  >
+                    <CourseCardDashboard data={ele} />
+                  </CarouselItem>
+                ))}
+          </CarouselContent>
+          <CarouselNext className="right-0" />
+          <CarouselPrevious className="left-0" />
+        </Carousel>
+      </div>
     </div>
   );
 }
