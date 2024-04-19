@@ -156,17 +156,7 @@ export default function UserForm({ userProfile, userId }: Props) {
                 생년월일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="ex) 19901216"
-                  // defaultValue={dateFormat(new Date(userProfile.birthDate))}
-                  {...field}
-                  // value={field.value ?? userProfile.birthDate}
-                  onChange={(e) => {
-                    const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                    const formattedInput = transformDate(cleanInput);
-                    field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                  }}
-                />
+                <Input type="date" {...field} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>

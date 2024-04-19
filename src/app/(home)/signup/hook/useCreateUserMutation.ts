@@ -2,34 +2,33 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ProfileFormSchema } from "./profileFormSchema";
+import { UserFormSchema } from "../lib/UserFormSchema";
 
 type UserPatchRequest = {
-  accessToken: string;
-  data: z.infer<typeof ProfileFormSchema>;
+  data: z.infer<typeof UserFormSchema>;
 };
 
-export function useUserMutation() {
+export function useUserCreateMutation() {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
 
   return useMutation({
-    mutationKey: ["updateUserProfile"],
-    mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
-      console.log(data);
+    mutationKey: ["createUser"],
+    mutationFn: async ({ data }: UserPatchRequest) => {
+      const { passwordVerify, ...bodyData } = data;
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
         {
           next: {
-            tags: ["updateUserProfile"],
+            tags: ["createUser"],
           },
           credentials: "include",
           headers: {
-            authorization: `Bearer ${accessToken}`,
             "content-type": "application/json",
           },
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify(bodyData),
         }
       );
       if (!response.ok) {
@@ -50,10 +49,10 @@ export function useUserMutation() {
         queryKey: ["allUsers"],
       });
       toast({
-        title: "회원정보 변경 성공",
-        description: "회원정보 변경에 성공했습니다.",
+        title: "회원가입 성공",
+        description: "회원가입에 성공하였습니다.",
       });
-      router.push("/userInfo");
+      router.push("/login");
     },
     onError: (error: any) => {
       // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력

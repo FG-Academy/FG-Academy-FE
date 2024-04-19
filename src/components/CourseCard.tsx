@@ -17,9 +17,10 @@ import {
 
 export default function CourseCard() {
   const router = useRouter();
-  const { data: courses, isPending, error } = useFetchAllCourseListQuery();
   const [category, setCategory] = useState("전체");
   const [uniqueCategories, setUniqueCategories] = useState<string[]>([]);
+
+  const { data: courses, isPending, error } = useFetchAllCourseListQuery();
 
   useEffect(() => {
     if (courses) {
@@ -30,12 +31,12 @@ export default function CourseCard() {
     }
   }, [courses]);
 
-  const filteredCourses = courses?.filter(
-    (course) => category === "전체" || course.curriculum === category
-  );
-
   if (isPending) return "로딩 중...";
   if (error) return "An error has occurred: " + error.message;
+
+  const filteredCourses = courses.filter(
+    (course) => category === "전체" || course.curriculum === category
+  );
 
   return (
     <div className="p-4 space-y-6">
@@ -65,8 +66,9 @@ export default function CourseCard() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <h2 className="text-2xl font-bold mx-auto">{category}</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
-        {filteredCourses?.map((ele) => (
+        {filteredCourses.map((ele) => (
           <div
             key={ele.courseId}
             id="courseInfo1"
@@ -77,11 +79,7 @@ export default function CourseCard() {
               width={500}
               height={500}
               style={{ width: "100%", height: "auto" }}
-              // src={
-              //   ele.thumbnailImagePath ||
-              //   "http://localhost:3000/testCourseThumbnail.jpeg"
-              // }
-              src="http://localhost:3000/testCourseThumbnail.jpeg"
+              src={`${process.env.NEXT_PUBLIC_API_URL}${ele.thumbnailImagePath}`}
               alt="강의 썸네일"
               priority
             />

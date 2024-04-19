@@ -43,10 +43,12 @@ export default function MainDashBoard() {
     setCompletedCourses(completedCourses);
     setRemainingCourses(remainingCourses);
 
-    if (remainingCourses.length > 2) {
-      setCardClassName(`basis-full sm:basis-1/2 md:basis-1/3`);
-    }
+    // if (remainingCourses.length > 2) {
+    //   setCardClassName(`basis-full sm:basis-1/2 md:basis-1/3`);
+    // }
   }, [dashboardInfo, submittedQuizList]);
+
+  // console.log(dashboardInfo);
 
   if (!dashboardInfo || !submittedQuizList) return <Loading />;
 
@@ -54,10 +56,10 @@ export default function MainDashBoard() {
     <div className="p-16">
       <div className="flex flex-row justify-start space-x-2">
         <Avatar>
-          <AvatarImage
+          {/* <AvatarImage
             alt="User Avatar"
             src="/placeholder.svg?height=40&width=40"
-          />
+          /> */}
           <AvatarFallback>{userName?.charAt(0)}</AvatarFallback>
         </Avatar>
         <div className="ml-4">
@@ -67,10 +69,10 @@ export default function MainDashBoard() {
           </h2>
         </div>
       </div>
-      <div id="sideBar" className="flex flex-col md:flex-row mt-8">
+      <div className="flex flex-col md:flex-row mt-8">
         <div
           id="navbar"
-          className="w-full md:w-1/6 space-y-4 bg-slate-100 text-black p-4 rounded-md border-r-2 shadow-lg"
+          className="w-[200px] md:w-1/6 space-y-4 bg-slate-100 text-black p-4 rounded-md border-r-2 shadow-lg"
         >
           <div
             className={modeClassName("course")}

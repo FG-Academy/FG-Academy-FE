@@ -12,11 +12,26 @@ import CourseEdit from "./components/CourseEdit";
 import { AdminCourse } from "@/model/course";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const courseId = parseInt(searchParams.get("cid") as string);
+
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
+
+  const { data: courseInfo } = useFetchOneAdminCourseListQuery(
+    accessToken,
+    courseId
+  );
+
+  if (!courseInfo) {
+    return <Loading />;
+  }
+
   return (
-    <div className="w-full">
-      <Suspense fallback={<Loading />}>
-        <CourseEdit />
-      </Suspense>
+    <div className="w-full h-screen">
+      {/* <Suspense> */}
+      <CourseEdit courseInfo={courseInfo} />
+      {/* </Suspense> */}
     </div>
   );
 }

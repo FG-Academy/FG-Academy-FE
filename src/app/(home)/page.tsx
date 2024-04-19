@@ -1,6 +1,6 @@
 import Image from "next/image";
 import MainBanner from "../../../public/images/main-banner02.jpg";
-import CourseCard from "../../components/CourseCard";
+import CourseCard from "../../components/CourseCard2";
 
 export default function Home() {
   return (

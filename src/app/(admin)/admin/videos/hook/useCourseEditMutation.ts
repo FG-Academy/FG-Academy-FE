@@ -16,9 +16,6 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
   return useMutation({
     mutationKey: ["updateCourseByAdmin"],
     mutationFn: async (data: FormData) => {
-      data.forEach((value, key) => {
-        console.log(key, value);
-      });
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/courses/${courseId}`,
         {

@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LectureFormSchema } from "../../lib/LecturesFormSchema";
 import { useSession } from "next-auth/react";
 import { useLectureMutation } from "../../hook/useLectureMutation";
-
+import { toast } from "@/components/ui/use-toast";
 interface LecturesResponse {
   lectureId: number;
   title: string;
@@ -55,6 +55,10 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
     name: "lectures",
   });
 
+  const {
+    formState: { dirtyFields },
+  } = form;
+
   const onDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
 
@@ -77,7 +81,8 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
       ...field,
       lectureNumber: index + 1, // 인덱스는 0부터 시작하므로 +1을 해줍니다.
     }));
-    form.setValue("lectures", updatedFields);
+    console.log(updatedFields);
+    form.setValue("lectures", updatedFields, { shouldDirty: true });
   };
 
   const handleAddLecture = () => {
@@ -104,8 +109,16 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
   const { mutate } = useLectureMutation(accessToken, courseId);
 
   const onSubmit = async (data: z.infer<typeof LectureFormSchema>) => {
-    console.log(data);
-    // mutate(data);
+    console.log(dirtyFields);
+    if (Object.keys(dirtyFields).length > 0) {
+      mutate(data);
+    } else {
+      toast({
+        title: "수정한 정보가 없습니다.",
+        description: "정보를 수정하고 다시 시도해주세요.",
+      });
+      console.log("No changes detected, no mutation occurred.");
+    }
   };
 
   return (
@@ -115,7 +128,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
         autoComplete="off"
         autoFocus={false}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/2 bg-yellow-50 overflow-y-auto border border-gray-400 space-y-4 p-12 rounded-lg"
+        className="w-1/2 bg-yellow-50 border overflow-y-auto border-gray-400 space-y-4 p-12 rounded-lg"
       >
         <Button
           onClick={handleAddLecture}
@@ -123,89 +136,96 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
         >
           강의 추가
         </Button>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(droppableProvided) => (
-              <div
-                className="space-y-2 overflow-auto"
-                {...droppableProvided.droppableProps}
-                ref={droppableProvided.innerRef}
-              >
-                {fields.map((field, index) => (
-                  <Draggable
-                    key={field.id}
-                    draggableId={field.id}
-                    index={index}
-                  >
-                    {(provide) => (
-                      <div
-                        ref={provide.innerRef}
-                        {...provide.draggableProps}
-                        {...provide.dragHandleProps}
-                        className="border-2 bg-white p-4 space-y-2 rounded-xl border-blue-300 border-dashed"
-                      >
-                        <div className="flex flex-row justify-between font-semibold text-lg">
-                          <div>{index + 1} 강</div>
-                          <Button
-                            variant="ghost"
-                            onClick={() => handleRemoveLecture(index)}
-                            className="border border-red-600 rounded-md"
-                          >
-                            <Trash />
-                            강의 제거
-                          </Button>
+        <div className="overflow-y-auto">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(droppableProvided) => (
+                <div
+                  className="space-y-2 overflow-y-auto"
+                  {...droppableProvided.droppableProps}
+                  ref={droppableProvided.innerRef}
+                >
+                  {fields.map((field, index) => (
+                    <Draggable
+                      key={field.id}
+                      draggableId={field.id}
+                      index={index}
+                    >
+                      {(provide) => (
+                        <div
+                          ref={provide.innerRef}
+                          {...provide.draggableProps}
+                          {...provide.dragHandleProps}
+                          className="border-2 bg-white p-4 space-y-2 rounded-xl border-blue-300 border-dashed"
+                        >
+                          <div className="flex flex-row justify-between font-semibold text-lg">
+                            <div>{index + 1} 강</div>
+                            <Button
+                              variant="ghost"
+                              onClick={() => handleRemoveLecture(index)}
+                              className="border border-red-600 rounded-md"
+                            >
+                              <Trash />
+                              강의 제거
+                            </Button>
+                          </div>
+                          <FormField
+                            control={form.control}
+                            name={`lectures.${index}.title`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-base font-bold">
+                                  강의 제목{" "}
+                                  <span className="text-red-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    {...form.register(
+                                      `lectures.${index}.title`
+                                    )}
+                                    // onChange={handleFileChange}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`lectures.${index}.videoLink`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-base font-bold">
+                                  유튜브 영상 코드{" "}
+                                  <span className="text-red-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    {...form.register(
+                                      `lectures.${index}.videoLink`
+                                    )}
+                                    // onChange={handleFileChange}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </div>
-                        <FormField
-                          control={form.control}
-                          name={`lectures.${index}.title`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-base font-bold">
-                                강의 제목{" "}
-                                <span className="text-red-500">*</span>
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  {...form.register(`lectures.${index}.title`)}
-                                  // onChange={handleFileChange}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`lectures.${index}.videoLink`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-base font-bold">
-                                유튜브 영상 코드{" "}
-                                <span className="text-red-500">*</span>
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  {...form.register(
-                                    `lectures.${index}.videoLink`
-                                  )}
-                                  // onChange={handleFileChange}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {droppableProvided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                      )}
+                    </Draggable>
+                  ))}
+                  {droppableProvided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
+        <Button className="w-full mt-10" type="submit">
+          강의 저장
+        </Button>
       </form>
     </Form>
   );

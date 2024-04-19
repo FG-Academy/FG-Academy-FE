@@ -5,8 +5,8 @@ import IntroBackground from "../../../../public/images/introBackground.jpg";
 
 export default function IntroducePage() {
   const imageStyle = {
-    width: "100%",
-    height: "300px",
+    width: "auto",
+    height: "30%",
   };
 
   return (
@@ -16,9 +16,6 @@ export default function IntroducePage() {
           <div className="relative flex flex-col justify-center w-full h-40">
             <Image
               src={IntroBackground}
-              // width={100}
-              // height={100}
-              // objectFit="cover"
               style={{ width: "100%", height: "160px", objectFit: "cover" }}
               alt="인트로 배경"
             />

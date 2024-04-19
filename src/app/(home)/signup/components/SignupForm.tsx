@@ -28,89 +28,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import { Department, Position } from "../../userInfo/types/type";
-
-function getValues<T extends Record<string, any>>(obj: T) {
-  return Object.values(obj) as [(typeof obj)[keyof T]];
-}
-
-const departments = [
-  { value: Department.FETAL, label: "태아부" },
-  { value: Department.INFANT, label: "영아부" },
-  { value: Department.TODDLER, label: "유아부" },
-  { value: Department.KINDERGARTEN, label: "유치부" },
-  { value: Department.ELEMENTARYYOUNG, label: "유년부" },
-  { value: Department.ELEMENTARY, label: "초등부" },
-  { value: Department.JUNIOR, label: "소년부" },
-  { value: Department.MIDDLE, label: "중등부" },
-  { value: Department.MIDDLEHIGH, label: "중고등부" },
-  { value: Department.HIGH, label: "고등부" },
-  { value: Department.GONGREUNGYOUNGKINDER, label: "공릉영유치부" },
-  { value: Department.GONGREUNGELEMENTARYYOUNG, label: "공릉유년부" },
-  { value: Department.GONGREUNGELEMENTARY, label: "공릉초등부" },
-  { value: Department.GONGREUNGMIDDLE, label: "공릉중등부" },
-  { value: Department.GONGREUNGHIGH, label: "공릉고등부" },
-  { value: Department.ENGLISHYOUNGKINDER, label: "영어영유치부" },
-  { value: Department.ENGLISHELEMENTARYYOUNG, label: "영어유년부" },
-  { value: Department.ENGLISHELEMENTARY, label: "영어초등부" },
-  { value: Department.ENGLISHMIDDLEHIGH, label: "영어중고등부" },
-  { value: Department.LOVE, label: "사랑부" },
-  { value: Department.YOUTH, label: "청년부" },
-  { value: Department.ETC, label: "기타" },
-];
-
-const positions = [
-  { value: Position.PASTOR, label: "목사" },
-  { value: Position.EVANGELIST, label: "전도사" },
-  { value: Position.ELDER, label: "장로" },
-  { value: Position.TEACHER, label: "교사" },
-  { value: Position.ETC, label: "기타" },
-];
-
-const FormSchema = z
-  .object({
-    name: z.string().min(2, {
-      message: "이름은 2글자 이상이어야 합니다.",
-    }),
-    email: z.string().min(1, { message: "필수 입력 항목입니다." }).email({
-      message: "이메일 형식이 올바르지 않습니다.",
-    }),
-    birthDate: z.string().min(8, {
-      message: "올바른 생년월일 8자를 입력해주세요.",
-    }),
-    // birthDate: z.string().pipe(z.coerce.date()),
-    password: z.string().min(8, {
-      message: "비밀번호는 영문, 숫자를 포함하여 8자 이상이어야 합니다.",
-    }),
-    passwordVerify: z.string(),
-    phoneNumber: z.string().min(10, {
-      message: "핸드폰 번호 11자리를 입력해주세요.",
-    }),
-    churchName: z.enum(["fg", "others"]),
-    departmentName: z.enum(getValues(Department), {
-      errorMap: () => ({
-        message: "부서명을 선택해주세요.",
-      }),
-    }),
-    position: z.enum(getValues(Position), {
-      errorMap: () => ({
-        message: "직분을 선택해주세요.",
-      }),
-    }),
-    yearsOfService: z.coerce
-      .number({ invalid_type_error: "숫자 형식의 값을 적어주세요." })
-      .nonnegative("0 이상의 값을 적어주세요.")
-      .lte(100, "100 이하의 값을 적어주세요."),
-  })
-  .refine(({ password, passwordVerify }) => password === passwordVerify, {
-    message: "비밀번호가 일치하지 않습니다.",
-    path: ["passwordVerify"],
-  });
+import { departments, positions } from "../../userInfo/types/type";
+import { UserFormSchema } from "../lib/UserFormSchema";
+import { useUserCreateMutation } from "../hook/useCreateUserMutation";
 
 export function InputForm() {
-  const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof UserFormSchema>>({
+    resolver: zodResolver(UserFormSchema),
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -126,54 +50,10 @@ export function InputForm() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    try {
-      // console.log(JSON.stringify(data, null, 2));
-      // passwordVerify 프로퍼티를 제거한 나머지 데이터를 bodyData에 옮김
-      const { passwordVerify, ...bodyData } = data;
-      // console.log(JSON.stringify(bodyData, null, 2));
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(bodyData),
-        }
-      );
-      if (!response.ok) {
-        if (response.status === 422) {
-          // 409 Conflict 에러 처리
-          toast({
-            variant: "destructive",
-            title: "이미 존재하는 이메일입니다.",
-            description: "다른 이메일 주소를 사용해주세요.",
-          });
-        } else {
-          // 그 외의 오류 처리
-          toast({
-            variant: "destructive",
-            title: "오류가 발생했습니다.",
-            description: "입력하신 정보를 확인 후 다시 한 번 시도해주세요.",
-          });
-        }
-      } else {
-        const data = await response.json();
-        toast({
-          title: "회원가입 성공",
-          description: "회원가입에 성공하였습니다.",
-        });
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("There was a problem with your fetch operation:", error);
-      toast({
-        variant: "destructive",
-        title: "네트워크 오류가 발생했습니다.",
-        description: "잠시 후 다시 시도해주세요.",
-      });
-    }
+  const { mutate } = useUserCreateMutation();
+
+  const onSubmit = async (data: z.infer<typeof UserFormSchema>) => {
+    mutate({ data });
   };
 
   return (
@@ -211,34 +91,7 @@ export function InputForm() {
                 생년월일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="ex) 19901216"
-                  {...field}
-                  value={field.value}
-                  onChange={(e) => {
-                    const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                    let formattedInput;
-
-                    if (cleanInput.length <= 4) {
-                      // 연도 입력 중
-                      formattedInput = cleanInput;
-                    } else if (cleanInput.length <= 6) {
-                      // 월 입력 중
-                      formattedInput = `${cleanInput.slice(
-                        0,
-                        4
-                      )}-${cleanInput.slice(4)}`;
-                    } else {
-                      // 일 입력 중
-                      formattedInput = `${cleanInput.slice(
-                        0,
-                        4
-                      )}-${cleanInput.slice(4, 6)}-${cleanInput.slice(6, 8)}`;
-                    }
-
-                    field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                  }}
-                />
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
