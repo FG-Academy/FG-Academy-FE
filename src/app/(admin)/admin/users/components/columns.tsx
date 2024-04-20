@@ -128,6 +128,7 @@ export const columns: ColumnDef<IUser>[] = [
       return <SortingHeader column={column} title="가입일자" />;
     },
     cell: ({ row }) => {
+      console.log(row.getValue("createdAt"));
       return <div>{formatDate(new Date(row.getValue("createdAt")))}</div>;
     },
   },

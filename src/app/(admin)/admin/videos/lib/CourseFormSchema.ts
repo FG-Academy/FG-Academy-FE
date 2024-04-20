@@ -36,6 +36,7 @@ export const AdminCourseFormSchema = z.object({
       message: "코스 이름은 1글자 이상이어야 합니다.",
     })
     .optional(),
+  status: z.enum(["active", "inactive"]).optional(),
   description: z
     .string()
     .min(1, {

@@ -18,7 +18,9 @@ declare module "next-auth" {
   interface Session {
     user: {
       name: string;
+      level: string;
       accessToken: any & DefaultSession["user"];
+      error: string | undefined;
     };
     accessToken: string;
   }
@@ -27,6 +29,7 @@ declare module "next-auth" {
     accessToken: any & DefaultSession["user"];
     refreshToken: any & DefaultSession["user"];
     expiresIn: any & DefaultSession["user"];
+    error: string | undefined;
   }
 }
 

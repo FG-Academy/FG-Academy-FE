@@ -31,6 +31,8 @@ import { transformDate } from "@/lib/utils";
 import { ChangeEvent, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useCurriculumQuery } from "@/hooks/useCurriculumQuery";
+import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 
 interface Data {
   title: string;
@@ -63,6 +65,9 @@ export default function Page() {
       // thumbnailImage: null,
     },
   });
+
+  const { data: curriculums } = useCurriculumQuery(accessToken);
+
   const { mutate } = useCourseMutation();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -93,16 +98,12 @@ export default function Page() {
       }
     });
 
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-
     mutate({ accessToken, data: formData });
   };
 
-  useEffect(() => {
-    console.log(imageFile);
-  }, [imageFile]);
+  if (!curriculums) {
+    return <Loading />;
+  }
 
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-screen p-2 py-8">
@@ -161,11 +162,7 @@ export default function Page() {
                 <FormLabel className="text-base font-bold">
                   코스 과정 <span className="text-red-500">*</span>
                 </FormLabel>
-                <Select
-                  name={field.name}
-                  onValueChange={field.onChange}
-                  // defaultValue={userInfo.departmentName}
-                >
+                <Select name={field.name} onValueChange={field.onChange}>
                   <SelectTrigger>
                     <SelectValue
                       onBlur={field.onBlur}
@@ -175,8 +172,11 @@ export default function Page() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {/* <SelectLabel>부서명</SelectLabel> */}
-                      <SelectItem value="sdf">ㄴㅇㄹ</SelectItem>
+                      {curriculums.data.map((ele, index) => (
+                        <SelectItem key={index} value={ele}>
+                          {ele}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -193,15 +193,7 @@ export default function Page() {
                   시작일자 <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="ex) 20241216"
-                    {...field}
-                    onChange={(e) => {
-                      const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                      const formattedInput = transformDate(cleanInput);
-                      field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                    }}
-                  />
+                  <Input type="date" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -216,15 +208,7 @@ export default function Page() {
                   마감일자 <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="ex) 19901216"
-                    {...field}
-                    onChange={(e) => {
-                      const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                      const formattedInput = transformDate(cleanInput);
-                      field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                    }}
-                  />
+                  <Input type="date" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

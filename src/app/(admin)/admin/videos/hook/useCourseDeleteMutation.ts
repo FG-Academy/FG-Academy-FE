@@ -2,31 +2,23 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ProfileFormSchema } from "@/app/(home)/userInfo/lib/profileFormSchema";
-import { CourseFormSchema } from "../lib/CourseFormSchema";
 
-type UserPatchRequest = {
-  accessToken: string;
-  // data: z.infer<typeof CourseFormSchema>;
-  data: FormData;
-};
-
-export function useCourseMutation() {
+export function useCourseDeleteMutation(accessToken: string) {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
 
   return useMutation({
-    mutationKey: ["updateCourseByAdmin"],
-    mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
-      console.log(data);
+    mutationKey: ["deleteCourseByAdmin"],
+    mutationFn: async (courseIds: number[]) => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/courses`,
         {
-          method: "POST",
+          method: "DELETE",
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
           },
-          body: data,
+          body: JSON.stringify({ courseIds }),
         }
       );
       if (!response.ok) {
@@ -44,8 +36,8 @@ export function useCourseMutation() {
         queryKey: ["courses"],
       });
       toast({
-        title: "코스 등록 성공",
-        description: "코스 등록에 성공하였습니다.",
+        title: "강의 삭제 성공",
+        description: "강의 삭제에 성공하였습니다.",
       });
       router.push("/admin/videos");
     },

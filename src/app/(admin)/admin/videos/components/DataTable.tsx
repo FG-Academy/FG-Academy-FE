@@ -28,11 +28,10 @@ import {
   rankItem,
   compareItems,
 } from "@tanstack/match-sorter-utils";
-import useOpenDialogStore from "@/store/useOpenDialogStore";
 import DebouncedInput from "../../users/components/DebouncedInput";
-import { DataTablePagination } from "../../users/components/DataTablePagination";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { DataTablePagination } from "./DataTablePagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
