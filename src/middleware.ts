@@ -15,8 +15,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_HOST}/`);
   }
 
-  if (request.nextUrl.pathname.startsWith("/course")) {
-  }
+  return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more

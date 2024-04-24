@@ -135,9 +135,11 @@ export default function CourseDetail({ courseId }: Props) {
               {enrollment.completedLectures}/{enrollment.totalCount}
             </div>
             <div className="justify-end w-fit">
-              {Math.floor(
-                (enrollment.completedLectures / enrollment.totalCount) * 100
-              )}
+              {enrollment.totalCount === 0
+                ? 0
+                : Math.floor(
+                    (enrollment.completedLectures / enrollment.totalCount) * 100
+                  )}
               %
             </div>
           </div>

@@ -12,12 +12,12 @@ export default function Header() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (session && session.user.error === "RefreshAccessTokenError") {
-  //     console.log("sdfsdf");
-  //     signOut({ callbackUrl: "/" });
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (session && session.user.error === "RefreshAccessTokenError") {
+      console.log("sdfsdf");
+      signOut({ callbackUrl: "/" });
+    }
+  }, [session]);
 
   return (
     <header className="inset-x-0 sticky top-0 left-0 z-50 text-gray-700 bg-white border-b border-gray-200 font-Pretendard">

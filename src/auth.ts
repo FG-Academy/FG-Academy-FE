@@ -17,20 +17,12 @@ export const {
   session: {
     strategy: "jwt",
   },
-  events: {
-    session: async ({ session }) => {
-      // if RefreshAccessTokenError then logout
-      if (session.user.error === "RefreshAccessTokenError") {
-        signOut({ redirect: true, redirectTo: "/login" });
-      }
-    },
-  },
   callbacks: {
     // 토큰 관련 action 시 호출되는 Callback
     async jwt({ token, user }) {
       if (user) {
         // Initial Login에만 user가 존재
-        console.log("initial login", user);
+        console.log("initial login", user, Date.now());
         return {
           ...user,
           accessToken: user.accessToken,
@@ -38,14 +30,10 @@ export const {
           refreshToken: user.refreshToken,
         };
       } else if (Date.now() < (token.expiresAt as number) * 1000) {
+        console.log(Date.now(), (token.expiresAt as number) * 1000);
         // 첫 로그인 이후 토큰 access
         return token;
       } else {
-        // access token 만료되어 토큰 재발급
-        console.log(
-          "=========== access token 만료 토큰 재발급 =========== refresh: ",
-          token
-        );
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh-token`,
@@ -77,17 +65,8 @@ export const {
     },
     // Session 관련 action 시 호출되는 callback
     session({ session, token }) {
-      // token에 error 속성이 있으면 null을 반환
-      // if (token.error) {
-      //   console.error(
-      //     "Session creation failed due to token error:",
-      //     token.error
-      //   );
-      //   return null;
-      // }
-
       session.user = token as any;
-      console.log(session);
+      // console.log(session);
       return session;
     },
   },
@@ -110,7 +89,6 @@ export const {
             credentials: "include",
           }
         );
-        // console.log(authResponse);
 
         if (!authResponse.ok) {
           console.log("return null");
