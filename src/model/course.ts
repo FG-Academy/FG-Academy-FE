@@ -22,7 +22,7 @@ export interface AdminCourse {
   thumbnailImagePath: string;
   description: string;
   curriculum: string;
-  status?: string;
+  status: "active" | "inactive";
   level: string;
   openDate: string;
   finishDate: string;

@@ -74,8 +74,11 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
     }
 
     const newFields = Array.from(fields);
+    console.log(newFields);
     const [removed] = newFields.splice(source.index, 1);
+    console.log(removed);
     newFields.splice(destination.index, 0, removed);
+    console.log(newFields);
 
     const updatedFields = newFields.map((field, index) => ({
       ...field,
@@ -94,22 +97,41 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
   };
 
   const handleRemoveLecture = (index: number) => {
-    remove(index);
-    const updatedLectures = fields.slice();
-    updatedLectures.splice(index, 1);
+    if (
+      confirm("정말로 삭제하시겠습니까? (등록된 강의, 퀴즈 모두 삭제됩니다.)")
+    ) {
+      try {
+        remove(index);
+        console.log(fields);
+        const updatedLectures = fields.slice();
+        updatedLectures.splice(index, 1);
 
-    const lecturesWithUpdatedNumbers = updatedLectures.map((lecture, idx) => ({
-      ...lecture,
-      lectureNumber: idx + 1, // Increment index to start from 1
-    }));
+        const lecturesWithUpdatedNumbers = updatedLectures.map(
+          (lecture, idx) => ({
+            ...lecture,
+            lectureNumber: idx + 1, // Increment index to start from 1
+          })
+        );
 
-    form.setValue("lectures", lecturesWithUpdatedNumbers);
+        form.setValue("lectures", lecturesWithUpdatedNumbers);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "요청이 불안정합니다..",
+          description: "잠시 후 다시 시도해주세요.",
+        });
+        console.error("Failed to delete courses:", error);
+      }
+    } else {
+      // User clicked 'Cancel'
+      console.log("Deletion cancelled.");
+    }
   };
 
   const { mutate } = useLectureMutation(accessToken, courseId);
 
   const onSubmit = async (data: z.infer<typeof LectureFormSchema>) => {
-    console.log(dirtyFields);
+    // console.log(dirtyFields);
     if (Object.keys(dirtyFields).length > 0) {
       mutate(data);
     } else {

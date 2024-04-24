@@ -17,11 +17,20 @@ export const {
   session: {
     strategy: "jwt",
   },
+  events: {
+    session: async ({ session }) => {
+      // if RefreshAccessTokenError then logout
+      if (session.user.error === "RefreshAccessTokenError") {
+        signOut({ redirect: true, redirectTo: "/login" });
+      }
+    },
+  },
   callbacks: {
     // 토큰 관련 action 시 호출되는 Callback
     async jwt({ token, user }) {
       if (user) {
         // Initial Login에만 user가 존재
+        console.log("initial login", user);
         return {
           ...user,
           accessToken: user.accessToken,
@@ -61,6 +70,7 @@ export const {
           };
         } catch (error) {
           console.error("Error refreshing access token", error);
+          signOut({ redirect: false });
           return { ...token, error: "RefreshAccessTokenError" as const };
         }
       }
@@ -75,7 +85,9 @@ export const {
       //   );
       //   return null;
       // }
+
       session.user = token as any;
+      console.log(session);
       return session;
     },
   },
@@ -84,8 +96,6 @@ export const {
     CredentialsProvider({
       async authorize(credentials) {
         // signIn 호출 시 동작
-        console.log(credentials);
-        console.log(process.env.NEXT_PUBLIC_BASE_URL);
         const authResponse = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/auth/sign-in`,
           {
@@ -108,7 +118,6 @@ export const {
         }
 
         const user = await authResponse.json();
-        console.log("user", user);
         return user;
       },
     }),

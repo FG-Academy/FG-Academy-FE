@@ -35,22 +35,36 @@ export function DataTablePagination<TData>({
     const selectedRowIds = table
       .getSelectedRowModel()
       .rows.map((row) => row.getValue("courseId") as number);
-    try {
-      mutate(selectedRowIds);
-      table.setRowSelection({}); // Reset selection after deletion
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "요청이 불안정합니다..",
-        description: "잠시 후 다시 시도해주세요.",
-      });
-      console.error("Failed to delete courses:", error);
+    if (
+      confirm("정말로 삭제하시겠습니까? (등록된 강의, 퀴즈 모두 삭제됩니다.)")
+    ) {
+      try {
+        mutate(selectedRowIds);
+        table.setRowSelection({}); // Reset selection after deletion
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "요청이 불안정합니다..",
+          description: "잠시 후 다시 시도해주세요.",
+        });
+        console.error("Failed to delete courses:", error);
+      }
+    } else {
+      // User clicked 'Cancel'
+      console.log("Deletion cancelled.");
     }
   };
 
   return (
     <div className="flex items-center justify-between p-2">
       <div className="flex-1 text-sm text-muted-foreground">
+        <Button
+          disabled={table.getFilteredSelectedRowModel().rows.length <= 0}
+          className=" p-2 bg-red-500 text-white"
+          onClick={deleteSelectedRows}
+        >
+          코스 삭제
+        </Button>
         {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} 행이 선택되었습니다. */}
       </div>

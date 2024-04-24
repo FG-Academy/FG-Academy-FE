@@ -35,6 +35,8 @@ import CourseLectureEdit from "./CourseLectureEdit";
 import { toast } from "@/components/ui/use-toast";
 import { useCurriculumQuery } from "@/hooks/useCurriculumQuery";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   courseInfo: AdminCourse;
@@ -75,6 +77,7 @@ export default function CourseEdit({ courseInfo }: Props) {
       openDate: dateFormat(new Date(courseInfo.openDate)),
       finishDate: dateFormat(new Date(courseInfo.finishDate)),
       level: courseInfo.level,
+      status: courseInfo.status,
       thumbnailImage: "",
     },
   });
@@ -167,6 +170,39 @@ export default function CourseEdit({ courseInfo }: Props) {
           >
             {/* <div className="flex flex-row w-full justify-between space-x-2 overflow-y-auto"> */}
             <div className="flex flex-col justify-between p-2 space-y-2 overflow-y-auto w-full">
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel className="text-base font-bold">
+                      공개여부 <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={courseInfo.status}
+                        className="flex flex-row space-x-2"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="active" />
+                          </FormControl>
+                          <FormLabel className="text-base">공개</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="inactive" />
+                          </FormControl>
+                          <FormLabel className="text-base">비공개</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Separator />
               <Image
                 className="mx-auto"
                 src={preview.dataUrl}
