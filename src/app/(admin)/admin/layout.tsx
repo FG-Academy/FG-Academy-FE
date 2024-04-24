@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../../globals.css";
 import SideNav from "./components/SideNav";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +17,11 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-row min-w-screen min-h-screen">
-      <SideNav />
-      {children}
-    </div>
+    <Suspense>
+      <div className="flex flex-row min-w-screen min-h-screen">
+        <SideNav />
+        {children}
+      </div>
+    </Suspense>
   );
 }
