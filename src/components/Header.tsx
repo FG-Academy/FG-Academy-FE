@@ -15,9 +15,7 @@ export default function Header() {
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {
       console.log("세션 만료.");
-      signOut({
-        callbackUrl: `${process.env.NEXT_PUBLIC_BASE_HOST}/`,
-      });
+      signOut();
     }
   }, [session]);
 
@@ -85,9 +83,7 @@ export default function Header() {
                         className="w-full text-left hover:text-blue-900"
                         href="/"
                         onClick={() => {
-                          signOut({
-                            callbackUrl: `${process.env.NEXT_PUBLIC_BASE_HOST}/`,
-                          });
+                          signOut();
                         }}
                       >
                         로그아웃
@@ -137,9 +133,7 @@ export default function Header() {
                   className="mr-5 hover:text-blue-900"
                   href="/"
                   onClick={() => {
-                    signOut({
-                      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_HOST}/`,
-                    });
+                    signOut();
                   }}
                 >
                   로그아웃
