@@ -15,7 +15,9 @@ export default function Header() {
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {
       console.log("sdfsdf");
-      signOut({ callbackUrl: "/" });
+      signOut({
+        callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+      });
     }
   }, [session]);
 
@@ -83,7 +85,9 @@ export default function Header() {
                         className="w-full text-left hover:text-blue-900"
                         href="/"
                         onClick={() => {
-                          signOut({ callbackUrl: "/" });
+                          signOut({
+                            callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+                          });
                         }}
                       >
                         로그아웃
@@ -133,7 +137,9 @@ export default function Header() {
                   className="mr-5 hover:text-blue-900"
                   href="/"
                   onClick={() => {
-                    signOut({ callbackUrl: "/" });
+                    signOut({
+                      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+                    });
                   }}
                 >
                   로그아웃
