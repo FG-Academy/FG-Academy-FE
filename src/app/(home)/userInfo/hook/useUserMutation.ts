@@ -16,7 +16,6 @@ export function useUserMutation() {
   return useMutation({
     mutationKey: ["updateUserProfile"],
     mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
-      console.log(data);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
         {

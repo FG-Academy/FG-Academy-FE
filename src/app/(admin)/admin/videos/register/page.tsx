@@ -87,7 +87,6 @@ export default function Page() {
   };
 
   const onSubmit = async (data: z.infer<typeof CourseFormSchema>) => {
-    console.log(data);
     const formData = new FormData();
 
     Object.keys(data).forEach((key) => {

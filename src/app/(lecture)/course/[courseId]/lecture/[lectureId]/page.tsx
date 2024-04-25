@@ -27,8 +27,6 @@ export default async function Page({ params }: Props) {
   });
   const dehydratedState = dehydrate(queryClient);
 
-  console.log(session);
-
   return (
     <HydrationBoundary state={dehydratedState}>
       <LectureVideo courseId={courseId} lectureId={lectureId} />

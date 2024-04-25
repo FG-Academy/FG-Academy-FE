@@ -18,7 +18,6 @@ export function useCourseMutation() {
   return useMutation({
     mutationKey: ["updateCourseByAdmin"],
     mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
-      console.log(data);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/courses`,
         {

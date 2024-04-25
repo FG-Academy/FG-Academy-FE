@@ -74,17 +74,14 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
     }
 
     const newFields = Array.from(fields);
-    console.log(newFields);
     const [removed] = newFields.splice(source.index, 1);
-    console.log(removed);
     newFields.splice(destination.index, 0, removed);
-    console.log(newFields);
 
     const updatedFields = newFields.map((field, index) => ({
       ...field,
       lectureNumber: index + 1, // 인덱스는 0부터 시작하므로 +1을 해줍니다.
     }));
-    console.log(updatedFields);
+
     form.setValue("lectures", updatedFields, { shouldDirty: true });
   };
 
@@ -102,7 +99,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
     ) {
       try {
         remove(index);
-        console.log(fields);
+
         const updatedLectures = fields.slice();
         updatedLectures.splice(index, 1);
 

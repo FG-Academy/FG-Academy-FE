@@ -59,7 +59,7 @@ export default function UserForm({ userProfile, userId }: Props) {
   } = form;
 
   const onSubmit = async (data: z.infer<typeof ProfileUpdateFormSchema>) => {
-    console.log(data);
+    // console.log(data);
     type UserData = z.infer<typeof ProfileUpdateFormSchema>;
     type UpdateData = { [K in keyof UserData]: UserData[K] };
     const updatedData: any = {};

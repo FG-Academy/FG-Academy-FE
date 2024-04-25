@@ -22,7 +22,6 @@ export const updateCompleted = async (
       throw new Error("Failed to update status 'completed'");
     }
     // 성공 로그 또는 처리
-    console.log(response.json());
   } catch (error) {
     console.error("Error saving duration:", error);
   }

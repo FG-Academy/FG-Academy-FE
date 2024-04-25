@@ -14,7 +14,7 @@ export default function Header() {
 
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {
-      console.log("sdfsdf");
+      console.log("세션 만료.");
       signOut({
         callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
       });

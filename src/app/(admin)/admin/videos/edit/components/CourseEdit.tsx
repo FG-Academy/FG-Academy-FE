@@ -92,7 +92,7 @@ export default function CourseEdit({ courseInfo }: Props) {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const reader = new FileReader();
-      console.log(file);
+      // console.log(file);
 
       reader.onloadend = () => {
         setImageFile(file);

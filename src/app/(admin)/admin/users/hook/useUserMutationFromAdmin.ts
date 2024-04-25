@@ -23,7 +23,7 @@ export function useUserMutationFromAdmin() {
   return useMutation({
     mutationKey: ["updateUserProfileByAdmin"],
     mutationFn: async ({ accessToken, data, userId }: UserPatchRequest) => {
-      console.log(data);
+      // console.log(data);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
         {

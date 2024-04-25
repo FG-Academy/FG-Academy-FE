@@ -21,8 +21,6 @@ export const saveSeconds = async (
     if (!response.ok) {
       throw new Error("Failed to save duration");
     }
-    // 성공 로그 또는 처리
-    console.log(response.json());
   } catch (error) {
     console.error("Error saving duration:", error);
   }

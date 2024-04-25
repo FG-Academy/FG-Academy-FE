@@ -109,12 +109,9 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
 
   // 타이머 시작
   const startTimer = () => {
-    // console.log("타이머 시작");
-
     if (!intervalRef.current && seconds < duration) {
       intervalRef.current = setInterval(() => {
         increaseSeconds();
-        // console.log("increase");
         const currentSeconds = useSecondsStore.getState().seconds;
         if (currentSeconds >= duration - 1) {
           updateCompleted(actualLecture?.lectureId as number, accessToken);
@@ -126,7 +123,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
           // queryClient.invalidateQueries({ queryKey: ["progress", courseId] });
         }
         if (currentSeconds % 60 === 0 && !(seconds > duration)) {
-          // console.log("1분 경과");
           saveSeconds(
             currentSeconds,
             actualLecture?.lectureId as number,
@@ -137,39 +133,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     }
   };
 
-  // const startTimer = () => {
-  //   stopTimer(); // Ensure any existing timer is cleared
-
-  //   // Immediate logic to handle any remaining time less than a minute
-  //   if (remainingTime < 60 * 1000) {
-  //     intervalRef.current = setTimeout(() => {
-  //       updateProgress(); // Define this function to handle progress update and DB save
-  //       setRemainingTime(60 * 1000); // Reset remaining time
-  //       startTimer(); // Restart timer for regular 1-minute intervals
-  //     }, remainingTime);
-  //   } else {
-  //     // Standard interval for every minute
-  //     intervalRef.current = setInterval(updateProgress, 60 * 1000);
-  //   }
-  // };
-
-  // // Extracted logic to update progress
-  // const updateProgress = () => {
-  //   const actualLecture = data?.find(
-  //     (lecture) => lecture.lectureNumber === +lectureId
-  //   );
-  //   if (!actualLecture) {
-  //     console.error("Actual lecture not found");
-  //     return;
-  //   }
-  //   useTimerStore.setState((state) => {
-  //     const newMinutes = state.minutes + 1;
-  //     state.setMinutes(newMinutes);
-  //     saveMinutesToDB(newMinutes, 1, actualLecture.lectureId);
-  //     return { ...state, minutes: newMinutes };
-  //   });
-  // };
-
   // 타이머 멈춤
 
   const stopTimer = () => {
@@ -179,19 +142,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
       intervalRef.current = null;
     }
   };
-
-  // Adjust stopTimer to cancel correctly and calculate remaining time
-  // const stopTimer = () => {
-  //   if (intervalRef.current) {
-  //     clearTimeout(intervalRef.current); // Clear both timeout and interval with the same call
-  //     intervalRef.current = null;
-
-  //     // Calculate and set the remaining time until the next minute mark
-  //     const currentTime = Date.now();
-  //     const elapsedTime = currentTime % (60 * 1000); // Time elapsed in the current minute
-  //     setRemainingTime(60 * 1000 - elapsedTime); // Time until the next minute
-  //   }
-  // };
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     event.target.unMute();
