@@ -58,7 +58,6 @@ export const {
           };
         } catch (error) {
           console.error("Error refreshing access token", error);
-          signOut({ redirect: false });
           return { ...token, error: "RefreshAccessTokenError" as const };
         }
       }
