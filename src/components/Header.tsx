@@ -16,7 +16,7 @@ export default function Header() {
     if (session && session.user.error === "RefreshAccessTokenError") {
       console.log("세션 만료.");
       signOut({
-        callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+        callbackUrl: `${process.env.NEXT_PUBLIC_BASE_HOST}/`,
       });
     }
   }, [session]);
@@ -86,7 +86,7 @@ export default function Header() {
                         href="/"
                         onClick={() => {
                           signOut({
-                            callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+                            callbackUrl: `${process.env.NEXT_PUBLIC_BASE_HOST}/`,
                           });
                         }}
                       >
@@ -138,7 +138,7 @@ export default function Header() {
                   href="/"
                   onClick={() => {
                     signOut({
-                      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+                      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_HOST}/`,
                     });
                   }}
                 >
