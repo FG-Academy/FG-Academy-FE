@@ -33,16 +33,10 @@ import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCurriculumQuery } from "@/hooks/useCurriculumQuery";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
-
-interface Data {
-  title: string;
-  description: string;
-  curriculum: string;
-  openDate: string;
-  finishDate: string;
-  level: string;
-  thumbnailImage: File;
-}
+import {
+  courseCurriculumOptions,
+  userLevelSettingOptions,
+} from "@/app/(home)/userInfo/types/type";
 
 export default function Page() {
   const { data: session } = useSession();
@@ -171,11 +165,16 @@ export default function Page() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {curriculums.data.map((ele, index) => (
+                      {courseCurriculumOptions.map((ele, index) => (
+                        <SelectItem key={index} value={ele.value}>
+                          {ele.value}
+                        </SelectItem>
+                      ))}
+                      {/* {curriculums.data.map((ele, index) => (
                         <SelectItem key={index} value={ele}>
                           {ele}
                         </SelectItem>
-                      ))}
+                      ))} */}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -222,11 +221,29 @@ export default function Page() {
                   최소 수강 레벨 <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input
+                  {/* <Input
                     autoComplete="off"
                     placeholder="최소 수강 레벨을 입력해주세요."
                     {...field}
-                  />
+                  /> */}
+                  <Select name={field.name} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        placeholder="최소 수강 레벨 선택"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {userLevelSettingOptions.map((ele, index) => (
+                          <SelectItem key={index} value={ele.value}>
+                            {ele.value}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

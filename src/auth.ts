@@ -30,7 +30,7 @@ export const {
           refreshToken: user.refreshToken,
         };
       } else if (Date.now() < (token.expiresAt as number) * 1000) {
-        console.log(Date.now(), (token.expiresAt as number) * 1000);
+        // console.log(Date.now(), (token.expiresAt as number) * 1000);
         // 첫 로그인 이후 토큰 access
         return token;
       } else {
