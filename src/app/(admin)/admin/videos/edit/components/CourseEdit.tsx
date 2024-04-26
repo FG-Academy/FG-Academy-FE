@@ -37,6 +37,10 @@ import { useCurriculumQuery } from "@/hooks/useCurriculumQuery";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import {
+  courseCurriculumOptions,
+  userLevelSettingOptions,
+} from "@/app/(home)/userInfo/types/type";
 
 type Props = {
   courseInfo: AdminCourse;
@@ -293,9 +297,9 @@ export default function CourseEdit({ courseInfo }: Props) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {curriculums.data.map((ele, index) => (
-                            <SelectItem key={index} value={ele}>
-                              {ele}
+                          {courseCurriculumOptions.map((ele, index) => (
+                            <SelectItem key={index} value={ele.value}>
+                              {ele.value}
                             </SelectItem>
                           ))}
                         </SelectGroup>
@@ -314,16 +318,7 @@ export default function CourseEdit({ courseInfo }: Props) {
                       시작일자 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        // placeholder="ex) 20241216"
-                        type="date"
-                        {...field}
-                        // onChange={(e) => {
-                        //   const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                        //   const formattedInput = transformDate(cleanInput);
-                        //   field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                        // }}
-                      />
+                      <Input type="date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -338,16 +333,7 @@ export default function CourseEdit({ courseInfo }: Props) {
                       마감일자 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        // placeholder="ex) 19901216"
-                        type="date"
-                        {...field}
-                        // onChange={(e) => {
-                        //   const cleanInput = e.target.value.replace(/\D/g, ""); // 숫자가 아닌 문자 제거
-                        //   const formattedInput = transformDate(cleanInput);
-                        //   field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
-                        // }}
-                      />
+                      <Input type="date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -362,11 +348,28 @@ export default function CourseEdit({ courseInfo }: Props) {
                       최소 수강 레벨 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        autoComplete="off"
-                        placeholder="최소 수강 레벨을 입력해주세요."
-                        {...field}
-                      />
+                      <Select
+                        name={field.name}
+                        onValueChange={field.onChange}
+                        defaultValue={courseInfo.level}
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            onBlur={field.onBlur}
+                            ref={field.ref}
+                            placeholder="최소 수강 레벨 선택"
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {userLevelSettingOptions.map((ele, index) => (
+                              <SelectItem key={index} value={ele.value}>
+                                {ele.value}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

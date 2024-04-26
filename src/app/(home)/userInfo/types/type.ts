@@ -72,4 +72,18 @@ export const userLevelOptions = [
   { value: "admin", label: "관리자" },
   { value: "deleted", label: "활동 정지" },
   { value: "L0", label: "L0" },
+  { value: "L1", label: "L1" },
+  { value: "L2", label: "L2" },
+];
+export const userLevelSettingOptions = [
+  { value: "L0", label: "L0" },
+  { value: "L1", label: "L1" },
+  { value: "L2", label: "L2" },
+];
+
+export const courseCurriculumOptions = [
+  { value: "필수과정" },
+  { value: "심화과정" },
+  { value: "기초과정" },
+  { value: "리더과정" },
 ];
