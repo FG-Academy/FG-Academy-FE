@@ -6,7 +6,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import QuizContents from "./quizContents";
 import { useFetchQuizListQuery } from "@/hooks/useQuizQuery";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";

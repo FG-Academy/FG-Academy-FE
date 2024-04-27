@@ -1,6 +1,5 @@
 "use client";
 
-import QuizContents from "@/app/(home)/myDashboard/components/quizContents";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import {
   // useFetchAdminDescriptiveQuizListQuery,

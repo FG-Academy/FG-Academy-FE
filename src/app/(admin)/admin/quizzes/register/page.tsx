@@ -43,7 +43,7 @@ export default function RegisterQuizPage() {
 
   if (!courses) return <Loading />;
 
-  const courseOptions: CourseOption[] = courses.map((course: AdminCourse) => ({
+  const courseOptions: CourseOption[] = courses.map((course) => ({
     courseId: course.courseId,
     title: course.title,
   }));

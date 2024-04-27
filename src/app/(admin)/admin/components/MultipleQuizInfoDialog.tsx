@@ -1,6 +1,6 @@
 "use client";
 
-import QuizContents from "@/app/(home)/myDashboard/components/quizContents";
+import QuizDetailContents from "@/app/(home)/myDashboard/components/QuizDetailContents";
 import { useFetchAdminQuizListQuery } from "@/hooks/useQuizQuery";
 import { useSession } from "next-auth/react";
 
@@ -24,7 +24,7 @@ export default function MultipleQuizInfoDialog({ userId }: Props) {
     <div className="flex w-full flex-col overflow-y-scroll">
       {submittedQuizList?.map((ele, index) => (
         <div key={index}>
-          <QuizContents data={ele} />
+          <QuizDetailContents data={ele} />
         </div>
       ))}
     </div>
