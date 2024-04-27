@@ -147,7 +147,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
         autoComplete="off"
         autoFocus={false}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/2 bg-yellow-50 border overflow-y-auto border-gray-400 space-y-4 p-12 rounded-lg"
+        className="w-1/2 border overflow-y-auto border-gray-300 space-y-4 p-12 rounded-lg"
       >
         <Button
           onClick={handleAddLecture}
@@ -175,7 +175,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
                           ref={provide.innerRef}
                           {...provide.draggableProps}
                           {...provide.dragHandleProps}
-                          className="border-2 bg-white p-4 space-y-2 rounded-xl border-blue-300 border-dashed"
+                          className="border-2 bg-white p-4 space-y-2 rounded-xl border-gray-300 border-dashed"
                         >
                           <div className="flex flex-row justify-between font-semibold text-lg">
                             <div>{index + 1} 강</div>
