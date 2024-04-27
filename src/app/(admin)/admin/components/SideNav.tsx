@@ -19,7 +19,8 @@ export default function SideNav() {
   };
 
   return (
-    <div className="w-auto flex-1 h-screen">
+    // h-screen 뺌
+    <div className="w-auto flex-1">
       <div className="w-[300px] h-full bg-blue-700 text-white flex flex-col items-center">
         <Link
           href="/"

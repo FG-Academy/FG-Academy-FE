@@ -19,13 +19,13 @@ interface AllLecturesResponse {
 
 export const useFetchAllLectureListQuery = (
   accessToken: string,
-  courseId: number,
+  courseId: number | null,
   options?: { enabled?: boolean }
 ) => {
   return useQuery<AllLecturesResponse[]>({
     queryKey: ["lectures", courseId],
     queryFn: () => getAllLectures(courseId, accessToken),
-    enabled: !!accessToken,
+    enabled: !!accessToken && courseId !== null,
   });
 };
 

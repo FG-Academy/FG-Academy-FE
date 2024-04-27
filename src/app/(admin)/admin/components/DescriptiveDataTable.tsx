@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { DataTablePagination } from "./DataTablePagination";
+// import { DataTablePagination } from "./DataTablePagination";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -41,10 +41,11 @@ import {
   rankItem,
   compareItems,
 } from "@tanstack/match-sorter-utils";
-import { UserInfoDialog } from "./UserInfoDialog";
-import DebouncedInput from "./DebouncedInput";
-import useOpenDialogStore from "@/store/useOpenDialogStore";
-import { UserProfile } from "@/model/user";
+// import { UserInfoDialog } from "./UserInfoDialog";
+// import DebouncedInput from "./DebouncedInput";
+import { IAdminQuizData } from "@/model/adminQuiz";
+import DescriptiveQuizInfoDialog from "./DescriptiveQuizInfoDialog";
+import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -73,28 +74,17 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-export function DataTable<TData, TValue>({
+export function DescriptiveDataTableQuiz<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
-  // const [userInfo, setUserInfo] = useState<UserProfile>({
-  //   userId: 0,
-  //   birthDate: "",
-  //   name: "",
-  //   email: "",
-  //   phoneNumber: "",
-  //   churchName: "others",
-  //   departmentName: "etc",
-  //   position: "etc",
-  //   yearsOfService: 0,
-  //   status: "active",
-  // });
   const [userId, setUserId] = useState(0);
+  const [quizInfo, setQuizInfo] = useState<IAdminQuizData | undefined>();
 
-  const { open, setOpen } = useOpenDialogStore((state) => state);
+  const { open, setOpen } = useOpenDescriptiveDialogStore((state) => state);
 
   const table = useReactTable({
     data,
@@ -112,10 +102,11 @@ export function DataTable<TData, TValue>({
     globalFilterFn: fuzzyFilter,
     initialState: {
       columnVisibility: {
-        birthDate: false,
         userId: false,
-        email: false,
-        phoneNumber: false,
+        quizId: false,
+        level: false,
+        courseTitle: false,
+        position: false,
       },
     },
     state: {
@@ -125,47 +116,34 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log(table.getRowModel().rows);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex flex-col justify-between flex-1 overflow-y-auto">
-        <div className="flex flex-col justify-start overflow-y-auto">
+      <div className="flex flex-col flex-1 justify-between overflow-y-auto">
+        <div className="flex flex-col justify-start overflow-y-scroll">
           <DialogContent
             onOpenAutoFocus={(e) => e.preventDefault()}
-            className="w-[600px] h-[646px] overflow-y-auto"
+            className="w-[600px] h-[646px] overflow-y-scroll"
           >
             <DialogHeader>
-              <DialogTitle>유저 관리</DialogTitle>
-              <DialogDescription>유저 정보를 수정합니다.</DialogDescription>
+              <DialogTitle>사용자 주관식 퀴즈 상세정보</DialogTitle>
+              <DialogDescription>
+                사용자가 제출한 퀴즈 상세정보를 확인합니다.
+              </DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
-              {/* <UserInfoDialog userInfo={userInfo as UserProfile} /> */}
-              <UserInfoDialog userId={userId as number} />
+              <DescriptiveQuizInfoDialog userId={userId} type={"descriptive"} />
             </div>
-            <DialogFooter className="sm:justify-between">
+            <DialogFooter className="sm:justify-end">
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
                   닫기
                 </Button>
               </DialogClose>
-              <Button type="submit" form="userInfoDialog">
-                수정하기
-              </Button>
             </DialogFooter>
           </DialogContent>
-          <div className="relative flex items-center justify-start flex-1 w-full h-full mb-6 mr-auto md:grow-0">
-            <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
-            <DebouncedInput
-              value={globalFilter ?? ""}
-              onChange={(value) => setGlobalFilter(String(value))}
-              type="search"
-              placeholder="검색..."
-              className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
-            />
-          </div>
-          <Table className="container relative justify-start py-2 mx-auto overflow-y-auto">
-            <TableHeader className="sticky top-0 bg-gray-100">
+          <div className="relative justify-start items-center w-full h-full flex mr-auto flex-1 md:grow-0 mb-6"></div>
+          <Table className="relative container justify-start mx-auto py-2 overflow-y-auto">
+            <TableHeader className="sticky top-0 bg-white">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -190,8 +168,18 @@ export function DataTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
-                      setUserId(row.getValue("userId"));
-                      setOpen(true);
+                      //   setQuizInfo({
+                      //     userId: row.getValue("userId"),
+                      //     name: row.getValue("name"),
+                      //     birthDate: row.getValue("birthDate"),
+                      //     email: row.getValue("email"),
+                      //     phoneNumber: row.getValue("phoneNumber"),
+                      //     churchName: row.getValue("churchName"),
+                      //     departmentName: row.getValue("departmentName"),
+                      //     position: row.getValue("position"),
+                      //     yearsOfService: row.getValue("yearsOfService"),
+                      //   });
+                      // setOpen(true);
                     }}
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -202,6 +190,19 @@ export function DataTable<TData, TValue>({
                         )}
                       </TableCell>
                     ))}
+                    <TableRow>
+                      <Button
+                        className="mt-2 hover:bg-gray-300"
+                        variant="secondary"
+                        onClick={() => {
+                          setUserId(parseInt(row.getValue("userId")));
+                          console.log(userId);
+                          setOpen(true);
+                        }}
+                      >
+                        채점현황
+                      </Button>
+                    </TableRow>
                   </TableRow>
                 ))
               ) : (
@@ -217,7 +218,7 @@ export function DataTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        <DataTablePagination table={table} />
+        {/* <DataTablePagination table={table} /> */}
       </div>
     </Dialog>
   );

@@ -26,6 +26,8 @@ export interface UserProfileResponse {
   status: "active" | "inactive";
   createdAt: string;
   updatedAt: string;
+  // UserInfoDialog.tsx에서 enrollments에 대한 타입 정의가 없다고 해서 추가
+  enrollments: IEnrollment[];
 }
 
 export const useFetchAllUserListQuery = (
