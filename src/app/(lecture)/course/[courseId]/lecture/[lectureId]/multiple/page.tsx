@@ -99,6 +99,7 @@ export default function Multiple() {
     const sendData = {
       quizId: quizzes[search - 1].quizId,
       multipleAnswer: data.items,
+      submittedAnswer: null,
     };
 
     // quizSubmits에 저장

@@ -209,12 +209,10 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                           }`}
                           //! 강의 진행에 따라서 강의를 다 수강하지 않은 경우, 퀴즈도 이동을 못함
                           onClick={(e) => {
-                            // console.log(isClickable);
                             if (
                               !(
                                 progress.lectureProgresses[index].completed ||
-                                index === lastCompletedLectureIndex ||
-                                index === 0
+                                index === lastCompletedLectureIndex
                               )
                             ) {
                               e.preventDefault();

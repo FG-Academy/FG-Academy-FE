@@ -6,7 +6,7 @@ import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loadi
 import { useEffect, useMemo, useState } from "react";
 import { courseDetail } from "@/model/dashboard";
 import { useFetchDashboardQuery } from "@/hooks/useDashboard";
-import { useFetchQuizListQuery } from "@/hooks/useQuizeQuery";
+import { useFetchQuizListQuery } from "@/hooks/useQuizQuery";
 import CourseList from "./CourseList";
 import QuizList from "./QuizList";
 

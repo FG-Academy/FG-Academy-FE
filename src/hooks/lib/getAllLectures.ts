@@ -1,4 +1,7 @@
-export async function getAllLectures(courseId: number, accessToken: string) {
+export async function getAllLectures(
+  courseId: number | null,
+  accessToken: string
+) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/lectures`,
     {

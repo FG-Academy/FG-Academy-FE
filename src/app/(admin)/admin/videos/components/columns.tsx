@@ -79,7 +79,7 @@ export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
     // cell: (info) => info.getValue(),
   },
   {
-    accessorKey: "description",
+    accessorKey: "curriculum",
     header: ({ column }) => {
       return <SortingHeader column={column} title="카테고리" />;
     },

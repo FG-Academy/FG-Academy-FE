@@ -1,22 +1,17 @@
-export async function getQuiz(
+export default async function getLectureQuizList(
+  accessToken: string,
   courseId: number,
-  lectureId: number,
-  accessToken: string
+  lectureId: number
 ) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/quizzes/${courseId}/${lectureId}`,
     {
-      next: {
-        tags: ["quizzes"],
-      },
       headers: { authorization: `Bearer ${accessToken}` },
       credentials: "include",
     }
   );
-
   if (!response.ok) {
-    throw new Error("Failed to get lectures");
+    throw new Error("Failed to get dashboard Info");
   }
-
   return response.json();
 }
