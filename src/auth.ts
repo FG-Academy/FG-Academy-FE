@@ -73,6 +73,7 @@ export const {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
+        console.log(credentials);
         // signIn 호출 시 동작
         const authResponse = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/auth/sign-in`,

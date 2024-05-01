@@ -20,21 +20,63 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useQuizRegisterMutation } from "../../../videos/hook/useQuizRegisterMutate";
 import { useSession } from "next-auth/react";
+import { Quiz } from "@/model/quiz";
+import { useQuizMutation } from "../hook/useQuizEditMutation";
 
 interface Props {
+  isEdit: boolean;
   lectureId: number;
+  quizId?: number;
+  quizData?: Quiz;
 }
 
-export default function RegisterQuizForm({ lectureId }: Props) {
+export default function RegisterQuizForm({
+  lectureId,
+  isEdit,
+  quizId,
+  quizData,
+}: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
 
-  const [question, setQuestion] = useState("");
-  const [quizType, setQuizType] = useState("multiple");
-  const [choices, setChoices] = useState<Array<any>>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<Array<any>>([]);
+  console.log("isEdit");
+  console.log(isEdit);
 
-  const { mutate } = useQuizRegisterMutation(accessToken, lectureId);
+  console.log("quizId");
+  console.log(quizId);
+
+  console.log("quizData");
+  console.log(quizData);
+
+  const [question, setQuestion] = useState(
+    isEdit && quizData ? quizData.question : ""
+  );
+  const [quizType, setQuizType] = useState(
+    isEdit && quizData ? quizData.quizType : "multiple"
+  );
+  // const [choices, setChoices] = useState<Array<any>>([]);
+  const [choices, setChoices] = useState<{ item: string; isAnswer: boolean }[]>(
+    isEdit && quizData
+      ? quizData?.quizAnswers.map((info) => ({
+          item: info.item,
+          isAnswer: info.isAnswer,
+        }))
+      : []
+  );
+
+  const [correctAnswers, setCorrectAnswers] = useState<Array<any>>(
+    isEdit && quizData
+      ? quizData?.quizAnswers
+          .filter((info) => info.isAnswer)
+          .map((info) => info.itemIndex - 1)
+      : []
+  );
+  // if (isEdit && quizData) {
+  //   const { mutate } = useQuizEditMutation(accessToken, lectureId, quizId);
+  // } else {
+  //   const { mutate } = useQuizRegisterMutation(accessToken, lectureId);
+  // }
+  const { mutate } = useQuizMutation(accessToken, lectureId, isEdit, quizId);
 
   const addChoice = () => {
     setChoices([...choices, { item: "", isAnswer: false }]);
@@ -69,7 +111,6 @@ export default function RegisterQuizForm({ lectureId }: Props) {
     }
   };
 
-  // TODO: Mutation으로 변경 예정
   const handleSubmit = (e: any) => {
     e.preventDefault();
     let quizInfo: Array<any> = [];
@@ -81,10 +122,8 @@ export default function RegisterQuizForm({ lectureId }: Props) {
       }));
     }
     const quizData = { lectureId, question, quizType, quizInfo };
-    console.log(quizData);
-    // mutate({ feedbackComment: value, corrected: isCorrected, quizId: quizId });
+
     mutate({ question: question, quizType: quizType, quizInfo: quizInfo });
-    // 여기서 quizData를 서버로 전송할 수 있습니다.
   };
 
   const handleQuizTypeChange = (newType: string) => {
@@ -102,10 +141,10 @@ export default function RegisterQuizForm({ lectureId }: Props) {
       </div>
       <form className="grid gap-4" onSubmit={handleSubmit}>
         <div className="grid gap-1">
-          <Label htmlFor="question">Question Text</Label>
+          <Label htmlFor="question">퀴즈 내용</Label>
           <Textarea
             id="question"
-            placeholder="Enter the question text here..."
+            placeholder="퀴즈 내용을 입력해주세요..."
             rows={3}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
