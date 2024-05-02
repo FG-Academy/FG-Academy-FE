@@ -44,7 +44,7 @@ export const useFetchAllAdminCourseListQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<MainCoursesResponse[]>({
-    queryKey: ["courses", "admin"],
+    queryKey: ["courses"],
     queryFn: () => getAllAdminCourses(accessToken),
     enabled: !!accessToken,
   });

@@ -4,16 +4,6 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFetchAllCourseListQuery } from "@/hooks/useCourseQuery";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
 export default function CourseCard() {
@@ -38,6 +28,7 @@ export default function CourseCard() {
   if (isPending) return "로딩 중...";
   if (error) return `An error has occurred: ${error.message}`;
 
+  // console.log(`${process.env.NEXT_PUBLIC_IMAGE_URL}`);
   return (
     <div className="p-4 space-y-6">
       {Object.keys(categories).map((category) => (
@@ -54,7 +45,7 @@ export default function CourseCard() {
                   className="rounded-md"
                   width={500}
                   height={500}
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${course.thumbnailImagePath}`}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
                   alt="강의 썸네일"
                   priority
                 />

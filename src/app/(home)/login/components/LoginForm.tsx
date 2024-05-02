@@ -43,7 +43,9 @@ export default function LoginForm() {
       const response = await signIn("credentials", {
         nameBirthId: data.nameBirthId,
         password: data.password,
+        // redirect: false,
         redirect: false,
+        // callbackUrl: `/`,
       });
       if (response?.error) {
         toast({

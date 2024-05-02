@@ -5,12 +5,20 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "3000",
+        port: "",
+        pathname: "/asset/**",
+      },
+      {
+        protocol: "http",
+        hostname: "host.docker.internal",
+        port: "",
+        pathname: "/asset/**",
       },
       {
         protocol: "http",
         hostname: "43.202.237.172",
-        port: "3000",
+        port: "",
+        pathname: "/asset/**",
       },
     ],
   },

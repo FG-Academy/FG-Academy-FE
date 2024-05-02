@@ -39,14 +39,14 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
       return response.json(); // 성공 응답 데이터 반환
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["course"],
-      });
       toast({
         title: "강의 수정 성공",
         description: "강의 수정에 성공하였습니다.",
       });
       router.push("/admin/videos");
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
+      });
     },
     onError: (error: any) => {
       // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력

@@ -36,7 +36,7 @@ export const {
       } else {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh-token`,
+            `${process.env.NEXT_PUBLIC_DOCKER_HOST}/auth/refresh-token`,
             {
               method: "GET",
               headers: {
@@ -73,10 +73,9 @@ export const {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        console.log(credentials);
         // signIn 호출 시 동작
         const authResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/auth/sign-in`,
+          `${process.env.NEXT_PUBLIC_DOCKER_HOST}/auth/sign-in`,
           {
             method: "POST",
             headers: {
@@ -89,6 +88,7 @@ export const {
             credentials: "include",
           }
         );
+        // console.log(authResponse);
 
         if (!authResponse.ok) {
           console.log("return null");

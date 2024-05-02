@@ -79,7 +79,7 @@ export default function CourseCard() {
               width={500}
               height={500}
               style={{ width: "100%", height: "auto" }}
-              src={`${process.env.NEXT_PUBLIC_API_URL}${ele.thumbnailImagePath}`}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${ele.thumbnailImagePath}`}
               alt="강의 썸네일"
               priority
             />

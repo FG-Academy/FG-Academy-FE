@@ -37,6 +37,7 @@ import {
   courseCurriculumOptions,
   userLevelSettingOptions,
 } from "@/app/(home)/userInfo/types/type";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Page() {
   const { data: session } = useSession();
@@ -141,7 +142,12 @@ export default function Page() {
                   코스 설명 <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="코스 설명을 입력해주세요." {...field} />
+                  <Textarea
+                    placeholder="코스 설명을 입력해주세요."
+                    className="resize-none"
+                    {...field}
+                  />
+                  {/* <Input placeholder="코스 설명을 입력해주세요." {...field} /> */}
                 </FormControl>
                 <FormMessage />
               </FormItem>

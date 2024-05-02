@@ -41,6 +41,7 @@ import {
   courseCurriculumOptions,
   userLevelSettingOptions,
 } from "@/app/(home)/userInfo/types/type";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
   courseInfo: AdminCourse;
@@ -54,7 +55,7 @@ export default function CourseEdit({ courseInfo }: Props) {
   // console.log(courseInfo);
 
   const [preview, setPreview] = useState<{ dataUrl: string }>({
-    dataUrl: `${process.env.NEXT_PUBLIC_API_URL}${courseInfo.thumbnailImagePath}`,
+    dataUrl: `${process.env.NEXT_PUBLIC_IMAGE_URL}${courseInfo.thumbnailImagePath}`,
   });
   const [imageFile, setImageFile] = useState<File>();
   const [enabled, setEnabled] = useState(false);
@@ -266,10 +267,15 @@ export default function CourseEdit({ courseInfo }: Props) {
                       코스 설명 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         placeholder="코스 설명을 입력해주세요."
+                        className="resize-none"
                         {...field}
                       />
+                      {/* <Input
+                        placeholder="코스 설명을 입력해주세요."
+                        {...field}
+                      /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
