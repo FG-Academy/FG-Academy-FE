@@ -83,11 +83,15 @@ export default function QuizList({}) {
       </div>
 
       <div className="flex w-full flex-col">
-        {currentQuizzes?.map((ele, index) => (
-          <div key={index}>
-            <QuizDetailContents data={ele} />
-          </div>
-        ))}
+        {submittedQuizList?.length !== 0 ? (
+          currentQuizzes?.map((ele, index) => (
+            <div key={index}>
+              <QuizDetailContents data={ele} />
+            </div>
+          ))
+        ) : (
+          <div>답변을 제출한 퀴즈가 없습니다😅</div>
+        )}
         <Pagination>
           <PaginationContent>
             {currentPage > 1 && (
