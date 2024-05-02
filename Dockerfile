@@ -1,32 +1,33 @@
-# Dockerfile
-FROM node:20.4.0-alpine3.18
-# Set the working directory
+# Base stage for installing dependencies and building
+FROM node:20.4.0-alpine3.18 AS development
+
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Install dependencies based on the preferred package manager
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci ; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i; \
+  # Allow install without lockfile, so example works even without Node.js installed locally
+  else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && yarn install; \
+  fi
 
-# Install dependencies
-RUN npm install
+COPY src ./src
+COPY public ./public
+COPY next.config.mjs .
+COPY tsconfig.json .
 
-# Copy the entire project to the working directory
-COPY . .
+# Next.js collects completely anonymous telemetry data about general usage. Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line to disable telemetry at run time
+# ENV NEXT_TELEMETRY_DISABLED 1
 
-# Build the Next.js application for production
-RUN npm run build
-# Set the environment variable to run the Next.js application in production mode
-ENV NODE_ENV production
-ENV PORT 80
-ENV AUTH_SECRET YzQc0Xv71rFTPAFixXHsPSo57XVdXa9osnatKRtf+/c=
-# ENV NEXT_PUBLIC_BASE_URL http://43.202.237.172:3000
-# ENV NEXT_PUBLIC_BASE_URL http://43.202.237.172:3000
-ENV NEXT_PUBLIC_BASE_URL=http://43.202.237.172:3000
-ENV NEXT_PUBLIC_API_URL=http://43.202.237.172:3000
-ENV NEXT_PUBLIC_BASE_HOST=http://43.202.237.172:80
-# ENV AUTH_URL=http://43.202.237.172:80
-# ENV AUTH_TRUST_HOST=true
-# Expose the port that the application will run on
-EXPOSE 80
+# Note: Don't expose ports here, Compose will handle that for us
 
-# Start the application
-CMD ["npm", "start"]
+# Start Next.js in development mode based on the preferred package manager
+CMD \
+  if [ -f yarn.lock ]; then yarn dev; \
+  elif [ -f package-lock.json ]; then npm run dev; \
+  elif [ -f pnpm-lock.yaml ]; then pnpm dev; \
+  else npm run dev; \
+  fi

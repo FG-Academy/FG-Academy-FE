@@ -125,8 +125,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log(table.getRowModel().rows);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="flex flex-col justify-between flex-1 overflow-y-auto">

@@ -42,7 +42,7 @@ export default function CourseDetail({ courseId }: Props) {
             className="rounded justify-center"
             width={700}
             height={700}
-            src={`${process.env.NEXT_PUBLIC_API_URL}${course.thumbnailImagePath}`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
             alt="썸네일 이미지"
             priority
             style={{

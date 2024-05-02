@@ -3,6 +3,7 @@ export async function getAllCourses() {
     next: {
       tags: ["allCourses"],
     },
+    credentials: "include",
   });
 
   if (!response.ok) {

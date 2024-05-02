@@ -37,7 +37,7 @@ export default function Header() {
           </div>
           <div className="md:hidden">
             <button onClick={() => setIsOpen(!isOpen)}>
-              <IoMenu />
+              <IoMenu size={24} />
             </button>
             {isOpen && (
               <div

@@ -50,7 +50,7 @@ export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
           className="rounded-md"
           width={100}
           height={100}
-          src={`${process.env.NEXT_PUBLIC_API_URL}${row.getValue(
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.getValue(
             "thumbnailImagePath"
           )}`}
           alt="강의 썸네일"

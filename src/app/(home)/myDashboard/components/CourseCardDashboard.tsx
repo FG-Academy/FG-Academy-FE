@@ -29,7 +29,7 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
         <CardContent>
           <div className="flex items-center space-x-1"></div>
           <Image
-            src={`${process.env.NEXT_PUBLIC_API_URL}${data.thumbnailPath}`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${data.thumbnailPath}`}
             width={100}
             height={100}
             style={{ width: "100%", height: "auto" }}
