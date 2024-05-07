@@ -1,19 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  // output: "standalone",
   images: {
     remotePatterns: [
+      // {
+      //   protocol: "http",
+      //   hostname: "localhost",
+      //   port: "",
+      //   pathname: "/asset/**",
+      // },
       {
         protocol: "http",
         hostname: "localhost",
-        port: "",
-        pathname: "/asset/**",
+        port: "8080",
+        pathname: "/**",
       },
       {
         protocol: "http",
         hostname: "host.docker.internal",
         port: "",
-        pathname: "/asset/**",
+        pathname: "/**",
       },
       {
         protocol: "http",

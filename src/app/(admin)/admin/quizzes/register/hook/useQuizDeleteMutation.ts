@@ -32,7 +32,7 @@ export function useQuizDeleteMutation(accessToken: string) {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["lectureQuiz", accessToken],
+        queryKey: ["lectureQuiz"],
       });
       toast({
         title: "퀴즈 삭제 성공",

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getEnrollment } from "./lib/getEnrollment";
 
 export interface enrollmentResponse {
-  isTaking: boolean;
+  isTaking: boolean | null;
   message: string;
   totalCount: number;
   completedLectures: number;
