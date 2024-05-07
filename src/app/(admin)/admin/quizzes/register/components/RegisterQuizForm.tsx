@@ -39,15 +39,6 @@ export default function RegisterQuizForm({
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
 
-  console.log("isEdit");
-  console.log(isEdit);
-
-  console.log("quizId");
-  console.log(quizId);
-
-  console.log("quizData");
-  console.log(quizData);
-
   const [question, setQuestion] = useState(
     isEdit && quizData ? quizData.question : ""
   );

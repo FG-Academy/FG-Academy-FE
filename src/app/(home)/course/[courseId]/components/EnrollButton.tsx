@@ -39,6 +39,13 @@ export default function EnrollButton({ enrollment, courseId }: Props) {
         >
           이어듣기
         </button>
+      ) : enrollment.isTaking === null ? (
+        <button
+          className="w-full px-4 py-2 text-black transition-colors duration-150"
+          disabled={true}
+        >
+          {enrollment.message}
+        </button>
       ) : (
         <button
           className="w-full px-4 py-2 text-white transition-colors duration-150 bg-blue-400 rounded-xl hover:bg-blue-600 hover:text-white"

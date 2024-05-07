@@ -54,7 +54,7 @@ export const useFetchAdminLectureQuizList = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<Quiz[]>({
-    queryKey: ["lectureQuiz", accessToken],
+    queryKey: ["lectureQuiz", lectureId],
     queryFn: () => getLectureQuizList(accessToken, courseId, lectureId),
     enabled: !!accessToken,
   });

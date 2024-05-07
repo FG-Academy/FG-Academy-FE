@@ -19,7 +19,7 @@ interface dataProps {
 
 export default function QuizDetailContents({ data }: dataProps) {
   const [isOpen, setIsOpen] = useState(false);
-  // console.log(data);
+  console.log(data.isAnswer);
   return (
     <main className="flex flex-1 flex-col gap-4 md:gap-4 md:p-2">
       <div className="shadow-sm">

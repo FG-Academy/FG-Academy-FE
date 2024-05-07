@@ -48,10 +48,7 @@ export default function RegisterQuizDialog({ courseId, lectureId }: Props) {
 
   if (!quizList) return <Loading />;
 
-  console.log(quizList);
-
   function sendDelete(quizId: number) {
-    console.log(quizId);
     mutate(quizId);
   }
 

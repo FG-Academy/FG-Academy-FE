@@ -48,7 +48,7 @@ export function useQuizMutation(
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["lectureQuiz", accessToken],
+        queryKey: ["lectureQuiz"],
       });
       toast({
         title: "퀴즈 수정 완료",
@@ -98,7 +98,7 @@ export function useQuizMutation(
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["lectureQuiz", accessToken],
+        queryKey: ["lectureQuiz"],
       });
       toast({
         title: "퀴즈 등록 완료",
