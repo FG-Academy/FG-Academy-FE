@@ -18,7 +18,7 @@ import {
 } from "@/app/(home)/myDashboard/components/svg";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useQuizRegisterMutation } from "../../../videos/hook/useQuizRegisterMutate";
+import { useQuizRegisterMutation } from "../hook/useQuizRegisterMutate";
 import { useSession } from "next-auth/react";
 import { Quiz } from "@/model/quiz";
 import { useQuizMutation } from "../hook/useQuizEditMutation";
@@ -62,11 +62,7 @@ export default function RegisterQuizForm({
           .map((info) => info.itemIndex - 1)
       : []
   );
-  // if (isEdit && quizData) {
-  //   const { mutate } = useQuizEditMutation(accessToken, lectureId, quizId);
-  // } else {
-  //   const { mutate } = useQuizRegisterMutation(accessToken, lectureId);
-  // }
+
   const { mutate } = useQuizMutation(accessToken, lectureId, isEdit, quizId);
 
   const addChoice = () => {

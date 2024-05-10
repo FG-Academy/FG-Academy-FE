@@ -1,37 +1,34 @@
-import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { ProfileFormSchema } from "@/app/(home)/userInfo/lib/profileFormSchema";
-import { CourseFormSchema } from "../lib/CourseFormSchema";
+import z from "zod";
+import { AnswerFormSchema } from "../lib/AnswerFornSchema";
 
-type QuizPostRequest = {
-  question: string;
-  quizType: string;
-  quizInfo: any[];
-};
-
-export function useQuizRegisterMutation(
+export function useSubmitDescriptiveAnswerMutation(
   accessToken: string,
-  lectureId: number
+  quizId: number
 ) {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
 
   return useMutation({
-    mutationKey: ["registerQuiz"],
-    mutationFn: async ({ question, quizType, quizInfo }: QuizPostRequest) => {
-      console.log(JSON.stringify({ question, quizType, quizInfo }));
-
+    mutationKey: ["submitDescriptiveAnswer"],
+    mutationFn: async (data: z.infer<typeof AnswerFormSchema>) => {
+      const dataBody = {
+        quizId,
+        multipleAnswer: 0,
+        answer: data.descriptiveAnswer,
+      };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes/register/${lectureId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/quizzes/answer`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ question, quizType, quizInfo }),
+          body: JSON.stringify(dataBody),
         }
       );
       if (!response.ok) {
@@ -45,21 +42,18 @@ export function useQuizRegisterMutation(
       return response.json(); // 성공 응답 데이터 반환
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["lectureQuiz", accessToken],
-      });
       toast({
-        title: "퀴즈 등록 완료",
-        description: "퀴즈를 성공적으로 등록했습니다.",
+        title: "주관식 퀴즈 제출 성공",
+        description: "주관식 퀴즈를 제출하셨습니다.",
       });
+      queryClient.invalidateQueries();
     },
     onError: (error: any) => {
       // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력
       toast({
         variant: "destructive",
-        title: "잘못된 양식입니다..",
-        description:
-          "잠시 후 다시 시도해주세요. 오류 지속 시 개발사 측에 문의해주세요",
+        title: error.message,
+        description: "잠시 후 다시 시도해주세요.",
       });
       console.error(
         "There was a problem with your fetch operation:",

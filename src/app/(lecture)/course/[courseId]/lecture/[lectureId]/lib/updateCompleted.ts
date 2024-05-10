@@ -7,7 +7,7 @@ export const updateCompleted = async (
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/completed`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/completed/${lectureId}`,
       {
         method: "PATCH",
         headers: {
@@ -15,7 +15,6 @@ export const updateCompleted = async (
           authorization: `Bearer ${accessToken}`,
         },
         credentials: "include",
-        body: JSON.stringify({ lectureId }),
       }
     );
     if (!response.ok) {

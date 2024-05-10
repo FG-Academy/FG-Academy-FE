@@ -80,18 +80,6 @@ export function DataTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
-  // const [userInfo, setUserInfo] = useState<UserProfile>({
-  //   userId: 0,
-  //   birthDate: "",
-  //   name: "",
-  //   email: "",
-  //   phoneNumber: "",
-  //   churchName: "others",
-  //   departmentName: "etc",
-  //   position: "etc",
-  //   yearsOfService: 0,
-  //   status: "active",
-  // });
   const [userId, setUserId] = useState(0);
 
   const { open, setOpen } = useOpenDialogStore((state) => state);

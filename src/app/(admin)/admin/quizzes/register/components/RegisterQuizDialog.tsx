@@ -28,15 +28,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useQuizDeleteMutation } from "../hook/useQuizDeleteMutation";
+import useIdForQuizStore from "@/store/useIdForQuiz";
+import { useState } from "react";
 
-interface Props {
-  courseId: number;
-  lectureId: number;
-}
+export default function RegisterQuizDialog() {
+  const { lectureId, courseId } = useIdForQuizStore((state) => state);
 
-export default function RegisterQuizDialog({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
+
+  const [open, setOpen] = useState(false);
 
   const { mutate } = useQuizDeleteMutation(accessToken);
 
@@ -84,8 +85,8 @@ export default function RegisterQuizDialog({ courseId, lectureId }: Props) {
                 <Dialog>
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger>
-                        <DialogTrigger>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
                           <Button variant="ghost">
                             <FiEdit className="w-5 h-5 cursor-pointer" />
                           </Button>
@@ -94,16 +95,16 @@ export default function RegisterQuizDialog({ courseId, lectureId }: Props) {
                       <TooltipContent>
                         <p>수정</p>
                       </TooltipContent>
-                      <DialogContent>
-                        <RegisterQuizForm
-                          lectureId={lectureId}
-                          isEdit={true}
-                          quizId={quiz.quizId}
-                          quizData={quiz}
-                        />
-                      </DialogContent>
                     </Tooltip>
                   </TooltipProvider>
+                  <DialogContent>
+                    <RegisterQuizForm
+                      lectureId={lectureId}
+                      isEdit={true}
+                      quizId={quiz.quizId}
+                      quizData={quiz}
+                    />
+                  </DialogContent>
                 </Dialog>
 
                 <AlertDialog>
@@ -120,26 +121,26 @@ export default function RegisterQuizDialog({ courseId, lectureId }: Props) {
                         <p>삭제</p>
                       </TooltipContent>
                     </Tooltip>
-
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>퀴즈 삭제</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          정말 퀴즈를 삭제하시겠습니까?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>취소</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => {
-                            sendDelete(quiz.quizId);
-                          }}
-                        >
-                          삭제
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
                   </TooltipProvider>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>퀴즈 삭제</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        정말 퀴즈를 삭제하시겠습니까?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>취소</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => {
+                          sendDelete(quiz.quizId);
+                        }}
+                      >
+                        삭제
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
                 </AlertDialog>
               </div>
             </div>

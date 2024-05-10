@@ -28,6 +28,8 @@ import { useState } from "react";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
+import { useQuizQuery } from "../multiple/hooks/useQuizQuery";
+import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 
 type Props = {
   courseId: number;
@@ -37,49 +39,41 @@ type Props = {
 export default function LectureNav({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
+
   const searchParams = useSearchParams();
-  const isHere = searchParams.get("quizIndex") as string;
+  const currentQuizIndex = parseInt(searchParams.get("quizIndex") as string);
 
   const { data: progress } = useQuery<IProgressResult>({
     queryKey: ["progress", courseId],
     queryFn: () => getProgress(courseId, accessToken),
     enabled: !!accessToken,
   });
-  const { data: course } = useQuery<Course>({
-    queryKey: ["courses", courseId],
-    queryFn: () => getCourses(courseId, accessToken),
-    enabled: !!accessToken,
-  });
-  const { data: lectures } = useQuery<Lecture[]>({
-    queryKey: ["lectures", courseId],
-    queryFn: () => getLectures(courseId, accessToken),
-    enabled: !!accessToken,
-  });
-  // const { data: quizzes } = useQuery<Lecture[]>({
-  //   queryKey: ["quizzes", courseId],
-  //   queryFn: () => getQuiz(courseId),
-  // });
+
+  const { data: myCourse } = useMyCoursesQuery(accessToken, courseId);
 
   const [isActiveNavbar, changeActiveNavbar] = useState(true);
 
   const pathname = usePathname();
 
-  if (!lectures || !progress || !course) {
+  if (!progress || !myCourse) {
     return <Loading />;
   }
 
-  const realLecture = lectures.find(
-    (lecture) => lecture.lectureId === +lectureId
+  const currentLecture = myCourse.lectures.find(
+    (lecture) => lecture.lectureId === lectureId
   );
 
   // 완료한 마지막 강의 번호를 찾습니다.
-  const lastCompletedLectureIndex = progress.lectureProgresses
-    .filter((lp) => lp.completed)
-    .reduce(
-      (maxIndex, current, currentIndex) =>
-        current.completed && currentIndex > maxIndex ? currentIndex : maxIndex,
-      -1
-    );
+  const lastCompletedLectureIndex =
+    progress.lectureProgresses
+      .filter((lp) => lp.completed)
+      .reduce(
+        (maxIndex, current, currentIndex) =>
+          current.completed && currentIndex > maxIndex
+            ? currentIndex
+            : maxIndex,
+        -1
+      ) + 1;
 
   if (!isActiveNavbar) {
     return (
@@ -108,18 +102,21 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             className=" hover:bg-black hover:bg-opacity-20 rounded-full"
           />
         </div>
-        <div className="text-lg">{course.title}</div>
+        <div className="text-lg">{myCourse.title}</div>
         <div className="flex flex-col space-y-2 text-gray-500">
           <p>
-            수강 기한 : {formatDate(new Date(course.openDate))} ~{" "}
-            {formatDate(new Date(course.finishDate))}
+            수강 기한 : {formatDate(new Date(myCourse.openDate))} ~{" "}
+            {formatDate(new Date(myCourse.finishDate))}
           </p>
           <p>
-            진도율 : {progress.completedCount}강/{lectures.length}강 (
-            {Math.floor((progress.completedCount / lectures.length) * 100)}%)
+            진도율 : {progress.completedCount}강/{myCourse.lectures.length}강 (
+            {Math.floor(
+              (progress.completedCount / myCourse.lectures.length) * 100
+            )}
+            %)
           </p>
           <Progress
-            value={(progress.completedCount / lectures.length) * 100}
+            value={(progress.completedCount / myCourse.lectures.length) * 100}
             indicatorColor="bg-blue-500"
           />
           <p className="text-black text-xs mt-2">
@@ -131,21 +128,19 @@ export default function LectureNav({ courseId, lectureId }: Props) {
       <Accordion
         className="flex flex-col justify-center bg-gray-100 border-y-2"
         type="single"
-        // defaultValue={lectures[lectureId - 1].title}
-        defaultValue={realLecture?.title}
+        defaultValue={currentLecture?.title}
         collapsible
       >
-        {lectures.map((lecture, index) => {
+        {myCourse.lectures.map((lecture, index) => {
           // 현재 강의가 완료되었거나, 완료한 마지막 강의의 바로 다음 강의이거나, 첫 번째 강의인 경우에만 클릭 가능
+          const lectureIds = progress.lectureProgresses.map((lp) => {
+            return lp.lectureId;
+          });
           const isClickable =
-            progress.lectureProgresses[index].completed ||
-            index === lastCompletedLectureIndex + 1 ||
+            lectureIds.includes(lecture.lectureId) ||
+            lecture.lectureNumber === lastCompletedLectureIndex + 1 ||
             index === 0;
 
-          // const isClickable2 =
-          //   progress.lectureProgresses[index].completed ||
-          //   index === lastCompletedLectureIndex ||
-          //   index === 0;
           return (
             <AccordionItem
               disabled={!isClickable}
@@ -158,12 +153,12 @@ export default function LectureNav({ courseId, lectureId }: Props) {
               <AccordionContent>
                 <div className={`flex flex-col bg-white`}>
                   <Link
-                    href={`/course/${lecture.courseId}/lecture/${lecture.lectureNumber}`}
+                    href={`/course/${lecture.courseId}/lecture/${lecture.lectureId}`}
                     className={`p-4 px-6 cursor-pointer grow flex flex-row items-center justify-start space-x-2 hover:text-blue-500 ${
                       !(
                         pathname.includes("multiple") ||
                         pathname.includes("descriptive")
-                      ) && +lectureId === lecture.lectureId
+                      ) && lectureId === lecture.lectureId
                         ? "bg-blue-100 font-semibold"
                         : ""
                     }`}
@@ -175,11 +170,12 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                       <div className="w-auto">{`${lecture.lectureNumber}강: 강의 영상`}</div>
                     </div>
                     <div className="flex flex-row grow justify-end space-x-2">
-                      {/* <div>한영상 전체 길이</div> */}
                       <FaCircleCheck
                         size={24}
                         className={`${
-                          progress.lectureProgresses[index].completed
+                          progress.lectureProgresses.find(
+                            (lp) => lp.lectureId === lecture.lectureId
+                          )?.completed
                             ? "text-blue-500"
                             : "text-gray-300"
                         }`}
@@ -200,19 +196,21 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                           }?quizIndex=${quiz.quizIndex}`}
                           className={`p-4 px-6 cursor-pointer flex flex-row items-center justify-start space-x-2 hover:text-blue-500 ${
                             ((quiz.quizType === "multiple" &&
-                              +isHere === quiz.quizIndex) ||
-                              (quiz.quizType === "descriptive" &&
+                              currentQuizIndex === quiz.quizIndex) ||
+                              (currentQuizIndex === quiz.quizIndex &&
                                 pathname.includes("descriptive"))) &&
-                            +lectureId === lecture.lectureId
+                            lectureId === lecture.lectureId
                               ? "bg-blue-100 font-semibold"
                               : ""
                           }`}
-                          //! 강의 진행에 따라서 강의를 다 수강하지 않은 경우, 퀴즈도 이동을 못함
                           onClick={(e) => {
                             if (
                               !(
-                                progress.lectureProgresses[index].completed ||
-                                index === lastCompletedLectureIndex
+                                progress.lectureProgresses.find(
+                                  (lp) => lp.lectureId === lectureId
+                                )?.completed ||
+                                lecture.lectureNumber ===
+                                  lastCompletedLectureIndex
                               )
                             ) {
                               e.preventDefault();
@@ -237,9 +235,15 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                           <div className="flex flex-row grow justify-end space-x-2">
                             <FaCircleCheck
                               size={24}
-                              // TODO: 퀴즈용으로 바꾸기
                               className={`${
-                                quiz.quizSubmits.length > 0
+                                (quiz.quizType === "descriptive" &&
+                                  quiz.quizSubmits.length > 0) ||
+                                (quiz.quizType === "multiple" &&
+                                  quiz.quizSubmits.length > 0 &&
+                                  quiz.quizSubmits.some((submit) => {
+                                    return submit.status === 1;
+                                  })) ||
+                                quiz.quizSubmits.length >= 3
                                   ? "text-blue-500"
                                   : "text-gray-300"
                               }`}

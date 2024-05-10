@@ -30,7 +30,7 @@ export default function CourseCard() {
 
   // console.log(`${process.env.NEXT_PUBLIC_IMAGE_URL}`);
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 space-y-6 flex">
       {Object.keys(categories).map((category) => (
         <div className="flex flex-col items-center space-y-2" key={category}>
           <h2 className="text-2xl font-bold">{category}</h2>{" "}
@@ -39,13 +39,16 @@ export default function CourseCard() {
             {categories[category].map((course) => (
               <div
                 key={course.courseId}
-                className="min-w-0 flex-shrink-0 shadow-xl rounded-2xl flex flex-col justify-between max-w-[410px] w-full mx-auto"
+                className="min-w-0 shadow-xl rounded-2xl border flex flex-col justify-between max-w-[410px] w-full h-full mx-auto"
               >
                 <Image
-                  className="rounded-md"
+                  className="rounded-2xl h-full"
                   width={500}
                   height={500}
+                  // layout="fill" // This makes the image fill the container while respecting aspect ratio
+                  // objectFit="none" // Adjust as needed: cover, contain, etc.
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
+                  style={{ objectFit: "contain" }}
                   alt="강의 썸네일"
                   priority
                 />

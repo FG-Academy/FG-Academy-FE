@@ -11,8 +11,6 @@ export interface Lecture {
   status: string;
   createdAt: string;
   updatedAt: string;
-  // isComplete: boolean;
-  // course: Course;
   lectureTimeRecords: LectureTimeRecord[];
   quizzes: Quiz[];
 }

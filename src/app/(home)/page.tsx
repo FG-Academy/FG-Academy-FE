@@ -6,9 +6,14 @@ export default function Home() {
   return (
     <main className="flex flex-col h-full">
       <section className="w-full h-full">
-        <Image priority src={MainBanner} alt="메인 배너 이미지" />
+        <Image
+          priority
+          src={MainBanner}
+          style={{ width: "100%" }}
+          alt="메인 배너 이미지"
+        />
       </section>
-      <section id="infoPart" className="flex w-full mx-auto p-10">
+      <section id="infoPart" className="flex justify-center w-full p-10">
         <CourseCard />
       </section>
     </main>

@@ -18,6 +18,15 @@ export default function SideNav() {
     }`;
   };
 
+  const sublinkClassName = (linkType: string) => {
+    const isActivePage = pathname.includes(linkType);
+    return `flex flex-row w-full px-4 p-2 ${
+      isActivePage
+        ? "bg-white text-blue-700"
+        : "hover:bg-white hover:text-blue-700"
+    }`;
+  };
+
   return (
     // h-screen 뺌
     <div className="w-auto flex-1">
@@ -48,10 +57,43 @@ export default function SideNav() {
             <Video />
             <div>강의 관리</div>
           </Link>
-          <Link href="/admin/quizzes" className={linkClassName("quizzes")}>
-            <MessageCircleQuestion />
-            <div>퀴즈 관리</div>
+          <Link
+            href="/admin/quizzes"
+            className={`flex flex-col ${linkClassName("quizzes")}`}
+          >
+            <div className="flex flex-row space-x-2">
+              <MessageCircleQuestion />
+              <div>퀴즈 관리</div>
+            </div>
           </Link>
+          <div className="w-full flex flex-col px-4 mt-2">
+            <ul className="list-disc pl-5">
+              <li>
+                <Link
+                  className={`${sublinkClassName("multiple")}`}
+                  href="/admin/quizzes/multiple"
+                >
+                  객관식 퀴즈 현황
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={`${sublinkClassName("descriptive")}`}
+                  href="/admin/quizzes/descriptive"
+                >
+                  주관식 퀴즈 관리
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={`${sublinkClassName("register")}`}
+                  href="/admin/quizzes/register"
+                >
+                  퀴즈 등록
+                </Link>
+              </li>
+            </ul>
+          </div>
         </nav>
       </div>
     </div>

@@ -33,19 +33,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CopyIcon, Search } from "lucide-react";
 import {
   RankingInfo,
   rankItem,
   compareItems,
 } from "@tanstack/match-sorter-utils";
-// import { UserInfoDialog } from "./UserInfoDialog";
-// import DebouncedInput from "./DebouncedInput";
-import { IAdminQuizData } from "@/model/adminQuiz";
-import DescriptiveQuizInfoDialog from "./DescriptiveQuizInfoDialog";
+import DescriptiveQuizInfoDialog from "./DescriptiveQuizDialog";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
+import { Search } from "lucide-react";
+import DebouncedInput from "../../../users/components/DebouncedInput";
+import { DataTablePagination } from "../../../users/components/DataTablePagination";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -81,8 +78,6 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
-  const [userId, setUserId] = useState(0);
-  const [quizInfo, setQuizInfo] = useState<IAdminQuizData | undefined>();
 
   const { open, setOpen } = useOpenDescriptiveDialogStore((state) => state);
 
@@ -105,8 +100,6 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
         userId: false,
         quizId: false,
         level: false,
-        courseTitle: false,
-        position: false,
       },
     },
     state: {
@@ -118,7 +111,7 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex flex-col flex-1 justify-between overflow-y-auto">
+      <div className="flex flex-col justify-between flex-1 overflow-y-auto">
         <div className="flex flex-col justify-start overflow-y-scroll">
           <DialogContent
             onOpenAutoFocus={(e) => e.preventDefault()}
@@ -131,7 +124,7 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
               </DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
-              <DescriptiveQuizInfoDialog userId={userId} type={"descriptive"} />
+              <DescriptiveQuizInfoDialog />
             </div>
             <DialogFooter className="sm:justify-end">
               <DialogClose asChild>
@@ -141,9 +134,18 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
               </DialogClose>
             </DialogFooter>
           </DialogContent>
-          <div className="relative justify-start items-center w-full h-full flex mr-auto flex-1 md:grow-0 mb-6"></div>
-          <Table className="relative container justify-start mx-auto py-2 overflow-y-auto">
-            <TableHeader className="sticky top-0 bg-white">
+          <div className="relative flex items-center justify-start flex-1 w-full h-full mb-6 mr-auto md:grow-0">
+            <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
+            <DebouncedInput
+              value={globalFilter ?? ""}
+              onChange={(value) => setGlobalFilter(String(value))}
+              type="search"
+              placeholder="검색..."
+              className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
+            />
+          </div>
+          <Table className="container relative justify-start py-2 mx-auto overflow-y-auto">
+            <TableHeader className="sticky top-0 bg-gray-100">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -167,20 +169,6 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    onClick={() => {
-                      //   setQuizInfo({
-                      //     userId: row.getValue("userId"),
-                      //     name: row.getValue("name"),
-                      //     birthDate: row.getValue("birthDate"),
-                      //     email: row.getValue("email"),
-                      //     phoneNumber: row.getValue("phoneNumber"),
-                      //     churchName: row.getValue("churchName"),
-                      //     departmentName: row.getValue("departmentName"),
-                      //     position: row.getValue("position"),
-                      //     yearsOfService: row.getValue("yearsOfService"),
-                      //   });
-                      // setOpen(true);
-                    }}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell className="cursor-pointer" key={cell.id}>
@@ -190,19 +178,6 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
                         )}
                       </TableCell>
                     ))}
-                    <TableRow>
-                      <Button
-                        className="mt-2 hover:bg-gray-300"
-                        variant="secondary"
-                        onClick={() => {
-                          setUserId(parseInt(row.getValue("userId")));
-                          console.log(userId);
-                          setOpen(true);
-                        }}
-                      >
-                        채점현황
-                      </Button>
-                    </TableRow>
                   </TableRow>
                 ))
               ) : (
@@ -218,7 +193,7 @@ export function DescriptiveDataTableQuiz<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        {/* <DataTablePagination table={table} /> */}
+        <DataTablePagination table={table} />
       </div>
     </Dialog>
   );

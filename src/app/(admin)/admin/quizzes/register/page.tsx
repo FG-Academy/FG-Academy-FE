@@ -57,39 +57,37 @@ export default function RegisterQuizPage() {
         <h2 className="text-2xl font-sans">퀴즈 등록 화면</h2>
       </div>
       <div id="div2" className="flex flex-row p-2 mt-2  items-center">
-        <div id="div2-1" className="flex flex-row items-center">
-          <p className="text-base font-bold font-sans mr-4 text-center">
-            코스 선택
-          </p>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                {selectedCourseId
-                  ? courseOptions.find(
-                      (option) => option.courseId === selectedCourseId
-                    )?.title
-                  : "코스 선택"}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>코스를 선택해주세요</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup
-                value={selectedCourseId?.toString() || ""}
-                onValueChange={(value) => setSelectedCourseId(parseInt(value))}
-              >
-                {courseOptions.map(({ courseId, title }) => (
-                  <DropdownMenuRadioItem
-                    key={courseId}
-                    value={courseId.toString()}
-                  >
-                    {title}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <p className="text-base font-bold font-sans mr-4 text-center">
+          코스 선택
+        </p>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              {selectedCourseId
+                ? courseOptions.find(
+                    (option) => option.courseId === selectedCourseId
+                  )?.title
+                : "코스 선택"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>코스를 선택해주세요</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup
+              value={selectedCourseId?.toString() || ""}
+              onValueChange={(value) => setSelectedCourseId(parseInt(value))}
+            >
+              {courseOptions.map(({ courseId, title }) => (
+                <DropdownMenuRadioItem
+                  key={courseId}
+                  value={courseId.toString()}
+                >
+                  {title}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div id="div3" className="flex flex-col w-full h-full p-2 ">
         <div

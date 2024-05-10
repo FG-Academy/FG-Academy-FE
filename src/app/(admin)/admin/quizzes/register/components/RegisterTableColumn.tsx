@@ -11,13 +11,15 @@ import { Department, Position } from "@/app/(home)/userInfo/types/type";
 
 import { XIcon, CheckIcon } from "@/app/(home)/myDashboard/components/svg";
 import { Lecture } from "@/model/lecture";
+import useOpenDialogStore from "@/store/useOpenDialogStore";
+import useIdForQuizStore from "@/store/useIdForQuiz";
 
 export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
-  {
-    accessorKey: "lectureId",
-    cell: (info) => info.getValue(),
-    enableHiding: true,
-  },
+  // {
+  //   accessorKey: "lectureId",
+  //   cell: (info) => info.getValue(),
+  //   enableHiding: true,
+  // },
   {
     accessorKey: "courseId",
     cell: (info) => info.getValue(),
@@ -51,6 +53,31 @@ export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
     },
     cell: (info) => {
       return <div className="ml-10">{`${info.getValue()}강`}</div>;
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "lectureId",
+    header: ({ column }) => {
+      return <SortingHeader column={column} title="강의 회차" />;
+    },
+    cell: ({ row }) => {
+      const { setOpen } = useOpenDialogStore((state) => state);
+      const { setLectureId, setCourseId } = useIdForQuizStore((state) => state);
+
+      return (
+        <Button
+          variant="secondary"
+          className="px-4 space-x-2 border border-gray-300 hover:bg-gray-400"
+          onClick={() => {
+            setLectureId(parseInt(row.getValue("lectureId")));
+            setCourseId(parseInt(row.getValue("courseId")));
+            setOpen(true);
+          }}
+        >
+          <div>수정하기</div>
+        </Button>
+      );
     },
     enableHiding: false,
   },

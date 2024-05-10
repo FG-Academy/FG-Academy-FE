@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ProfileFormSchema } from "@/app/(home)/userInfo/lib/profileFormSchema";
-import { CourseFormSchema } from "../lib/CourseFormSchema";
+import { CourseFormSchema } from "../../videos/lib/CourseFormSchema";
 
 type FeedbackPostRequest = {
   feedbackComment: string;
@@ -44,9 +44,7 @@ export function useQuizFeedbackMutation(accessToken: string, userId: number) {
       return response.json(); // 성공 응답 데이터 반환
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["quizzes", "descriptive"],
-      });
+      queryClient.invalidateQueries();
       toast({
         title: "피드백 제출 완료",
         description: "피드백 제출에 성공하였습니다.",

@@ -12,6 +12,7 @@ import { getProgress } from "../lib/getProgress";
 import { usePathname } from "next/navigation";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
+import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 
 type Props = {
   courseId: number;
@@ -21,23 +22,14 @@ export default function MainHeader({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
 
-  const lectures = useQuery<Lecture[]>({
-    queryKey: ["lectures", courseId],
-    queryFn: () => getLectures(courseId, accessToken),
-    enabled: !!accessToken,
-  });
-  const progress = useQuery<IProgressResult>({
-    queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId, accessToken),
-    enabled: !!accessToken,
-  });
+  const { data: course } = useMyCoursesQuery(accessToken, courseId);
 
   const pathname = usePathname();
 
   const { duration } = useDurationStore((state) => state);
   const seconds = useSecondsStore((state) => state.seconds);
 
-  if (!lectures.data || !progress.data) {
+  if (!course) {
     return <Loading />;
   }
 
@@ -54,13 +46,19 @@ export default function MainHeader({ courseId, lectureId }: Props) {
         <div>강의 대시보드</div>
       </Link>
       <div>
-        {lectureId}강: {lectures.data[lectureId - 1].title}
+        {course.lectures.find((l) => l.lectureId === lectureId)?.lectureNumber}
+        강: {course.lectures.find((l) => l.lectureId === lectureId)?.title}
       </div>
       {!(pathname.includes("multiple") || pathname.includes("descriptive")) && (
         <div className="absolute right-4">
           {Math.floor(seconds / 60)}분/
           {Math.round(duration / 60)}분(
-          {`${Math.floor((seconds / 60 / (duration / 60)) * 100)}%`})
+          {`${
+            Math.floor((seconds / (duration - 3)) * 100) >= 100
+              ? 100
+              : Math.floor((seconds / (duration - 3)) * 100)
+          }%`}
+          )
           {/* {`${(Math.floor(seconds / 60) / Math.round(duration / 60)) * 100}%`}) */}
         </div>
       )}
