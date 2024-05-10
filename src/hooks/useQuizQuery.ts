@@ -1,9 +1,77 @@
 import { useQuery } from "@tanstack/react-query";
 import getSubmittedQuizList from "./lib/getSubmittedQuizList";
 import getAdminSubmittedQuizList from "./lib/getAdminSubmittedQuizList";
-import getAdminSubmittedDescriptiveQuizList from "./lib/getAdminSubmittedDescriptiveQuizList";
-import { Quiz } from "@/model/quiz";
 import getLectureQuizList from "./lib/getLectureQuizList";
+import getAdminSubmittedQuiz from "./lib/getAdminSubmittedQuiz";
+
+interface Course {
+  courseId: number;
+  thumbnailImagePath: string;
+  title: string;
+  level: string;
+  description: string;
+  curriculum: string;
+  openDate: string;
+  finishDate: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Lecture {
+  lectureId: number;
+  courseId: number;
+  lectureNumber: number;
+  title: string;
+  videoLink: string;
+  attachmentFile?: string | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  course: Course;
+}
+
+interface User {
+  userId: number;
+  birthDate: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  churchName: string;
+  departmentName: string;
+  position: string;
+  yearsOfService: number;
+  level: string;
+  nameBirthId: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Quiz {
+  quizId: number;
+  quizType: string;
+  quizIndex: number;
+  question: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  lecture: Lecture;
+}
+
+export interface AdminSubmittedQuiz {
+  id: number;
+  userId: number;
+  multipleAnswer: number;
+  answer: string;
+  submittedAnswer: string | null;
+  feedbackComment: string | null;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+  quiz: Quiz;
+}
 
 interface MainQuiz {
   quizId: number;
@@ -43,6 +111,17 @@ export const useFetchAdminQuizListQuery = (
     queryKey: ["quizzes", queryQuizType, accessToken],
     queryFn: () =>
       getAdminSubmittedQuizList(accessToken, userId, queryQuizType),
+    enabled: !!accessToken,
+  });
+};
+
+export const useAdminSubmittedQuizListQuery = (
+  accessToken: string,
+  options?: { enabled?: boolean }
+) => {
+  return useQuery<AdminSubmittedQuiz[]>({
+    queryKey: ["amdinQuizzes"],
+    queryFn: () => getAdminSubmittedQuiz(accessToken),
     enabled: !!accessToken,
   });
 };

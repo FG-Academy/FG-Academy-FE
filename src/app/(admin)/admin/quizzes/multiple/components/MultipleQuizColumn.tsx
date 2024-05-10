@@ -5,18 +5,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { SortingHeader } from "./SortingHeader";
+import { SortingHeader } from "../../../components/SortingHeader";
 import {
   Department,
-  Position,
   departments,
+  Position,
   positions,
 } from "@/app/(home)/userInfo/types/type";
 // import { Department, Position } from "@/app/(home)/signup/types/type";
 import { AdminQuizInfo, IAdminQuizData } from "@/model/adminQuiz";
 import { XIcon, CheckIcon } from "@/app/(home)/myDashboard/components/svg";
+import useOpenMultipleDialogStore from "@/store/useOpenMultipleDialogStore";
+import { AdminSubmittedQuiz } from "@/hooks/useQuizQuery";
+import { IUser } from "@/model/user";
 
-export const DescriptiveQuizColumn: ColumnDef<IAdminQuizData>[] = [
+export const MultipleQuizColumn: ColumnDef<IUser>[] = [
   {
     accessorKey: "userId",
     cell: (info) => info.getValue(),
@@ -27,40 +30,19 @@ export const DescriptiveQuizColumn: ColumnDef<IAdminQuizData>[] = [
     header: ({ column }) => {
       return (
         // <DataTableColumnHeader column={column} title="이름" />
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          이름
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <SortingHeader column={column} title="이름" />
       );
     },
-    cell: (info) => {
-      const result = info.getValue();
-      return result;
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "postion",
-    header: () => {
-      return <div>직분</div>;
-    },
+    // cell: (info) => info.getValue(),
     cell: ({ row }) => {
-      const positionValue = row.getValue("position");
-      const positionLabel =
-        positions.find((pos) => pos.value === positionValue)?.label || "N/A";
-      return <div>{positionLabel}</div>;
+      return <div className="text-center ">{row.getValue("name")}</div>;
     },
-    enableHiding: false,
   },
   {
     accessorKey: "courseTitle",
     cell: (info) => info.getValue(),
     enableHiding: true,
   },
-
   {
     accessorKey: "position",
     header: ({ column }) => {
@@ -70,7 +52,7 @@ export const DescriptiveQuizColumn: ColumnDef<IAdminQuizData>[] = [
       const positionValue = row.getValue("position");
       const positionLabel =
         positions.find((pos) => pos.value === positionValue)?.label || "N/A";
-      return <div>{positionLabel}</div>;
+      return <div className="text-center ">{positionLabel}</div>;
     },
     enableHiding: true,
   },
@@ -92,19 +74,30 @@ export const DescriptiveQuizColumn: ColumnDef<IAdminQuizData>[] = [
       const departmentLabel =
         departments.find((dept) => dept.value === departmentValue)?.label ||
         "N/A";
-      return <div>{departmentLabel}</div>;
+      return <div className="text-center ">{departmentLabel}</div>;
     },
     enableHiding: false,
   },
+  {
+    id: "button",
+    cell: ({ row }) => {
+      const { setOpen, setUserId } = useOpenMultipleDialogStore(
+        (state) => state
+      );
 
-  // {
-  //   accessorKey: "submittedDate",
-  //   header: ({ column }) => {
-  //     return <SortingHeader column={column} title="제출일자" />;
-  //   },
-  //   cell: ({ row }) => {
-  //     return <div>{formatDate(new Date(row.getValue("submittedDate")))}</div>;
-  //   },
-  //   enableHiding: false,
-  // },
+      return (
+        <Button
+          variant="secondary"
+          className="px-4 space-x-2 border border-gray-300 hover:bg-gray-400"
+          onClick={() => {
+            setUserId(parseInt(row.getValue("userId")));
+            setOpen(true);
+          }}
+        >
+          상세 보기
+        </Button>
+      );
+    },
+    enableHiding: false,
+  },
 ];

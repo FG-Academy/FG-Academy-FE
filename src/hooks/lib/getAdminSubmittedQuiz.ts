@@ -1,10 +1,6 @@
-export default async function getAdminSubmittedDescriptiveQuizList(
-  accessToken: string,
-  userId: number,
-  queryQuizType: string
-) {
+export default async function getAdminSubmittedQuiz(accessToken: string) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes/${userId}?type=${queryQuizType}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes`,
     {
       headers: { authorization: `Bearer ${accessToken}` },
       credentials: "include",

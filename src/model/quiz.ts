@@ -9,12 +9,13 @@ interface QuizAnswer {
   updatedAt: string;
 }
 
-interface QuizSubmit {
+export interface QuizSubmit {
   id: number;
   userId: number;
   multipleAnswer: number | null;
   submittedAnswer: string | null;
   feedbackComment: string | null;
+  answer: string;
   status: number;
   createdAt: string;
   updatedAt: string;

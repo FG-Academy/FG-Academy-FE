@@ -36,17 +36,20 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useQuizFeedbackMutation } from "../videos/hook/useQuizFeedbackMutate";
+import { useQuizFeedbackMutation } from "../../hooks/useQuizFeedbackMutate";
+import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
+import { useMyDescriptiveQuizQuery } from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/hooks/useMyCoursesQuery";
 
 interface Props {
-  userId: number;
   type: string;
 }
 
-export default function DescriptiveQuizInfoDialog({ userId, type }: Props) {
+export default function DescriptiveQuizInfoDialog({ type }: Props) {
   const { data: session } = useSession();
-  const accessToken = session?.user.accessToken;
-  const [isOpen, setIsOpen] = useState(false);
+  const accessToken = session?.user.accessToken as string;
+
+  const { userId, quizId } = useOpenDescriptiveDialogStore((state) => state);
+
   const [isCorrected, setIsCorrected] = useState(true);
   const [value, setValue] = useState<string>("");
 
@@ -56,15 +59,21 @@ export default function DescriptiveQuizInfoDialog({ userId, type }: Props) {
     setValue(e.target.value);
   }
 
-  const { mutate } = useQuizFeedbackMutation(accessToken, userId);
-
   const { data: submittedQuizList } = useFetchAdminQuizListQuery(
     accessToken,
     userId,
     getQuizDataType
   );
 
-  if (!submittedQuizList) return <Loading />;
+  const { data: descriptiveQuiz } = useMyDescriptiveQuizQuery(
+    accessToken,
+    userId,
+    quizId
+  );
+
+  const { mutate } = useQuizFeedbackMutation(accessToken, userId);
+
+  if (!submittedQuizList || !descriptiveQuiz) return <Loading />;
 
   function onSubmit(quizId: number) {
     mutate({ feedbackComment: value, corrected: isCorrected, quizId: quizId });
@@ -72,7 +81,7 @@ export default function DescriptiveQuizInfoDialog({ userId, type }: Props) {
 
   return (
     <div className="flex w-full flex-col overflow-y-auto">
-      {submittedQuizList?.map((ele, index) => (
+      {submittedQuizList.map((ele, index) => (
         <div key={index}>
           {/* <QuizContents data={ele} /> */}
           <main className="flex flex-col md:gap-4 md:p-2">
@@ -101,7 +110,7 @@ export default function DescriptiveQuizInfoDialog({ userId, type }: Props) {
                     </div>
 
                     <div className="flex-1">
-                      <h2 className="font-semibold">{ele.question}</h2>
+                      <div className="font-semibold">{ele.question}</div>
                       <div className="flex flex-wrap gap-2">
                         {ele.submittedAnswer.map((ele2, index) => (
                           <div
@@ -140,9 +149,9 @@ export default function DescriptiveQuizInfoDialog({ userId, type }: Props) {
                           <DialogDescription>
                             <div className="flex justify-center items-center py-4 overflow-y-auto">
                               <div className="bg-white shadow-xl rounded-lg p-4 w-full flex-col">
-                                <h2 className="mt-2 text-center text-2xl font-semibold text-gray-900">
+                                <div className="mt-2 text-center text-2xl font-semibold text-gray-900">
                                   {ele.courseTitle}
-                                </h2>
+                                </div>
                                 <p className="mt-2 text-center text-lg text-gray-700">
                                   {ele.lectureTitle}
                                 </p>

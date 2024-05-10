@@ -72,13 +72,13 @@ export default function CourseCard() {
           <div
             key={ele.courseId}
             id="courseInfo1"
-            className="min-w-0 flex-shrink-0 shadow-xl rounded-2xl flex flex-col justify-between max-w-[410px] w-full mx-auto"
+            className="min-w-0 border shadow-xl rounded-2xl flex flex-col justify-between max-w-[410px] w-full mx-auto"
           >
             <Image
-              className="rounded-md"
+              className="rounded-2xl h-full"
               width={500}
               height={500}
-              style={{ width: "100%", height: "auto" }}
+              style={{ objectFit: "contain" }}
               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${ele.thumbnailImagePath}`}
               alt="강의 썸네일"
               priority

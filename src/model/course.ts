@@ -7,13 +7,13 @@ export interface Course {
   thumbnailImagePath: string;
   description: string;
   curriculum: string;
-  status?: string;
+  status: string;
   level: string;
   openDate: string;
   finishDate: string;
   createdAt: Date;
   updatedAt: Date;
-  lecture: Lecture[];
+  lectures: Lecture[];
 }
 
 export interface AdminCourse {

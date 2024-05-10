@@ -24,16 +24,9 @@ export default function EnrollButton({ enrollment, courseId }: Props) {
         <button
           className="w-full px-4 py-2 text-white transition-colors duration-150 bg-blue-400 rounded-xl hover:bg-blue-600 hover:text-white"
           onClick={() => {
-            if (enrollment.completedLectures === enrollment.totalCount) {
-              // 현재 사용자가 수강 중인 강좌로 이동
-              router.push(
-                `/course/${courseId}/lecture/${enrollment.lastStudyLecture}`
-              );
-            }
-
             // 현재 사용자가 수강 중인 강좌로 이동
             router.push(
-              `/course/${courseId}/lecture/${enrollment.lastStudyLecture + 1}`
+              `/course/${courseId}/lecture/${enrollment.lastStudyLecture}`
             );
           }}
         >

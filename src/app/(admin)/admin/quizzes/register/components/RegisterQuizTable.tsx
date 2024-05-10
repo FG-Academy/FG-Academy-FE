@@ -104,7 +104,6 @@ export function RegisterQuizTable<TData, TValue>({
     globalFilterFn: fuzzyFilter,
     initialState: {
       columnVisibility: {
-        lectureId: false,
         courseId: false,
       },
     },
@@ -130,7 +129,7 @@ export function RegisterQuizTable<TData, TValue>({
             </DialogHeader>
             <div className="flex items-center space-x-2">
               {/* //! 여기에 반복적으로 들어갈 컴포넌트 넣기 */}
-              <RegisterQuizDialog lectureId={lectureId} courseId={courseId} />
+              <RegisterQuizDialog />
               {/* <DescriptiveQuizInfoDialog userId={userId} type={"descriptive"} /> */}
             </div>
             <DialogFooter className="sm:justify-end">
@@ -177,19 +176,6 @@ export function RegisterQuizTable<TData, TValue>({
                         )}
                       </TableCell>
                     ))}
-                    <TableRow>
-                      <Button
-                        className="mt-2 hover:bg-gray-300"
-                        variant="secondary"
-                        onClick={() => {
-                          setLectureId(parseInt(row.getValue("lectureId")));
-                          setCourseId(parseInt(row.getValue("courseId")));
-                          setOpen(true);
-                        }}
-                      >
-                        퀴즈 등록 현황
-                      </Button>
-                    </TableRow>
                   </TableRow>
                 ))
               ) : (
