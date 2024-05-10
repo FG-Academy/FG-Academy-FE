@@ -21,17 +21,16 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
 
   return (
     <div className="w-full h-full">
-      <Card className="h-full flex flex-col justify-between flex-shrink-0 shadow-xl rounded-2xl max-w-xs md:max-w-[350px]">
+      <Card className="h-full flex flex-col justify-betweenshadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
         <CardHeader>
           <CardTitle className="text-lg">{data.title}</CardTitle>
           <CardDescription>{data.curriculum}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center space-x-1"></div>
           <Image
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${data.thumbnailPath}`}
-            width={100}
-            height={100}
+            width={200}
+            height={200}
             style={{ width: "100%", height: "auto" }}
             alt="Thumbnail"
             priority

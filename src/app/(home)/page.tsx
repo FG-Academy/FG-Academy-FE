@@ -1,6 +1,6 @@
 import Image from "next/image";
 import MainBanner from "../../../public/images/main-banner02.jpg";
-import CourseCard from "@/components/CourseCard2";
+import MainCourseCard from "@/app/(home)/components/MainCourseCard";
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
         />
       </section>
       <section id="infoPart" className="flex justify-center w-full p-10">
-        <CourseCard />
+        <MainCourseCard />
       </section>
     </main>
   );
