@@ -70,7 +70,7 @@ export default function SideNav() {
             <ul className="list-disc pl-5">
               <li>
                 <Link
-                  className={`${sublinkClassName("multiple")}`}
+                  className={`${sublinkClassName("quizzes/multiple")}`}
                   href="/admin/quizzes/multiple"
                 >
                   객관식 퀴즈 현황
@@ -78,7 +78,7 @@ export default function SideNav() {
               </li>
               <li>
                 <Link
-                  className={`${sublinkClassName("descriptive")}`}
+                  className={`${sublinkClassName("quizzes/descriptive")}`}
                   href="/admin/quizzes/descriptive"
                 >
                   주관식 퀴즈 관리
@@ -86,7 +86,7 @@ export default function SideNav() {
               </li>
               <li>
                 <Link
-                  className={`${sublinkClassName("register")}`}
+                  className={`${sublinkClassName("quizzes/register")}`}
                   href="/admin/quizzes/register"
                 >
                   퀴즈 등록

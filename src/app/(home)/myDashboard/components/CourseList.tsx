@@ -30,6 +30,11 @@ Props) {
     if (remainingCourses.length > 2 || completedCourses.length > 2) {
       setCardClassName(`basis-full sm:basis-full md:basis-1/3`);
     }
+    // if (remainingCourses.length > 2 || completedCourses.length > 2) {
+    //   setCardClassName(`basis-1/3 flex-grow-0 flex-shrink-0`); // 3개 등분
+    // } else {
+    //   setCardClassName(`basis-1/3 flex-grow-0 flex-shrink-0`); // 요소가 1개일 때도 3등분 유지
+    // }
   }, [remainingCourses, completedCourses]);
 
   const remainingCoursesLength = remainingCourses.length;
@@ -76,13 +81,23 @@ Props) {
             {/* 화면 크기에 따라 CarouselItem의 너비를 조정합니다. */}
             {/* 컴포넌트가 3개 이하면 basis 클래스는 제외하도록 구성해야함 */}
 
-            {isSelectedComplete
-              ? completedCoursesRender(completedCourses, cardclassName)
-              : remainingCourses.map((ele: courseDetail, index: number) => (
-                  <CarouselItem key={index} className={`pl-2 ${cardclassName}`}>
+            {isSelectedComplete ? (
+              completedCourses.length === 0 ? (
+                <p className="mx-10">😅 수강 완료한 코스가 없습니다.</p>
+              ) : (
+                completedCourses.map((ele, index) => (
+                  <CarouselItem key={index} className={`${cardclassName}`}>
                     <CourseCardDashboard data={ele} />
                   </CarouselItem>
-                ))}
+                ))
+              )
+            ) : (
+              remainingCourses.map((ele, index) => (
+                <CarouselItem key={index} className={`${cardclassName}`}>
+                  <CourseCardDashboard data={ele} />
+                </CarouselItem>
+              ))
+            )}
           </CarouselContent>
           <CarouselNext className="right-0" />
           <CarouselPrevious className="left-0" />
@@ -90,19 +105,4 @@ Props) {
       </div>
     </div>
   );
-}
-
-function completedCoursesRender(
-  completedCourses: courseDetail[],
-  cardclassName: string
-) {
-  if (completedCourses?.length === 0) {
-    return <p className="mx-10">😅 수강 완료한 코스가 없습니다.</p>;
-  } else {
-    return completedCourses.map((ele, index) => (
-      <CarouselItem key={index} className={`pl-2 ${cardclassName}`}>
-        <CourseCardDashboard data={ele} />
-      </CarouselItem>
-    ));
-  }
 }

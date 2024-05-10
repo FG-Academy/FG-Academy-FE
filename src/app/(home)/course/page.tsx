@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import CourseCard from "../../../components/CourseCard";
+import CourseCard from "./components/CourseCard";
 
 export default function CoursesPage() {
   return (

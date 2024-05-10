@@ -30,7 +30,7 @@ export default function CourseCard() {
 
   // console.log(`${process.env.NEXT_PUBLIC_IMAGE_URL}`);
   return (
-    <div className="p-4 space-y-6 flex">
+    <div className="p-4 space-y-6 flex flex-col">
       {Object.keys(categories).map((category) => (
         <div className="flex flex-col items-center space-y-2" key={category}>
           <h2 className="text-2xl font-bold">{category}</h2>{" "}

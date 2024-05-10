@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {

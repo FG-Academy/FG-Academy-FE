@@ -7,7 +7,7 @@ import { useFetchAllLectureListQuery } from "@/hooks/useLectureQuery";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
-import LectureList from "@/components/LectureList";
+import LectureList from "@/app/(home)/course/[courseId]/components/LectureList";
 import { createMarkup } from "../lib/createMarkup";
 import { Progress } from "@/components/ui/progress";
 import EnrollButton from "./EnrollButton";
