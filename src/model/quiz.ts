@@ -1,4 +1,4 @@
-interface QuizAnswer {
+export interface QuizAnswer {
   id: number;
   itemIndex: number;
   quizId: number;

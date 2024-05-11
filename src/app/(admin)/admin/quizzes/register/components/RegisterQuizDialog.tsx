@@ -65,7 +65,7 @@ export default function RegisterQuizDialog() {
           >
             <div id="div1" className="flex-col flex-1">
               <h2 className="text-lg font-semibold">{quiz.question}</h2>
-              {quiz.quizAnswers.map((ele) => (
+              {quiz.quizAnswers?.map((ele) => (
                 <p key={ele.id} className="text-sm mt-1 text-gray-600">
                   {ele.itemIndex}번: {ele.item}
                 </p>

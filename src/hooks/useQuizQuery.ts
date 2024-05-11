@@ -3,6 +3,7 @@ import getSubmittedQuizList from "./lib/getSubmittedQuizList";
 import getAdminSubmittedQuizList from "./lib/getAdminSubmittedQuizList";
 import getLectureQuizList from "./lib/getLectureQuizList";
 import getAdminSubmittedQuiz from "./lib/getAdminSubmittedQuiz";
+import { Quiz as IQuiz, QuizAnswer, QuizSubmit } from "@/model/quiz";
 
 interface Course {
   courseId: number;
@@ -57,6 +58,8 @@ export interface Quiz {
   createdAt: string;
   updatedAt: string;
   lecture: Lecture;
+  // quizAnswers?: QuizAnswer[];
+  // quizSubmits?: QuizSubmit[];
 }
 
 export interface AdminSubmittedQuiz {
@@ -132,7 +135,7 @@ export const useFetchAdminLectureQuizList = (
   lectureId: number,
   options?: { enabled?: boolean }
 ) => {
-  return useQuery<Quiz[]>({
+  return useQuery<IQuiz[]>({
     queryKey: ["lectureQuiz", lectureId],
     queryFn: () => getLectureQuizList(accessToken, courseId, lectureId),
     enabled: !!accessToken,
