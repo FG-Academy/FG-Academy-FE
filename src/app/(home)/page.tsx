@@ -13,7 +13,7 @@ export default function Home() {
           alt="메인 배너 이미지"
         />
       </section>
-      <section id="infoPart" className="flex justify-center w-full p-10">
+      <section id="infoPart" className="flex justify-center w-full sm:p-10">
         <MainCourseCard />
       </section>
     </main>

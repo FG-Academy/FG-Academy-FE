@@ -35,7 +35,7 @@ export default function CourseCard() {
         <div className="flex flex-col items-center space-y-2" key={category}>
           <h2 className="text-2xl font-bold">{category}</h2>{" "}
           {/* 카테고리 이름 표시 */}
-          <div className="p-6 grid grid-cols-1 place-items-center gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
+          <div className="p-6 grid grid-cols-1 place-items-center gap-10 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
             {categories[category].map((course) => (
               <div
                 key={course.courseId}
@@ -52,12 +52,12 @@ export default function CourseCard() {
                   alt="강의 썸네일"
                   priority
                 />
-                <div className="p-4 text-lg overflow-hidden">
+                <div className="p-4 md:text-base overflow-hidden lg:text-lg text-base">
                   {course.title}
                 </div>
                 <div className="p-2">
                   <button
-                    className="w-full px-4 py-2 text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white"
+                    className="w-full px-4 py-2 text-sm lg:text-lg md:text-base text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white"
                     onClick={() => {
                       router.push(`/course/${course.courseId}`);
                     }}
