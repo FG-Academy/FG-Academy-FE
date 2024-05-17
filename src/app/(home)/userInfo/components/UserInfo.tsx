@@ -36,7 +36,7 @@ type Props = {
 };
 
 export function UserInfo({ userInfo }: Props) {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const accessToken = session?.user.accessToken;
 
   const form = useForm<z.infer<typeof ProfileUpdateFormSchema>>({
@@ -65,6 +65,15 @@ export function UserInfo({ userInfo }: Props) {
     });
 
     if (Object.keys(updatedData).length > 0) {
+      const updatePayload: any = {};
+      if (data.name !== undefined) {
+        updatePayload.name = data.name;
+      }
+      if (data.level !== undefined) {
+        updatePayload.level = data.level;
+      }
+
+      update(updatePayload);
       mutate({ accessToken, data: updatedData });
     } else {
       toast({

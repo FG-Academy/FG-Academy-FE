@@ -19,7 +19,19 @@ export const {
   },
   callbacks: {
     // 토큰 관련 action 시 호출되는 Callback
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update" && session !== null) {
+        const { name, level } = session;
+        if (session.name) {
+          token.name = session.name;
+        }
+        if (session.level) {
+          token.level = session.level;
+        }
+        if (session.enrollmentIds) {
+          token.enrollmentIds = session.enrollmentIds;
+        }
+      }
       if (user) {
         // Initial Login에만 user가 존재
         console.log("initial login", user, Date.now());
@@ -64,6 +76,7 @@ export const {
     },
     // Session 관련 action 시 호출되는 callback
     session({ session, token }) {
+      // console.log(token);
       session.user = token as any;
       // console.log(session);
       return session;

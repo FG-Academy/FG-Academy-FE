@@ -35,6 +35,12 @@ export function useCourseDeleteMutation(accessToken: string) {
       queryClient.invalidateQueries({
         queryKey: ["courses"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["enrollment"],
+      });
       toast({
         title: "강의 삭제 성공",
         description: "강의 삭제에 성공하였습니다.",

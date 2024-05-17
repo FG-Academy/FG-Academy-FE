@@ -20,6 +20,7 @@ declare module "next-auth" {
       name: string;
       level: string;
       accessToken: any & DefaultSession["user"];
+      enrollmentIds: number[];
       error: string | undefined;
     };
     accessToken: string;

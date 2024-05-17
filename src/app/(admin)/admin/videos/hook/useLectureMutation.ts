@@ -34,7 +34,16 @@ export function useLectureMutation(accessToken: string, courseId: number) {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
+        queryKey: ["courses"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["course"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["enrollment"],
       });
       toast({
         title: "강의 수정 성공",

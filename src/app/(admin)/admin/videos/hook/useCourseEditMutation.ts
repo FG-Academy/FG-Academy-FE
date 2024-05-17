@@ -43,6 +43,12 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
       queryClient.invalidateQueries({
         queryKey: ["course"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["enrollment"],
+      });
     },
     onError: (error: any) => {
       toast({

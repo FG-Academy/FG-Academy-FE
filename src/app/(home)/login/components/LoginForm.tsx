@@ -55,6 +55,7 @@ export default function LoginForm() {
         });
       } else {
         router.push("/");
+        router.refresh();
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);

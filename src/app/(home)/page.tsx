@@ -1,8 +1,16 @@
 import Image from "next/image";
 import MainBanner from "../../../public/images/main-banner02.jpg";
 import MainCourseCard from "@/app/(home)/_components/MainCourseCard";
+import { auth } from "@/auth";
+import Loading from "../(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
+  if (!session) {
+    return <Loading />;
+  }
+
   return (
     <main className="flex flex-col h-full">
       <section className="w-full h-full">

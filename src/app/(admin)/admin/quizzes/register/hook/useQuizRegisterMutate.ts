@@ -21,7 +21,7 @@ export function useQuizRegisterMutation(
   return useMutation({
     mutationKey: ["registerQuiz"],
     mutationFn: async ({ question, quizType, quizInfo }: QuizPostRequest) => {
-      console.log(JSON.stringify({ question, quizType, quizInfo }));
+      // console.log(JSON.stringify({ question, quizType, quizInfo }));
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes/register/${lectureId}`,

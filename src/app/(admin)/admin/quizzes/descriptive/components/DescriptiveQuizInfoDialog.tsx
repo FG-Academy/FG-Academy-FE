@@ -127,8 +127,8 @@ export default function DescriptiveQuizInfoDialog({ type }: Props) {
                         size="sm"
                         variant="outline"
                         onClick={() => {
-                          console.log(ele.quizId);
-                          console.log(userId);
+                          // console.log(ele.quizId);
+                          // console.log(userId);
                         }}
                       >
                         보기

@@ -3,7 +3,11 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-export function useEnrollmentMutate(courseId: number, accessToken: string) {
+export function useEnrollmentMutate(
+  courseId: number,
+  accessToken: string,
+  lastStudyLecture: number
+) {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
 
@@ -36,6 +40,12 @@ export function useEnrollmentMutate(courseId: number, accessToken: string) {
       queryClient.invalidateQueries({
         queryKey: ["dashboard"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
+      });
       toast({
         title: data.message,
         duration: 10000,
@@ -44,7 +54,7 @@ export function useEnrollmentMutate(courseId: number, accessToken: string) {
             <Button
               className="shadow-md bg-blue-500 text-white hover:bg-slate-50 hover:text-black"
               onClick={() => {
-                router.push(`/course/${courseId}/lecture/1`);
+                router.push(`/course/${courseId}/lecture/${lastStudyLecture}`);
               }}
             >
               강의 수강하기

@@ -13,10 +13,16 @@ type Props = {
 
 export default function EnrollButton({ enrollment, courseId }: Props) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const accessToken = session?.user.accessToken;
 
-  const { mutate } = useEnrollmentMutate(courseId, accessToken);
+  const { mutate } = useEnrollmentMutate(
+    courseId,
+    accessToken,
+    enrollment.lastStudyLecture
+  );
+
+  // console.log(enrollment.lastStudyLecture);
 
   return (
     <div>
@@ -37,12 +43,21 @@ export default function EnrollButton({ enrollment, courseId }: Props) {
           className="w-full px-4 py-2 text-black transition-colors duration-150"
           disabled={true}
         >
-          {enrollment.message}
+          {enrollment.totalCount === 0
+            ? "수강할 강의가 없습니다."
+            : enrollment.message}
         </button>
       ) : (
         <button
           className="w-full px-4 py-2 text-white transition-colors duration-150 bg-blue-400 rounded-xl hover:bg-blue-600 hover:text-white"
-          onClick={() => mutate()}
+          onClick={() => {
+            const newIds = [
+              ...(session?.user.enrollmentIds as number[]),
+              courseId,
+            ];
+            update({ enrollmentIds: newIds });
+            mutate();
+          }}
         >
           수강신청
         </button>
