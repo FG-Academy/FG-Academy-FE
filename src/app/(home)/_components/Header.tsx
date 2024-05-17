@@ -20,6 +20,7 @@ export default function Header() {
     if (session && session.user.error === "RefreshAccessTokenError") {
       console.log("세션 만료.");
       router.push("/");
+      router.refresh();
       // queryClient.invalidateQueries();
       signOut({ redirect: false });
     }
@@ -90,6 +91,7 @@ export default function Header() {
                         href="/"
                         onClick={() => {
                           router.push("/");
+                          router.refresh();
                           signOut({ redirect: false });
                         }}
                       >
@@ -144,6 +146,7 @@ export default function Header() {
                   href="/"
                   onClick={() => {
                     router.push("/");
+                    router.refresh();
                     signOut({ redirect: false });
                   }}
                 >
