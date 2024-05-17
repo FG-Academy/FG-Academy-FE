@@ -123,7 +123,7 @@ export default function CourseDetail({ courseId }: Props) {
             <h1 className="font-mono text-2xl font-bold">강의 목록</h1>
           </div>
           <div className="w-full h-auto mt-4">
-            <LectureList lectures={lectures} />
+            <LectureList lectures={lectures} isTaking={enrollment.isTaking} />
           </div>
         </div>
         <div className="flex flex-col w-2/5 p-4 h-fit space-y-4 bg-blue-100 border-2 rounded-lg">

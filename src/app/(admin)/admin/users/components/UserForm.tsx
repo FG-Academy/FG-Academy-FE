@@ -48,9 +48,9 @@ export default function UserForm({ userProfile, userId }: Props) {
       name: userProfile.name ?? "",
       email: userProfile.email ?? "",
       phoneNumber: userProfile.phoneNumber ?? "",
-      // churchName: userProfile.churchName ?? "",
-      // departmentName: userProfile.departmentName ?? "",
-      // position: userProfile.position ?? "",
+      churchName: userProfile.churchName ?? "",
+      departmentName: userProfile.departmentName ?? "",
+      position: userProfile.position ?? "",
       yearsOfService: userProfile.yearsOfService ?? 0,
       level: userProfile.level ?? "",
     },
@@ -266,7 +266,7 @@ export default function UserForm({ userProfile, userId }: Props) {
               <Select
                 name={field.name}
                 onValueChange={field.onChange}
-                defaultValue={userProfile.position}
+                defaultValue={userProfile.position ?? ""}
               >
                 <SelectTrigger>
                   <SelectValue

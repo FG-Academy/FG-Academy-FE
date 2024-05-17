@@ -46,7 +46,13 @@ export function useQuizRegisterMutation(
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["lectureQuiz", accessToken],
+        queryKey: ["courses"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["adminQuizzes"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
       });
       toast({
         title: "퀴즈 등록 완료",

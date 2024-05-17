@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 const FormSchema = z.object({
   nameBirthId: z.string().min(1, {
@@ -54,7 +54,7 @@ export default function LoginForm() {
           description: "아이디와 비밀번호를 다시 한 번 확인해주세요.",
         });
       } else {
-        router.replace("/");
+        router.push("/");
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);

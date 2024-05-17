@@ -42,9 +42,9 @@ export default function QuizContents({
                       <div>{quiz.question}</div>
                       {quiz.quizSubmits.length > 0 ? (
                         quiz.quizSubmits[0].status === 2 ? (
-                          <Circle color="green" /> // 정답 아이콘
-                        ) : (
                           <X color="red" /> // 오답 아이콘
+                        ) : (
+                          <Circle color="green" /> // 정답 아이콘
                         )
                       ) : (
                         <span>미제출</span> // 퀴즈 미제출

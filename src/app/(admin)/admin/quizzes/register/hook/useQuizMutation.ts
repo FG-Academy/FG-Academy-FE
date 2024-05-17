@@ -41,7 +41,13 @@ export function useQuizMutation(
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["lectureQuiz"],
+        queryKey: ["courses"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["adminQuizzes"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["lectures"],
       });
       queryClient.invalidateQueries({
         queryKey: ["lectures"],

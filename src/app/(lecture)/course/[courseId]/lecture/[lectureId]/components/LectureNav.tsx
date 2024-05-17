@@ -121,7 +121,9 @@ export default function LectureNav({ courseId, lectureId }: Props) {
         {myCourse.lectures.map((lecture, index) => {
           // 현재 강의가 완료되었거나, 완료한 마지막 강의의 바로 다음 강의이거나, 첫 번째 강의인 경우에만 클릭 가능
           const lectureIds = progress.lectureProgresses.map((lp) => {
-            return lp.lectureId;
+            if (lp.completed === true) {
+              return lp.lectureId;
+            }
           });
           const isClickable =
             lectureIds.includes(lecture.lectureId) ||

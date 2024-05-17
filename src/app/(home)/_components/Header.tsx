@@ -5,14 +5,22 @@ import { useEffect, useState } from "react";
 import { IoMenu } from "react-icons/io5";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session, status } = useSession();
 
+  const queryClient = useQueryClient();
+
+  const router = useRouter();
+
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {
       console.log("세션 만료.");
+      router.push("/");
+      // queryClient.invalidateQueries();
       signOut({ redirect: false });
     }
   }, [session]);
@@ -81,6 +89,7 @@ export default function Header() {
                         className="w-full text-left hover:text-blue-900"
                         href="/"
                         onClick={() => {
+                          router.push("/");
                           signOut({ redirect: false });
                         }}
                       >
@@ -134,6 +143,7 @@ export default function Header() {
                   className="mr-5 hover:text-blue-900"
                   href="/"
                   onClick={() => {
+                    router.push("/");
                     signOut({ redirect: false });
                   }}
                 >

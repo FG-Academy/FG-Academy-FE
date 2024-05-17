@@ -4,7 +4,7 @@ import { getProgress } from "../lib/getProgress";
 interface IProgress {
   lectureId: number;
   lectureNumber: number;
-  completed: string;
+  completed: boolean;
   progress: number;
 }
 
