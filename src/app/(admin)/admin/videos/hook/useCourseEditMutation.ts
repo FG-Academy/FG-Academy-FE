@@ -1,17 +1,10 @@
-import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
-// type UserPatchRequest = {
-//   accessToken: string;
-//   // data: z.infer<typeof CourseFormSchema>;
-//   data: FormData;
-// };
-
 export function useCourseEditMutation(accessToken: string, courseId: number) {
   const queryClient = useQueryClient();
-  const router = useRouter(); // router 사용 설정
+  const router = useRouter();
 
   return useMutation({
     mutationKey: ["updateCourseByAdmin"],
@@ -47,9 +40,11 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
       queryClient.invalidateQueries({
         queryKey: ["courses"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["course"],
+      });
     },
     onError: (error: any) => {
-      // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력
       toast({
         variant: "destructive",
         title: "잘못된 양식입니다..",

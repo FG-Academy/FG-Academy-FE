@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { getValues } from "./getValues";
-import { Department, Position } from "../types/type";
+import { Department, Position } from "../../../types/type";
 
 export const ProfileFormSchema = z.object({
   name: z.string().min(2, {

@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import z from "zod";
 import { AnswerFormSchema } from "../lib/AnswerFornSchema";
 
@@ -9,7 +8,6 @@ export function useSubmitDescriptiveAnswerMutation(
   quizId: number
 ) {
   const queryClient = useQueryClient();
-  const router = useRouter(); // router 사용 설정
 
   return useMutation({
     mutationKey: ["submitDescriptiveAnswer"],

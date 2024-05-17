@@ -4,7 +4,7 @@ import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loadi
 import { DataTable } from "./components/DataTable";
 import { columns } from "./components/columns";
 import { useSession } from "next-auth/react";
-import { useFetchAllUserListQuery } from "@/hooks/useUserQuery";
+import { useFetchAllUserListQuery } from "../hooks/useUserQuery";
 
 export default function Page() {
   const { data: session } = useSession();
@@ -20,7 +20,7 @@ export default function Page() {
     <div className="w-full p-4 px-10">
       <div className="text-2xl mb-4">유저 관리</div>
       <div className="flex flex-col p-2 h-[646px]">
-        <DataTable columns={columns} data={allUsers.users} />
+        <DataTable columns={columns} data={allUsers} />
       </div>
     </div>
   );

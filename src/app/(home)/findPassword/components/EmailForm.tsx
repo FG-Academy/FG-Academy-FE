@@ -65,10 +65,13 @@ export default function EmailForm2() {
     } else {
       toast({
         title: "해당 이메일로 가입된 계정이 존재하지 않습니다.",
+        variant: "destructive",
+        duration: 3000,
         description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(values, null, 2)}
+          <pre className="mt-2 w-[340px] rounded-md bg-white p-4">
+            <code className="text-black">
+              {/* {JSON.stringify(values, null, 2)} */}
+              {values.email}
             </code>
           </pre>
         ),

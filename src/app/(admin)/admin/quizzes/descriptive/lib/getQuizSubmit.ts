@@ -1,6 +1,6 @@
 export async function getQuizSubmit(accessToken: string) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes2`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes`,
     {
       next: {
         tags: ["quizSubmits"],

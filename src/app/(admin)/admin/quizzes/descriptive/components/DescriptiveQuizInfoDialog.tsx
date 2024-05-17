@@ -1,10 +1,6 @@
 "use client";
 
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
-import {
-  // useFetchAdminDescriptiveQuizListQuery,
-  useFetchAdminQuizListQuery,
-} from "@/hooks/useQuizQuery";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -38,7 +34,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useQuizFeedbackMutation } from "../../hooks/useQuizFeedbackMutate";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
-import { useMyDescriptiveQuizQuery } from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/hooks/useMyCoursesQuery";
+import { useMyDescriptiveQuizQuery } from "../../hooks/useQuizQuery";
+import { useFetchAdminQuizListQuery } from "../../../hooks/useUserQuery";
 
 interface Props {
   type: string;
@@ -53,16 +50,13 @@ export default function DescriptiveQuizInfoDialog({ type }: Props) {
   const [isCorrected, setIsCorrected] = useState(true);
   const [value, setValue] = useState<string>("");
 
-  const getQuizDataType = "descriptive";
-
   function onChange(e: any) {
     setValue(e.target.value);
   }
 
   const { data: submittedQuizList } = useFetchAdminQuizListQuery(
     accessToken,
-    userId,
-    getQuizDataType
+    userId
   );
 
   const { data: descriptiveQuiz } = useMyDescriptiveQuizQuery(

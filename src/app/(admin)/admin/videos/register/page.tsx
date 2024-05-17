@@ -1,7 +1,5 @@
 "use client";
 
-import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   SelectValue,
@@ -14,7 +12,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,16 +24,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CourseFormSchema } from "../lib/CourseFormSchema";
 import { useCourseMutation } from "../hook/useCourseMutation";
 import { useSession } from "next-auth/react";
-import { transformDate } from "@/lib/utils";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCurriculumQuery } from "@/hooks/useCurriculumQuery";
-import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import {
   courseCurriculumOptions,
   userLevelSettingOptions,
-} from "@/app/(home)/userInfo/types/type";
+} from "@/app/types/type";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Page() {
@@ -60,8 +54,6 @@ export default function Page() {
       // thumbnailImage: null,
     },
   });
-
-  const { data: curriculums } = useCurriculumQuery(accessToken);
 
   const { mutate } = useCourseMutation();
 
@@ -94,10 +86,6 @@ export default function Page() {
 
     mutate({ accessToken, data: formData });
   };
-
-  if (!curriculums) {
-    return <Loading />;
-  }
 
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-screen p-2 py-8">

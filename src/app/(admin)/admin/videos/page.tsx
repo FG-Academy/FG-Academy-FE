@@ -2,9 +2,9 @@
 
 import { DataTable } from "./components/DataTable";
 import { useSession } from "next-auth/react";
-import { useFetchAllAdminCourseListQuery } from "@/hooks/useCourseQuery";
 import { videoColumns } from "./components/columns";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
+import { useFetchAllAdminCourseListQuery } from "../hooks/useAdminCourseQuery";
 
 export default function Page() {
   const { data: session } = useSession();

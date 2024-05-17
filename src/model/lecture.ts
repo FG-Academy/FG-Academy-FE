@@ -1,7 +1,4 @@
-import { Course } from "./course";
-import { Quiz } from "./quiz";
-
-export interface Lecture {
+export interface ILecture {
   lectureId: number;
   courseId: number;
   lectureNumber: number;
@@ -11,20 +8,9 @@ export interface Lecture {
   status: string;
   createdAt: string;
   updatedAt: string;
-  lectureTimeRecords: LectureTimeRecord[];
-  quizzes: Quiz[];
 }
 
-interface LecturesObject {
-  [lectureId: number]: Lecture;
-}
-
-export interface ILecture {
-  lectures: LecturesObject;
-  length: number;
-}
-
-export interface LectureTimeRecord {
+export interface ILectureTimeRecord {
   userId: number;
   lectureId: number;
   playTime: number;

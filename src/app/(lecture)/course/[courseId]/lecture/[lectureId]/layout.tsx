@@ -2,15 +2,10 @@ import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
-  useQueryClient,
 } from "@tanstack/react-query";
 import LectureHeader from "./components/LectureHeader";
 import LectureNav from "./components/LectureNav";
-import { getLectures } from "./lib/getLectures";
 import { getProgress } from "./lib/getProgress";
-import { getCourses } from "./lib/getCourses";
-import { Toast } from "@/components/ui/toast";
-import { useSession } from "next-auth/react";
 import { auth } from "@/auth";
 import { getMyCourses } from "./lib/getMyCourses";
 

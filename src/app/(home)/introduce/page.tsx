@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import IntroImage from "../../../../public/images/introduceImage.jpeg";
 import IntroBackground from "../../../../public/images/introBackground.jpg";
 

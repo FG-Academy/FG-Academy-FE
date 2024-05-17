@@ -4,11 +4,7 @@ import {
   ProfileFormSchema,
   ProfileUpdateFormSchema,
 } from "@/app/(home)/userInfo/lib/profileFormSchema";
-import {
-  departments,
-  positions,
-  userLevelOptions,
-} from "@/app/(home)/userInfo/types/type";
+import { departments, positions, userLevelOptions } from "@/app/types/type";
 import {
   Form,
   FormControl,
@@ -28,16 +24,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { dateFormat } from "@/lib/dateFormat";
-import { UserProfile } from "@/model/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUserMutationFromAdmin } from "../hook/useUserMutationFromAdmin";
 import { useSession } from "next-auth/react";
-import { transformDate } from "@/lib/utils";
+import { IUser } from "@/model/user";
 
 type Props = {
-  userProfile: UserProfile;
+  userProfile: IUser;
   userId: number;
 };
 
@@ -49,19 +44,26 @@ export default function UserForm({ userProfile, userId }: Props) {
     resolver: zodResolver(ProfileFormSchema),
     mode: "onChange",
     defaultValues: {
-      ...userProfile,
       birthDate: dateFormat(new Date(userProfile.birthDate)),
+      name: userProfile.name ?? "",
+      email: userProfile.email ?? "",
+      phoneNumber: userProfile.phoneNumber ?? "",
+      // churchName: userProfile.churchName ?? "",
+      // departmentName: userProfile.departmentName ?? "",
+      // position: userProfile.position ?? "",
+      yearsOfService: userProfile.yearsOfService ?? 0,
+      level: userProfile.level ?? "",
     },
   });
   const {
-    handleSubmit,
     formState: { dirtyFields },
   } = form;
 
+  const { mutate } = useUserMutationFromAdmin();
+
   const onSubmit = async (data: z.infer<typeof ProfileUpdateFormSchema>) => {
-    // console.log(data);
     type UserData = z.infer<typeof ProfileUpdateFormSchema>;
-    type UpdateData = { [K in keyof UserData]: UserData[K] };
+    // type UpdateData = { [K in keyof UserData]: UserData[K] };
     const updatedData: any = {};
 
     Object.keys(dirtyFields).forEach((key) => {
@@ -76,10 +78,7 @@ export default function UserForm({ userProfile, userId }: Props) {
     } else {
       console.log("No fields have been changed.");
     }
-    // mutate({ accessToken, data, userId });
   };
-
-  const { mutate } = useUserMutationFromAdmin();
 
   return (
     <Form {...form}>
@@ -102,9 +101,7 @@ export default function UserForm({ userProfile, userId }: Props) {
                 <Input
                   autoComplete="off"
                   placeholder="이름을 입력해주세요."
-                  // defaultValue={userProfile.name}
                   {...field}
-                  // value={field.value ?? data.name}
                 />
               </FormControl>
               <FormMessage />
@@ -134,7 +131,6 @@ export default function UserForm({ userProfile, userId }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {/* <SelectLabel>부서명</SelectLabel> */}
                     {userLevelOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -171,13 +167,7 @@ export default function UserForm({ userProfile, userId }: Props) {
                 이메일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  // autoComplete="off"
-                  placeholder="이메일을 입력해주세요."
-                  // defaultValue={userProfile.email}
-                  {...field}
-                  // value={field.value ?? data.email}
-                />
+                <Input placeholder="이메일을 입력해주세요." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -193,11 +183,7 @@ export default function UserForm({ userProfile, userId }: Props) {
                 핸드폰 번호 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  // defaultValue={userProfile.phoneNumber}
-                  // value={field.value ?? data.phoneNumber}
-                />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -244,7 +230,6 @@ export default function UserForm({ userProfile, userId }: Props) {
                 부서명 <span className="text-red-500">*</span>
               </FormLabel>
               <Select
-                // value={field.value ?? data.departmentName}
                 name={field.name}
                 onValueChange={field.onChange}
                 defaultValue={userProfile.departmentName}
@@ -258,7 +243,6 @@ export default function UserForm({ userProfile, userId }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {/* <SelectLabel>부서명</SelectLabel> */}
                     {departments.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -280,7 +264,6 @@ export default function UserForm({ userProfile, userId }: Props) {
                 직분 <span className="text-red-500">*</span>
               </FormLabel>
               <Select
-                // value={field.value ?? data.position}
                 name={field.name}
                 onValueChange={field.onChange}
                 defaultValue={userProfile.position}
@@ -294,7 +277,6 @@ export default function UserForm({ userProfile, userId }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {/* <SelectLabel>부서명</SelectLabel> */}
                     {positions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -319,9 +301,7 @@ export default function UserForm({ userProfile, userId }: Props) {
                 <Input
                   type="number"
                   placeholder="근속년수를 입력해주세요."
-                  // defaultValue={userProfile.yearsOfService}
                   {...field}
-                  // value={field.value ?? data.yearsOfService}
                 />
               </FormControl>
               <FormMessage />

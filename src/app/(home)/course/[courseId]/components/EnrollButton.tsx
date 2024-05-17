@@ -1,13 +1,13 @@
 "use client";
 
-import { enrollmentResponse } from "@/hooks/useEnrollmentQuery";
+import { EnrollmentResponse } from "@/app/(home)/course/[courseId]/hook/useEnrollmentQuery";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useEnrollmentMutate } from "../hook/useEnrollmentMutate";
 
 type Props = {
-  enrollment: enrollmentResponse;
+  enrollment: EnrollmentResponse;
   courseId: number;
 };
 

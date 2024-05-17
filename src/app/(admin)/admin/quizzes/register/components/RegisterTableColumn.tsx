@@ -1,27 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { SortingHeader } from "../../../components/SortingHeader";
-import { Department, Position } from "@/app/(home)/userInfo/types/type";
-// import { Department, Position } from "@/app/(home)/signup/types/type";
-
-import { XIcon, CheckIcon } from "@/app/(home)/myDashboard/components/svg";
-import { Lecture } from "@/model/lecture";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
 import useIdForQuizStore from "@/store/useIdForQuiz";
+import { AllLecturesResponse } from "@/hooks/useLectureQuery";
 
-export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
-  // {
-  //   accessorKey: "lectureId",
-  //   cell: (info) => info.getValue(),
-  //   enableHiding: true,
-  // },
+export const RegisterQuizColumn: ColumnDef<AllLecturesResponse>[] = [
   {
     accessorKey: "courseId",
+    cell: (info) => info.getValue(),
+    enableHiding: true,
+  },
+  {
+    accessorKey: "lectureId",
     cell: (info) => info.getValue(),
     enableHiding: true,
   },
@@ -29,8 +23,8 @@ export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
     accessorKey: "title",
     header: ({ column }) => {
       return (
-        // <DataTableColumnHeader column={column} title="이름" />
         <Button
+          className="w-full"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -40,8 +34,7 @@ export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
       );
     },
     cell: (info) => {
-      const result = info.getValue();
-      return result;
+      return <div className="text-center">{`${info.getValue()}`}</div>;
     },
     enableHiding: false,
   },
@@ -52,18 +45,15 @@ export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
       return <SortingHeader column={column} title="강의 회차" />;
     },
     cell: (info) => {
-      return <div className="ml-10">{`${info.getValue()}강`}</div>;
+      return <div className="text-center">{`${info.getValue()}강`}</div>;
     },
     enableHiding: false,
   },
   {
-    accessorKey: "lectureId",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="강의 회차" />;
-    },
+    id: "button",
     cell: ({ row }) => {
       const { setOpen } = useOpenDialogStore((state) => state);
-      const { setLectureId, setCourseId } = useIdForQuizStore((state) => state);
+      const { setLectureId } = useIdForQuizStore((state) => state);
 
       return (
         <Button
@@ -71,7 +61,6 @@ export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
           className="px-4 space-x-2 border border-gray-300 hover:bg-gray-400"
           onClick={() => {
             setLectureId(parseInt(row.getValue("lectureId")));
-            setCourseId(parseInt(row.getValue("courseId")));
             setOpen(true);
           }}
         >
@@ -81,27 +70,4 @@ export const RegisterQuizColumn: ColumnDef<Lecture>[] = [
     },
     enableHiding: false,
   },
-
-  //   {
-  //     accessorKey: "correctedRate",
-  //     header: () => {
-  //       return <div>정답률</div>;
-  //     },
-  //     cell: (info) => {
-  //       const rate = Math.round(info.getValue() as number);
-
-  //       return `${rate}%`;
-  //     },
-  //   },
-
-  // {
-  //   accessorKey: "submittedDate",
-  // header: ({ column }) => {
-  //   return <SortingHeader column={column} title="제출일자" />;
-  // },
-  //   cell: ({ row }) => {
-  //     return <div>{formatDate(new Date(row.getValue("submittedDate")))}</div>;
-  //   },
-  //   enableHiding: false,
-  // },
 ];

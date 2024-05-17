@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { getValues } from "../../userInfo/lib/getValues";
-import { Department, Position } from "../../userInfo/types/type";
+import { Department, Position } from "../../../types/type";
 
 export const UserFormSchema = z
   .object({

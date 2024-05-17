@@ -1,10 +1,6 @@
-export async function getQuiz(
-  courseId: number,
-  lectureId: number,
-  accessToken: string
-) {
+export async function getQuiz(lectureId: number, accessToken: string) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/quizzes/${courseId}/${lectureId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/quizzes/lectures/${lectureId}`,
     {
       next: {
         tags: ["quizzes"],

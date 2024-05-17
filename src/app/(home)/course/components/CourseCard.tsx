@@ -3,7 +3,6 @@
 import Image from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useFetchAllCourseListQuery } from "@/hooks/useCourseQuery";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useFetchAllCourseListQuery } from "../../_hooks/useCourseQuery";
 
 export default function CourseCard() {
   const router = useRouter();

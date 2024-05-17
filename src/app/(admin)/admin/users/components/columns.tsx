@@ -1,19 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { formatDate } from "@/lib/utils";
 import { IUser } from "@/model/user";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { SortingHeader } from "./SortingHeader";
-import {
-  Department,
-  departments,
-  Position,
-  positions,
-} from "@/app/(home)/userInfo/types/type";
-import { useMemo } from "react";
+import { departments, positions } from "@/app/types/type";
 
 export const columns: ColumnDef<IUser>[] = [
   {

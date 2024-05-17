@@ -11,7 +11,7 @@ type UserPatchRequest = {
 
 export function useUserMutation() {
   const queryClient = useQueryClient();
-  const router = useRouter(); // router 사용 설정
+  const router = useRouter();
 
   return useMutation({
     mutationKey: ["updateUserProfile"],
@@ -47,6 +47,9 @@ export function useUserMutation() {
       });
       queryClient.invalidateQueries({
         queryKey: ["allUsers"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
       });
       toast({
         title: "회원정보 변경 성공",

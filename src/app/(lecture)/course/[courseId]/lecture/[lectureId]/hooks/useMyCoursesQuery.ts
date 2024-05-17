@@ -1,58 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import { getMyCourses } from "../lib/getMyCourses";
-import { Course } from "@/model/course";
-import { getMyCoursesQuiz } from "../lib/getMyCoursesQuiz";
-import { getMyDescriptiveQuiz } from "../lib/getMyDescriptiveQuiz";
-import { User } from "@/model/user";
-import { Quiz } from "@/hooks/useQuizQuery";
+import { ICourse } from "@/model/course";
+import { ILecture, ILectureTimeRecord } from "@/model/lecture";
+import { IQuiz, IQuizAnswer, IQuizSubmit } from "@/model/quiz";
 
-interface DescriptiveQuizResponse {
-  id: number;
-  userId: number;
-  multipleAnswer: number;
-  answer: string;
-  submittedAnswer: string | null;
-  feedbackComment: string | null;
-  status: number;
-  createdAt: string;
-  updatedAt: string;
-  user: User;
-  quiz: Quiz;
+interface Quiz extends IQuiz {
+  quizAnswers: IQuizAnswer[];
+  quizSubmits: IQuizSubmit[];
+}
+interface Lecture extends ILecture {
+  quizzes: Quiz[];
+  lectureTimeRecords: ILectureTimeRecord[];
+}
+interface MyCourseResponse extends ICourse {
+  lectures: Lecture[];
 }
 
+/** [강의 수강 화면] 한 코스에 달린 강의, 퀴즈, 제출현황 전부 가져오기 */
 export const useMyCoursesQuery = (
   accessToken: string,
   courseId: number,
   options?: { enabled?: boolean }
 ) => {
-  return useQuery<Course>({
+  return useQuery<MyCourseResponse>({
     queryKey: ["myCourse", courseId],
     queryFn: () => getMyCourses(courseId, accessToken),
-    enabled: !!accessToken,
-  });
-};
-
-export const useMyCoursesQuizQuery = (
-  accessToken: string,
-  userId: number,
-  options?: { enabled?: boolean }
-) => {
-  return useQuery<Course[]>({
-    queryKey: ["myCourses", userId],
-    queryFn: () => getMyCoursesQuiz(accessToken, userId),
-    enabled: !!accessToken,
-  });
-};
-
-export const useMyDescriptiveQuizQuery = (
-  accessToken: string,
-  userId: number,
-  quizId: number,
-  options?: { enabled?: boolean }
-) => {
-  return useQuery<DescriptiveQuizResponse>({
-    queryKey: ["quizzes", quizId, userId],
-    queryFn: () => getMyDescriptiveQuiz(accessToken, userId, quizId),
     enabled: !!accessToken,
   });
 };

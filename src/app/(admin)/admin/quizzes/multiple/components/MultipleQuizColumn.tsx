@@ -1,22 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { SortingHeader } from "../../../components/SortingHeader";
-import {
-  Department,
-  departments,
-  Position,
-  positions,
-} from "@/app/(home)/userInfo/types/type";
-// import { Department, Position } from "@/app/(home)/signup/types/type";
-import { AdminQuizInfo, IAdminQuizData } from "@/model/adminQuiz";
-import { XIcon, CheckIcon } from "@/app/(home)/myDashboard/components/svg";
+import { departments, positions } from "@/app/types/type";
 import useOpenMultipleDialogStore from "@/store/useOpenMultipleDialogStore";
-import { AdminSubmittedQuiz } from "@/hooks/useQuizQuery";
 import { IUser } from "@/model/user";
 
 export const MultipleQuizColumn: ColumnDef<IUser>[] = [

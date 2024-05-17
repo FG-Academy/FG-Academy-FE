@@ -20,10 +20,8 @@ import {
   Select,
   SelectGroup,
 } from "@/components/ui/select";
-import { AdminCourse } from "@/model/course";
 import { useSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
-import { transformDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChangeEvent, useEffect, useState } from "react";
 import { X } from "lucide-react";
@@ -33,26 +31,24 @@ import Image from "next/image";
 import { dateFormat } from "@/lib/dateFormat";
 import CourseLectureEdit from "./CourseLectureEdit";
 import { toast } from "@/components/ui/use-toast";
-import { useCurriculumQuery } from "@/hooks/useCurriculumQuery";
-import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import {
   courseCurriculumOptions,
   userLevelSettingOptions,
-} from "@/app/(home)/userInfo/types/type";
+} from "@/app/types/type";
 import { Textarea } from "@/components/ui/textarea";
+import { AdminCourseReponse } from "../../../hooks/useAdminCourseQuery";
 
 type Props = {
-  courseInfo: AdminCourse;
+  courseInfo: AdminCourseReponse;
 };
 
 export default function CourseEdit({ courseInfo }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
-  const router = useRouter();
 
-  // console.log(courseInfo);
+  const router = useRouter();
 
   const [preview, setPreview] = useState<{ dataUrl: string }>({
     dataUrl: `${process.env.NEXT_PUBLIC_IMAGE_URL}${courseInfo.thumbnailImagePath}`,
@@ -60,7 +56,6 @@ export default function CourseEdit({ courseInfo }: Props) {
   const [imageFile, setImageFile] = useState<File>();
   const [enabled, setEnabled] = useState(false);
 
-  const { data: curriculums } = useCurriculumQuery(accessToken);
   const { mutate } = useCourseEditMutation(accessToken, courseInfo.courseId);
 
   useEffect(() => {
@@ -97,13 +92,11 @@ export default function CourseEdit({ courseInfo }: Props) {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const reader = new FileReader();
-      // console.log(file);
 
       reader.onloadend = () => {
         setImageFile(file);
         setPreview({
           dataUrl: reader.result as string,
-          // file,
         });
       };
 
@@ -151,10 +144,6 @@ export default function CourseEdit({ courseInfo }: Props) {
 
   if (!enabled) {
     return null;
-  }
-
-  if (!curriculums) {
-    return <Loading />;
   }
 
   return (
@@ -272,10 +261,6 @@ export default function CourseEdit({ courseInfo }: Props) {
                         className="resize-none"
                         {...field}
                       />
-                      {/* <Input
-                        placeholder="코스 설명을 입력해주세요."
-                        {...field}
-                      /> */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>

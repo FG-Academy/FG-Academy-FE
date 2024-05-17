@@ -16,7 +16,6 @@ type UserPatchRequest = {
 
 export function useUserMutationFromAdmin() {
   const queryClient = useQueryClient();
-  const router = useRouter(); // router 사용 설정
 
   const { setOpen } = useOpenDialogStore((state) => state);
 
@@ -25,7 +24,7 @@ export function useUserMutationFromAdmin() {
     mutationFn: async ({ accessToken, data, userId }: UserPatchRequest) => {
       // console.log(data);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${userId}`,
         {
           method: "PATCH",
           headers: {

@@ -10,19 +10,17 @@ import {
 } from "@/components/ui/carousel";
 import CourseCardDashboard from "./CourseCardDashboard";
 import { useEffect, useState } from "react";
-import { courseDetail } from "@/model/dashboard";
+import { CourseDetail } from "../hooks/useDashboard";
 
 type Props = {
-  remainingCourses: courseDetail[];
-  completedCourses: courseDetail[];
-  // cardclassName: string;
+  remainingCourses: CourseDetail[];
+  completedCourses: CourseDetail[];
 };
 
 export default function CourseList({
   remainingCourses,
   completedCourses,
-}: // cardclassName,
-Props) {
+}: Props) {
   const [isSelectedComplete, setIsSelectedComplete] = useState(false);
   const [cardclassName, setCardClassName] = useState("basis-auto");
 
@@ -30,15 +28,11 @@ Props) {
     if (remainingCourses.length > 2 || completedCourses.length > 2) {
       setCardClassName(`basis-full sm:basis-full md:basis-1/3`);
     }
-    // if (remainingCourses.length > 2 || completedCourses.length > 2) {
-    //   setCardClassName(`basis-1/3 flex-grow-0 flex-shrink-0`); // 3개 등분
-    // } else {
-    //   setCardClassName(`basis-1/3 flex-grow-0 flex-shrink-0`); // 요소가 1개일 때도 3등분 유지
-    // }
   }, [remainingCourses, completedCourses]);
 
   const remainingCoursesLength = remainingCourses.length;
   const completedCoursesLength = completedCourses.length;
+
   return (
     <div className="flex-1 px-4">
       <div className="mb-8 mt-4 ">
@@ -78,9 +72,6 @@ Props) {
           className="w-full px-10 flex flex-row"
         >
           <CarouselContent className="-ml-2 p-2 flex w-full">
-            {/* 화면 크기에 따라 CarouselItem의 너비를 조정합니다. */}
-            {/* 컴포넌트가 3개 이하면 basis 클래스는 제외하도록 구성해야함 */}
-
             {isSelectedComplete ? (
               completedCourses.length === 0 ? (
                 <p className="mx-10">😅 수강 완료한 코스가 없습니다.</p>

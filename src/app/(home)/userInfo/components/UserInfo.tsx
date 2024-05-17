@@ -27,13 +27,12 @@ import { useSession } from "next-auth/react";
 import { dateFormat } from "@/lib/dateFormat";
 import { useUserMutation } from "../hook/useUserMutation";
 import { ProfileUpdateFormSchema } from "../lib/profileFormSchema";
-import { departments, positions, userLevelOptions } from "../types/type";
-import { UserProfileResponse } from "@/hooks/useUserQuery";
-import { transformDate } from "@/lib/utils";
+import { departments, positions } from "../../../types/type";
 import { toast } from "@/components/ui/use-toast";
+import { IUser } from "@/model/user";
 
 type Props = {
-  userInfo: UserProfileResponse;
+  userInfo: IUser;
 };
 
 export function UserInfo({ userInfo }: Props) {
@@ -95,7 +94,6 @@ export function UserInfo({ userInfo }: Props) {
                 <Input
                   autoComplete="off"
                   placeholder="이름을 입력해주세요."
-                  // defaultValue={data.name}
                   {...field}
                 />
               </FormControl>
@@ -112,13 +110,7 @@ export function UserInfo({ userInfo }: Props) {
                 레벨 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  disabled
-                  autoComplete="off"
-                  readOnly
-                  // className="bg-gray-200"
-                  {...field}
-                />
+                <Input disabled autoComplete="off" readOnly {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -148,12 +140,7 @@ export function UserInfo({ userInfo }: Props) {
                 이메일 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  // autoComplete="off"
-                  placeholder="이메일을 입력해주세요."
-                  // defaultValue={data.email}
-                  {...field}
-                />
+                <Input placeholder="이메일을 입력해주세요." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -230,7 +217,6 @@ export function UserInfo({ userInfo }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {/* <SelectLabel>부서명</SelectLabel> */}
                     {departments.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -266,7 +252,6 @@ export function UserInfo({ userInfo }: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {/* <SelectLabel>부서명</SelectLabel> */}
                     {positions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}

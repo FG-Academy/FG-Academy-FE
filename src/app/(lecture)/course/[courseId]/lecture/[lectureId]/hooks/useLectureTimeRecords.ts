@@ -10,14 +10,14 @@ interface LectureTimeRecordsResponse {
   updatedAt: string;
 }
 
+/** [강의 수강 화면] 수강 시간 가져오기 */
 export const useLectureTimeRecordsQuery = (
-  courseId: number,
   lectureId: number,
   accessToken: string,
   options?: { enabled?: boolean }
 ) => {
   return useQuery<LectureTimeRecordsResponse>({
-    queryKey: ["lectureTimeRecord", courseId, lectureId],
+    queryKey: ["lectureTimeRecord", lectureId],
     queryFn: () => getLectuereTimeRecord(accessToken, lectureId),
     enabled: !!accessToken,
   });

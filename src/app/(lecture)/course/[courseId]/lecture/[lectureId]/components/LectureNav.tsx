@@ -14,22 +14,15 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import Link from "next/link";
-import { getLectures } from "../lib/getLectures";
-import { Lecture } from "@/model/lecture";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
-import { getProgress } from "../lib/getProgress";
-import { IProgressResult } from "@/model/progress";
 import { FaCircleCheck } from "react-icons/fa6";
-import { getCourses } from "../lib/getCourses";
-import { Course } from "@/model/course";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
-import { useQuizQuery } from "../multiple/hooks/useQuizQuery";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
+import { useProgressQuery } from "../hooks/useProgressQuery";
 
 type Props = {
   courseId: number;
@@ -42,18 +35,12 @@ export default function LectureNav({ courseId, lectureId }: Props) {
 
   const searchParams = useSearchParams();
   const currentQuizIndex = parseInt(searchParams.get("quizIndex") as string);
+  const pathname = usePathname();
 
-  const { data: progress } = useQuery<IProgressResult>({
-    queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId, accessToken),
-    enabled: !!accessToken,
-  });
-
+  const { data: progress } = useProgressQuery(accessToken, courseId);
   const { data: myCourse } = useMyCoursesQuery(accessToken, courseId);
 
   const [isActiveNavbar, changeActiveNavbar] = useState(true);
-
-  const pathname = usePathname();
 
   if (!progress || !myCourse) {
     return <Loading />;

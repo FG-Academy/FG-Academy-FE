@@ -3,10 +3,6 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-// type EnrollmentPatchRequest = {
-//   accessToken: string;
-// };
-
 export function useEnrollmentMutate(courseId: number, accessToken: string) {
   const queryClient = useQueryClient();
   const router = useRouter(); // router 사용 설정
@@ -17,14 +13,12 @@ export function useEnrollmentMutate(courseId: number, accessToken: string) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/enrollment`,
         {
-          // next: {
-          //   tags: ["enrollment"],
-          // },
           method: "POST",
           headers: { authorization: `Bearer ${accessToken}` },
           credentials: "include",
         }
       );
+
       if (!response.ok) {
         const errorData = await response.json(); // 에러 메시지를 포함할 수 있는 응답의 본문
         throw {
@@ -38,6 +32,9 @@ export function useEnrollmentMutate(courseId: number, accessToken: string) {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["enrollment"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
       });
       toast({
         title: data.message,

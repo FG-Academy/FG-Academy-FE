@@ -1,43 +1,16 @@
-import { User } from "@/model/user";
 import { useQuery } from "@tanstack/react-query";
 import { getQuizSubmit } from "../lib/getQuizSubmit";
+import { IUser } from "@/model/user";
+import { IQuiz } from "@/model/quiz";
+import { ILecture } from "@/model/lecture";
+import { ICourse } from "@/model/course";
 
-interface Quiz {
-  quizId: number;
-  quizType: string;
-  quizIndex: number;
-  question: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
+interface Quiz extends IQuiz {
   lecture: Lecture;
 }
 
-interface Lecture {
-  lectureId: number;
-  courseId: number;
-  lectureNumber: number;
-  title: string;
-  videoLink: string;
-  attachmentFile?: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  course: Course;
-}
-
-interface Course {
-  courseId: number;
-  title: string;
-  thumbnailImagePath: string;
-  description: string;
-  curriculum: string;
-  status: string;
-  level: string;
-  openDate: string;
-  finishDate: string;
-  createdAt: Date;
-  updatedAt: Date;
+interface Lecture extends ILecture {
+  course: ICourse;
 }
 
 export interface QuizSubmitResponse {
@@ -50,7 +23,7 @@ export interface QuizSubmitResponse {
   lectureTitle: string;
   courseTitle: string;
   status: number;
-  user: User;
+  user: IUser;
   quiz: Quiz;
 }
 

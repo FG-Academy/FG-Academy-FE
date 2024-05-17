@@ -1,4 +1,4 @@
-export interface QuizAnswer {
+export interface IQuizAnswer {
   id: number;
   itemIndex: number;
   quizId: number;
@@ -9,7 +9,7 @@ export interface QuizAnswer {
   updatedAt: string;
 }
 
-export interface QuizSubmit {
+export interface IQuizSubmit {
   id: number;
   userId: number;
   multipleAnswer: number | null;
@@ -21,7 +21,7 @@ export interface QuizSubmit {
   updatedAt: string;
 }
 
-export interface Quiz {
+export interface IQuiz {
   quizId: number;
   quizType: string;
   quizIndex: number;
@@ -29,6 +29,4 @@ export interface Quiz {
   status: string;
   createdAt: string;
   updatedAt: string;
-  quizAnswers: QuizAnswer[];
-  quizSubmits: QuizSubmit[];
 }
