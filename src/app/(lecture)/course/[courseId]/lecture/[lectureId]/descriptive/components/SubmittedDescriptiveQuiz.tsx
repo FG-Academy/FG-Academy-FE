@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { QuizSubmit } from "@/model/quiz";
+import { IQuizSubmit } from "@/model/quiz";
 import { useForm } from "react-hook-form";
 import { AnswerFormSchema } from "../lib/AnswerFornSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +21,7 @@ import { toast } from "@/components/ui/use-toast";
 type Props = {
   quizId: number;
   question: string;
-  submittedQuiz: QuizSubmit;
+  submittedQuiz: IQuizSubmit;
 };
 
 export default function SubmittedDescriptiveQuiz({

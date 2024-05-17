@@ -31,17 +31,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   RankingInfo,
   rankItem,
   compareItems,
 } from "@tanstack/match-sorter-utils";
-// import { UserInfoDialog } from "./UserInfoDialog";
-// import DebouncedInput from "./DebouncedInput";
-import useOpenDialogStore from "@/store/useOpenDialogStore";
-import { IAdminQuizData } from "@/model/adminQuiz";
 import MultipleQuizInfoDialog from "./MultipleQuizInfoDialog";
 import useOpenMultipleDialogStore from "@/store/useOpenMultipleDialogStore";
 import { DataTablePagination } from "../../../users/components/DataTablePagination";
@@ -120,7 +115,7 @@ export function MultipleDataTableQuiz<TData, TValue>({
         <div className="flex flex-col justify-start overflow-y-auto">
           <DialogContent
             onOpenAutoFocus={(e) => e.preventDefault()}
-            className="w-[900px] h-[800px] flex flex-col justify-between"
+            className="w-[900px] h-full flex flex-col justify-between"
           >
             <DialogHeader>
               <DialogTitle>사용자 퀴즈 상세정보</DialogTitle>

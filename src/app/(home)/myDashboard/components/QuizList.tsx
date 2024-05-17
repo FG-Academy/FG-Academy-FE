@@ -6,10 +6,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useFetchQuizListQuery } from "@/hooks/useQuizQuery";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 import QuizDetailContents from "./QuizDetailContents";
+import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
+import { useFetchDashboardQuizzesQuery } from "../hooks/useQuizQuery";
 
 export default function QuizList({}) {
   let maxPageNumberLimit = 5;
@@ -19,24 +20,24 @@ export default function QuizList({}) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: session } = useSession();
-  const accessToken = session?.user.accessToken as string;
+  const accessToken = session?.user.accessToken;
 
-  const { data: submittedQuizList } = useFetchQuizListQuery(accessToken);
+  const { data: quizzes } = useFetchDashboardQuizzesQuery(accessToken);
 
   const currentQuizzes = useMemo(() => {
-    if (submittedQuizList) {
+    if (quizzes) {
       const indexOfLastQuiz = currentPage * quizzesPerPage;
       const indexOfFirstQuiz = indexOfLastQuiz - quizzesPerPage;
 
-      return submittedQuizList.slice(indexOfFirstQuiz, indexOfLastQuiz);
+      return quizzes.slice(indexOfFirstQuiz, indexOfLastQuiz);
     }
-  }, [currentPage, submittedQuizList]);
+  }, [currentPage, quizzes]);
 
   const totalPageLength = useMemo(() => {
-    if (submittedQuizList) {
-      return Math.ceil(submittedQuizList.length / quizzesPerPage);
+    if (quizzes) {
+      return Math.ceil(quizzes.length / quizzesPerPage);
     }
-  }, [submittedQuizList]);
+  }, [quizzes]);
 
   const pages = useMemo(() => {
     if (totalPageLength) {
@@ -72,6 +73,10 @@ export default function QuizList({}) {
     }
   };
 
+  if (!quizzes) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex-1 p-4">
       <div className="mb-4">
@@ -83,14 +88,14 @@ export default function QuizList({}) {
       </div>
 
       <div className="flex w-full flex-col">
-        {submittedQuizList?.length !== 0 ? (
+        {quizzes.length !== 0 ? (
           currentQuizzes?.map((ele, index) => (
             <div key={index}>
               <QuizDetailContents data={ele} />
             </div>
           ))
         ) : (
-          <div>답변을 제출한 퀴즈가 없습니다😅</div>
+          <div className="p-4">답변을 제출한 퀴즈가 없습니다😅</div>
         )}
         <Pagination>
           <PaginationContent>

@@ -12,9 +12,8 @@ import { toast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Loading from "../../loading";
-import { useQuizQuery } from "../hooks/useQuizQuery";
+import { useQuizQuery } from "../../hooks/useQuizQuery";
 import { MultipleQuizFormSchema } from "../lib/MultipleQuizFormSchema";
-import { QuizSubmit } from "@/model/quiz";
 
 export default function MultipleQuizForm() {
   // reactHook 모음
@@ -51,7 +50,7 @@ export default function MultipleQuizForm() {
   const lectureId = +params.lectureId;
 
   // 퀴즈 데이터 받아오기
-  const { data: quizzes } = useQuizQuery(courseId, lectureId, accessToken);
+  const { data: quizzes } = useQuizQuery(lectureId, accessToken);
 
   // 퀴즈 데이터를 완전히 불러올 때까지 로딩
   if (!quizzes) {

@@ -1,9 +1,7 @@
 "use client";
 
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
-import { useFetchCourseByIdQuery } from "@/hooks/useCourseQuery";
-import { useFetchEnrollmentQuery } from "@/hooks/useEnrollmentQuery";
-import { useFetchAllLectureListQuery } from "@/hooks/useLectureQuery";
+import { useFetchEnrollmentQuery } from "@/app/(home)/course/[courseId]/hook/useEnrollmentQuery";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -11,6 +9,8 @@ import LectureList from "@/app/(home)/course/[courseId]/components/LectureList";
 import { createMarkup } from "../lib/createMarkup";
 import { Progress } from "@/components/ui/progress";
 import EnrollButton from "./EnrollButton";
+import { useFetchCourseByIdQuery } from "@/app/(home)/_hooks/useCourseQuery";
+import { useFetchAllLectureListQuery } from "@/hooks/useLectureQuery";
 
 type Props = {
   courseId: number;

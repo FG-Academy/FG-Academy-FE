@@ -18,22 +18,21 @@ import {
 } from "@/app/(home)/myDashboard/components/svg";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useQuizRegisterMutation } from "../hook/useQuizRegisterMutate";
 import { useSession } from "next-auth/react";
-import { Quiz } from "@/model/quiz";
-import { useQuizMutation } from "../hook/useQuizEditMutation";
+import { useQuizMutation } from "../hook/useQuizMutation";
+import { LectureQuizResponse } from "../../hooks/useQuizQuery";
 
 interface Props {
   isEdit: boolean;
-  lectureId: number;
+  lectureId?: number;
   quizId?: number;
-  quizData?: Quiz;
+  quizData?: LectureQuizResponse;
 }
 
 export default function RegisterQuizForm({
-  lectureId,
   isEdit,
   quizId,
+  lectureId,
   quizData,
 }: Props) {
   const { data: session } = useSession();
@@ -45,7 +44,6 @@ export default function RegisterQuizForm({
   const [quizType, setQuizType] = useState(
     isEdit && quizData ? quizData.quizType : "multiple"
   );
-  // const [choices, setChoices] = useState<Array<any>>([]);
   const [choices, setChoices] = useState<{ item: string; isAnswer: boolean }[]>(
     isEdit && quizData
       ? quizData?.quizAnswers.map((info) => ({
@@ -63,7 +61,7 @@ export default function RegisterQuizForm({
       : []
   );
 
-  const { mutate } = useQuizMutation(accessToken, lectureId, isEdit, quizId);
+  const { mutate } = useQuizMutation(accessToken, isEdit, lectureId, quizId);
 
   const addChoice = () => {
     setChoices([...choices, { item: "", isAnswer: false }]);
@@ -108,9 +106,9 @@ export default function RegisterQuizForm({
         isAnswer: choice.isAnswer,
       }));
     }
-    const quizData = { lectureId, question, quizType, quizInfo };
+    // const quizData = { lectureId, question, quizType, quizInfo };
 
-    mutate({ question: question, quizType: quizType, quizInfo: quizInfo });
+    mutate({ question, quizType, quizInfo });
   };
 
   const handleQuizTypeChange = (newType: string) => {
@@ -211,12 +209,7 @@ export default function RegisterQuizForm({
             </div>
           </div>
         </div>
-        <Button
-          className="bg-blue-300 hover:bg-blue-500"
-          onClick={() => {
-            console.log(question, quizType, choices, correctAnswers);
-          }}
-        >
+        <Button className="bg-blue-300 hover:bg-blue-500" type="submit">
           퀴즈 등록
         </Button>
       </form>

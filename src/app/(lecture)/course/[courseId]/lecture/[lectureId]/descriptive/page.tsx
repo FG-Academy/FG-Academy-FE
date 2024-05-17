@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
-import { useQuizQuery } from "../multiple/hooks/useQuizQuery";
+import { useQuizQuery } from "../hooks/useQuizQuery";
 import DescriptiveQuizForm from "./components/DescriptiveQuizForm";
 import { useSession } from "next-auth/react";
 import Loading from "../loading";
@@ -10,13 +10,12 @@ import SubmittedDescriptiveQuiz from "./components/SubmittedDescriptiveQuiz";
 export default function Descriptive() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const courseId = +params.courseId;
   const lectureId = +params.lectureId;
 
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
-  const { data: quizzes } = useQuizQuery(courseId, lectureId, accessToken);
+  const { data: quizzes } = useQuizQuery(lectureId, accessToken);
   const search = parseInt(searchParams.get("quizIndex") as string);
 
   if (!quizzes) {

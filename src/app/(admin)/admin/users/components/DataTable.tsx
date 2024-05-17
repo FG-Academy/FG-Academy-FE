@@ -31,20 +31,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CopyIcon, Search } from "lucide-react";
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-} from "@tanstack/match-sorter-utils";
+import { Search } from "lucide-react";
+import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import { UserInfoDialog } from "./UserInfoDialog";
 import DebouncedInput from "./DebouncedInput";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
-import { UserProfile } from "@/model/user";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -61,15 +53,12 @@ interface DataTableProps<TData, TValue> {
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
 
-  // Store the itemRank info
   addMeta({
     itemRank,
   });
 
-  // Return if the item should be filtered in/out
   return itemRank.passed;
 };
 
@@ -126,8 +115,7 @@ export function DataTable<TData, TValue>({
               <DialogDescription>유저 정보를 수정합니다.</DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
-              {/* <UserInfoDialog userInfo={userInfo as UserProfile} /> */}
-              <UserInfoDialog userId={userId as number} />
+              <UserInfoDialog userId={userId} />
             </div>
             <DialogFooter className="sm:justify-between">
               <DialogClose asChild>

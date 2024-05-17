@@ -1,7 +1,4 @@
-import { IEnrollment } from "./enrollment";
-import { Lecture } from "./lecture";
-
-export interface Course {
+export interface ICourse {
   courseId: number;
   title: string;
   thumbnailImagePath: string;
@@ -13,27 +10,4 @@ export interface Course {
   finishDate: string;
   createdAt: Date;
   updatedAt: Date;
-  lectures: Lecture[];
-}
-
-export interface AdminCourse {
-  courseId: number;
-  title: string;
-  thumbnailImagePath: string;
-  description: string;
-  curriculum: string;
-  status: "active" | "inactive";
-  level: string;
-  openDate: string;
-  finishDate: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  enrollments?: IEnrollment[];
-  enrollmentCount?: number;
-  lectures: Lecture[];
-}
-
-export interface CourseQuiz {
-  courseId: number;
-  lectures: Lecture[];
 }

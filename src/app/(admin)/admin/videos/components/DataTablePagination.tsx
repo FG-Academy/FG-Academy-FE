@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { useCourseDeleteMutation } from "../../videos/hook/useCourseDeleteMutation";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 
 interface DataTablePaginationProps<TData> {
@@ -65,8 +64,6 @@ export function DataTablePagination<TData>({
         >
           코스 삭제
         </Button>
-        {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} 행이 선택되었습니다. */}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">

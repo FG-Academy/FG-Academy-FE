@@ -16,10 +16,9 @@ import { RegisterQuizTable } from "./components/RegisterQuizTable";
 import { RegisterQuizColumn } from "./components/RegisterTableColumn";
 import { useSession } from "next-auth/react";
 import { useFetchAllLectureListQuery } from "@/hooks/useLectureQuery";
-import { useFetchAllAdminCourseListQuery } from "@/hooks/useCourseQuery";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
-import { AdminCourse } from "@/model/course";
 import { useState } from "react";
+import { useFetchAllAdminCourseListQuery } from "../../hooks/useAdminCourseQuery";
 
 type CourseOption = {
   courseId: number;
@@ -28,12 +27,10 @@ type CourseOption = {
 
 export default function RegisterQuizPage() {
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
-  const [text, setText] = useState("코스 선택");
 
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
 
-  // const { data: course } = useFetchCourseByIdQuery(accessToken, courseId);
   const { data: courses } = useFetchAllAdminCourseListQuery(accessToken);
 
   const { data: lectures } = useFetchAllLectureListQuery(
@@ -94,7 +91,7 @@ export default function RegisterQuizPage() {
           id="div3-1"
           className="flex w-full h-full items-start justify-center overflow-y-scroll"
         >
-          {lectures && selectedCourseId !== null ? (
+          {lectures && selectedCourseId ? (
             <RegisterQuizTable columns={RegisterQuizColumn} data={lectures} />
           ) : (
             <div>코스를 선택해주세요</div>

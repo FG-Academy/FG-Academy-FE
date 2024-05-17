@@ -7,10 +7,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
-import { MainCoursesResponse } from "@/hooks/useCourseQuery";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AdminCoursesResponse } from "../../hooks/useAdminCourseQuery";
 
-export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
+export const videoColumns: ColumnDef<AdminCoursesResponse>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -44,7 +44,6 @@ export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
       return <SortingHeader column={column} title="이미지" />;
     },
     cell: ({ row }) => {
-      // console.log(row.getValue("thumbnailImagePath"));
       return (
         <Image
           className="rounded-md"
@@ -64,7 +63,9 @@ export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
     header: ({ column }) => {
       return <SortingHeader column={column} title="강의명" />;
     },
-    cell: (info) => info.getValue(),
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("title")}</div>;
+    },
   },
   {
     accessorKey: "enrollmentCount",
@@ -76,12 +77,14 @@ export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
         <div className="text-center">{row.getValue("enrollmentCount")}</div>
       );
     },
-    // cell: (info) => info.getValue(),
   },
   {
     accessorKey: "curriculum",
     header: ({ column }) => {
       return <SortingHeader column={column} title="카테고리" />;
+    },
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("curriculum")}</div>;
     },
   },
   {
@@ -90,10 +93,8 @@ export const videoColumns: ColumnDef<MainCoursesResponse>[] = [
       return <SortingHeader column={column} title="상태" />;
     },
     cell: ({ row }) => {
-      // status 값을 row에서 가져옵니다.
       const statusValue = row.getValue("status");
 
-      // status 값에 따라 다른 레이블을 설정합니다.
       let statusLabel;
       switch (statusValue) {
         case "active":

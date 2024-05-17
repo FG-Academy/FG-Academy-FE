@@ -1,10 +1,10 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { DialogTrigger, DialogContent, Dialog } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { PlusIcon } from "@/app/(home)/myDashboard/components/svg";
 import { useSession } from "next-auth/react";
-import { useFetchAdminLectureQuizList } from "@/hooks/useQuizQuery";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import RegisterQuizForm from "./RegisterQuizForm";
 import { FiEdit } from "react-icons/fi";
@@ -29,21 +29,16 @@ import {
 } from "@/components/ui/tooltip";
 import { useQuizDeleteMutation } from "../hook/useQuizDeleteMutation";
 import useIdForQuizStore from "@/store/useIdForQuiz";
-import { useState } from "react";
+import { useFetchAdminLectureQuizList } from "../../hooks/useQuizQuery";
 
 export default function RegisterQuizDialog() {
-  const { lectureId, courseId } = useIdForQuizStore((state) => state);
-
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
 
-  const [open, setOpen] = useState(false);
-
+  const { lectureId } = useIdForQuizStore((state) => state);
   const { mutate } = useQuizDeleteMutation(accessToken);
-
   const { data: quizList } = useFetchAdminLectureQuizList(
     accessToken,
-    courseId,
     lectureId
   );
 
@@ -56,7 +51,6 @@ export default function RegisterQuizDialog() {
   return (
     <div className="flex w-full flex-col overflow-y-auto">
       <div className="mt-4 space-y-6">
-        {/* //! 이하 내용 반복 */}
         {quizList.map((quiz) => (
           <div
             key={quiz.quizId}
@@ -65,7 +59,7 @@ export default function RegisterQuizDialog() {
           >
             <div id="div1" className="flex-col flex-1">
               <h2 className="text-lg font-semibold">{quiz.question}</h2>
-              {quiz.quizAnswers?.map((ele) => (
+              {quiz.quizAnswers.map((ele) => (
                 <p key={ele.id} className="text-sm mt-1 text-gray-600">
                   {ele.itemIndex}번: {ele.item}
                 </p>
@@ -99,7 +93,6 @@ export default function RegisterQuizDialog() {
                   </TooltipProvider>
                   <DialogContent>
                     <RegisterQuizForm
-                      lectureId={lectureId}
                       isEdit={true}
                       quizId={quiz.quizId}
                       quizData={quiz}

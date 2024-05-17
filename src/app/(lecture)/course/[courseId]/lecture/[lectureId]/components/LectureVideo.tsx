@@ -1,14 +1,11 @@
 "use client";
 
-import { Lecture } from "@/model/lecture";
 import useDurationStore from "@/store/useDurationStore";
 import { useSecondsStore } from "@/store/useTimerStore";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
-import { getLectures } from "../lib/getLectures";
 import { saveSeconds } from "../lib/saveSeconds";
-import { IProgressResult } from "@/model/progress";
 import { getProgress } from "../lib/getProgress";
 import Loading from "../loading";
 import { updateCompleted } from "../lib/updateCompleted";
@@ -16,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
 import { useLectureTimeRecordsQuery } from "../hooks/useLectureTimeRecords";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
+import { IProgressResult, useProgressQuery } from "../hooks/useProgressQuery";
 
 type Props = {
   courseId: number;
@@ -29,18 +27,12 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   const queryClient = useQueryClient();
 
   const { data: course } = useMyCoursesQuery(accessToken, courseId);
-  const { data: progress } = useQuery<IProgressResult>({
-    queryKey: ["progress", courseId],
-    queryFn: () => getProgress(courseId, accessToken),
-    enabled: !!accessToken,
-  });
+  const { data: progress } = useProgressQuery(accessToken, courseId);
 
   const { data: lectureTimeRecord } = useLectureTimeRecordsQuery(
-    courseId,
     lectureId,
     accessToken
   );
-  // console.log(lectureTimeRecord);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { duration, setDuration } = useDurationStore((state) => state);
@@ -96,7 +88,9 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
             accessToken
           );
           updateCompleted(actualLecture?.lectureId as number, accessToken);
-          queryClient.invalidateQueries();
+          queryClient.invalidateQueries({ queryKey: ["myCourse"] });
+          queryClient.invalidateQueries({ queryKey: ["lectureTimeRecord"] });
+          queryClient.invalidateQueries({ queryKey: ["progress"] });
           toast({
             title: "수강을 완료하였습니다.",
             duration: 3000,

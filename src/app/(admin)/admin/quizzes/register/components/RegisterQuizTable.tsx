@@ -21,7 +21,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-// import { DataTablePagination } from "./DataTablePagination";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,20 +30,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CopyIcon, Divide, Search } from "lucide-react";
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-} from "@tanstack/match-sorter-utils";
-// import { UserInfoDialog } from "./UserInfoDialog";
-// import DebouncedInput from "./DebouncedInput";
+import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
+
 import useOpenDialogStore from "@/store/useOpenDialogStore";
-import { IAdminQuizData } from "@/model/adminQuiz";
 import RegisterQuizDialog from "./RegisterQuizDialog";
 
 declare module "@tanstack/react-table" {
@@ -81,9 +70,6 @@ export function RegisterQuizTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
-  const [lectureId, setLectureId] = useState(0);
-  const [courseId, setCourseId] = useState(0);
-  const [quizInfo, setQuizInfo] = useState<IAdminQuizData | undefined>();
 
   //! zustand 새로 만들 것
   const { open, setOpen } = useOpenDialogStore((state) => state);
@@ -105,6 +91,7 @@ export function RegisterQuizTable<TData, TValue>({
     initialState: {
       columnVisibility: {
         courseId: false,
+        lectureId: false,
       },
     },
     state: {
@@ -113,13 +100,14 @@ export function RegisterQuizTable<TData, TValue>({
       rowSelection,
     },
   });
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="flex flex-col flex-1 justify-between overflow-y-auto">
         <div className="flex flex-col justify-start overflow-y-scroll">
           <DialogContent
             onOpenAutoFocus={(e) => e.preventDefault()}
-            className="w-[600px] h-[646px] overflow-y-scroll"
+            className="w-[600px] h-[646px] overflow-y-auto"
           >
             <DialogHeader>
               <DialogTitle>강의 등록 퀴즈 현황</DialogTitle>
@@ -128,9 +116,7 @@ export function RegisterQuizTable<TData, TValue>({
               </DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
-              {/* //! 여기에 반복적으로 들어갈 컴포넌트 넣기 */}
               <RegisterQuizDialog />
-              {/* <DescriptiveQuizInfoDialog userId={userId} type={"descriptive"} /> */}
             </div>
             <DialogFooter className="sm:justify-end">
               <DialogClose asChild>

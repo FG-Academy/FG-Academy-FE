@@ -9,11 +9,11 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { courseDetail } from "@/model/dashboard";
 import { useRouter } from "next/navigation";
+import { CourseDetail } from "../hooks/useDashboard";
 
 interface DashboardProps {
-  data: courseDetail;
+  data: CourseDetail;
 }
 
 export default function CourseCardDashboard({ data }: DashboardProps) {

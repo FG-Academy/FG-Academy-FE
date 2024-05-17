@@ -1,6 +1,6 @@
 import Image from "next/image";
 import MainBanner from "../../../public/images/main-banner02.jpg";
-import MainCourseCard from "@/app/(home)/components/MainCourseCard";
+import MainCourseCard from "@/app/(home)/_components/MainCourseCard";
 
 export default function Home() {
   return (

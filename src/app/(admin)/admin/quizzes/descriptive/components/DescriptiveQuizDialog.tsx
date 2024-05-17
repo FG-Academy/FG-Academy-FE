@@ -9,15 +9,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useQuizFeedbackMutation } from "../../hooks/useQuizFeedbackMutate";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
-import { useMyDescriptiveQuizQuery } from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/hooks/useMyCoursesQuery";
+import { useMyDescriptiveQuizQuery } from "../../hooks/useQuizQuery";
 
 export default function DescriptiveQuizDialog() {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
   const { userId, quizId } = useOpenDescriptiveDialogStore((state) => state);
-
-  const getQuizDataType = "descriptive";
 
   function onChange(e: any) {
     setValue(e.target.value);

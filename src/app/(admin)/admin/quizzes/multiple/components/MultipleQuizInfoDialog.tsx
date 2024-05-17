@@ -1,16 +1,10 @@
 "use client";
 
-import QuizDetailContents from "@/app/(home)/myDashboard/components/QuizDetailContents";
-import { useFetchAdminQuizListQuery } from "@/hooks/useQuizQuery";
 import useOpenMultipleDialogStore from "@/store/useOpenMultipleDialogStore";
 import { useSession } from "next-auth/react";
 import QuizContents from "./QuizContents";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
-import {
-  useMyCoursesQuery,
-  useMyCoursesQuizQuery,
-} from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/hooks/useMyCoursesQuery";
-import { Course } from "@/model/course";
+import { useMyCoursesQuizQuery } from "../../hooks/useQuizQuery";
 
 export default function MultipleQuizInfoDialog() {
   const { data: session } = useSession();
@@ -25,9 +19,9 @@ export default function MultipleQuizInfoDialog() {
   }
 
   return (
-    <div className="flex w-full h-full items-center flex-col space-y-2">
+    <div className="flex w-full h-full overflow-y-auto items-center flex-col space-y-2">
       {courses.length > 0 ? (
-        courses.map((course: Course, index) => {
+        courses.map((course, index) => {
           const totalQuizzes = course.lectures.reduce((acc, lecture) => {
             return (
               acc +
@@ -64,7 +58,10 @@ export default function MultipleQuizInfoDialog() {
               : 0;
 
           return (
-            <div key={course.courseId} className="w-full p-4 overflow-y-auto">
+            <div
+              key={course.courseId}
+              className="w-full h-full p-4 overflow-y-auto"
+            >
               <QuizContents
                 course={course}
                 submittedQuizzes={submittedQuizzes}

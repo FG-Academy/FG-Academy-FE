@@ -1,14 +1,9 @@
 "use client";
 
-import { Lecture } from "@/model/lecture";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { getLectures } from "../lib/getLectures";
 import useDurationStore from "@/store/useDurationStore";
 import { useSecondsStore } from "@/store/useTimerStore";
-import { IProgressResult } from "@/model/progress";
-import { getProgress } from "../lib/getProgress";
 import { usePathname } from "next/navigation";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";

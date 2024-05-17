@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { SortingHeader } from "../../../components/SortingHeader";
-import { departments, positions } from "@/app/(home)/userInfo/types/type";
+import { departments, positions } from "@/app/types/type";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
 import { QuizSubmitResponse } from "../hooks/useQuizSubmitQuery";
 
@@ -20,10 +20,18 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "level",
+    header: ({ column }) => {
+      return <SortingHeader column={column} title="레벨" />;
+    },
+    enableHiding: true,
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
+          className="w-full"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -33,8 +41,7 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       );
     },
     cell: ({ row }) => {
-      const result = row.getValue("name");
-      return result;
+      return <div className="text-center">{row.getValue("name")}</div>;
     },
     enableHiding: false,
   },
@@ -47,17 +54,11 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       const positionValue = row.getValue("position");
       const positionLabel =
         positions.find((pos) => pos.value === positionValue)?.label || "N/A";
-      return <div>{positionLabel}</div>;
+      return <div className="text-center">{positionLabel}</div>;
     },
     enableHiding: false,
   },
-  {
-    accessorKey: "level",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="레벨" />;
-    },
-    enableHiding: true,
-  },
+
   {
     accessorKey: "departmentName",
     header: ({ column }) => {
@@ -88,7 +89,7 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       return <SortingHeader column={column} title="강의 이름" />;
     },
     cell: ({ row }) => {
-      return <div className="text-center ">{row.getValue("lectureTitle")}</div>;
+      return <div className="text-center">{row.getValue("lectureTitle")}</div>;
     },
     enableHiding: false,
   },

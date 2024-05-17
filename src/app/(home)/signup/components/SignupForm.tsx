@@ -8,27 +8,22 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
-import { departments, positions } from "../../userInfo/types/type";
+import { departments, positions } from "../../../types/type";
 import { UserFormSchema } from "../lib/UserFormSchema";
 import { useUserCreateMutation } from "../hook/useCreateUserMutation";
 
@@ -44,8 +39,6 @@ export function InputForm() {
       passwordVerify: "",
       phoneNumber: "",
       churchName: "fg",
-      // departmentName: Department.ETC,
-      // position: Position.ETC,
       yearsOfService: 0,
     },
   });
@@ -250,7 +243,6 @@ export function InputForm() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {/* <SelectLabel>부서명</SelectLabel> */}
                     {positions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
