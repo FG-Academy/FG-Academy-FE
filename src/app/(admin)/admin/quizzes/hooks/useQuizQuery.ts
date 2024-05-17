@@ -64,7 +64,7 @@ interface Lecture extends ILecture {
   quizzes: TQuiz[];
   LectureTimeRecords: ILectureTimeRecord[];
 }
-interface MyCourseResponse extends ICourse {
+export interface MyCourseResponse extends ICourse {
   lectures: Lecture[];
 }
 export const useMyCoursesQuizQuery = (

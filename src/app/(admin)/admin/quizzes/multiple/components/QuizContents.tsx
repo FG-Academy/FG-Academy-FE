@@ -1,9 +1,10 @@
 import { Separator } from "@/components/ui/separator";
-import { Course } from "@/model/course";
+import { ICourse } from "@/model/course";
 import { Circle, X } from "lucide-react";
+import { MyCourseResponse } from "../../hooks/useQuizQuery";
 
 type Props = {
-  course: Course;
+  course: MyCourseResponse;
   submittedQuizzes: number;
   totalQuizzes: number;
   answerRate: number;
@@ -16,8 +17,8 @@ export default function QuizContents({
   answerRate,
 }: Props) {
   return (
-    <div className="w-full space-y-2 flex flex-col p-4 rounded-lg border-blue-400 border">
-      <div className="text-lg justify-between">
+    <div className="flex flex-col w-full p-4 space-y-2 border border-blue-400 rounded-lg">
+      <div className="justify-between text-lg">
         <div>
           <span>코스 이름: </span>
           <span className="font-bold">{course.title}</span>
@@ -26,7 +27,7 @@ export default function QuizContents({
           {submittedQuizzes}/{totalQuizzes} (정답률: {answerRate}%)
         </div>
       </div>
-      <div className="border border-gray-400 rounded-md p-2 space-y-2">
+      <div className="p-2 space-y-2 border border-gray-400 rounded-md">
         {course.lectures.map((lecture) => {
           return (
             <div key={lecture.lectureId} className="p-2">
@@ -36,7 +37,7 @@ export default function QuizContents({
                   quiz.quizType === "multiple" && (
                     <div
                       key={quiz.quizId}
-                      className="flex justify-between items-center my-1 border p-2"
+                      className="flex items-center justify-between p-2 my-1 border"
                     >
                       <div>{quiz.question}</div>
                       {quiz.quizSubmits.length > 0 ? (
