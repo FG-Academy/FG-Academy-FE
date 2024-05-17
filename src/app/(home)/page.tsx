@@ -5,11 +5,11 @@ import { auth } from "@/auth";
 import Loading from "../(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 
 export default async function Home() {
-  const session = await auth();
+  // const session = await auth();
 
-  if (!session) {
-    return <Loading />;
-  }
+  // if (!session) {
+  //   return <Loading />;
+  // }
 
   return (
     <main className="flex flex-col h-full">
