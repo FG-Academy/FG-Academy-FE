@@ -31,7 +31,9 @@ export default function MainDashBoard() {
   useEffect(() => {
     if (dashboardCourses) {
       const completedCourses = dashboardCourses.courseDetail.filter(
-        (course) => course.totalCourseLength === course.completedLectures
+        (course) =>
+          course.totalCourseLength !== 0 &&
+          course.totalCourseLength === course.completedLectures
       );
       const remainingCourses = dashboardCourses.courseDetail.filter(
         (course) => course.totalCourseLength !== course.completedLectures

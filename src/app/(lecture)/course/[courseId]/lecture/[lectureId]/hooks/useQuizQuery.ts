@@ -14,7 +14,7 @@ export const useQuizQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<Quiz[]>({
-    queryKey: ["quizzes", lectureId],
+    queryKey: ["quizzes", lectureId, accessToken],
     queryFn: () => getQuiz(lectureId, accessToken),
     enabled: !!accessToken,
   });

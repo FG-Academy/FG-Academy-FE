@@ -17,7 +17,7 @@ export const useLectureTimeRecordsQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<LectureTimeRecordsResponse>({
-    queryKey: ["lectureTimeRecord", lectureId],
+    queryKey: ["lectureTimeRecord", lectureId, accessToken],
     queryFn: () => getLectuereTimeRecord(accessToken, lectureId),
     enabled: !!accessToken,
   });

@@ -15,7 +15,7 @@ export const useFetchAllLectureListQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<AllLecturesResponse[]>({
-    queryKey: ["lectures", courseId],
+    queryKey: ["lectures", courseId, accessToken],
     queryFn: () => getAllLectures(courseId, accessToken),
     enabled: !!accessToken && !!courseId,
   });

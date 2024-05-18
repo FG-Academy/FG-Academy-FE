@@ -16,7 +16,7 @@ export const useFetchEnrollmentQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<EnrollmentResponse>({
-    queryKey: ["enrollment", courseId],
+    queryKey: ["enrollment", courseId, accessToken],
     queryFn: () => getEnrollment(accessToken, courseId),
     enabled: !!accessToken,
   });

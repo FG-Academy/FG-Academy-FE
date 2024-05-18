@@ -20,7 +20,7 @@ export const useFetchDashboardQuizzesQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<DashboardQuizResponse[]>({
-    queryKey: ["quizzes", "dashboard"],
+    queryKey: ["quizzes", "dashboard", accessToken],
     queryFn: () => getDashboardQuizList(accessToken),
     enabled: !!accessToken,
   });

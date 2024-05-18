@@ -10,7 +10,7 @@ export const useFetchUserProfileQuery = (
   }
 ) => {
   return useQuery<IUser>({
-    queryKey: ["userProfile"],
+    queryKey: ["userProfile", accessToken],
     queryFn: () => getUserProfile(accessToken),
     gcTime: 0,
     enabled: !!accessToken,

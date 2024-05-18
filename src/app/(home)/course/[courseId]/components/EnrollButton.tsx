@@ -28,6 +28,7 @@ export default function EnrollButton({ enrollment, courseId }: Props) {
     <div>
       {enrollment.isTaking ? (
         <button
+          disabled={enrollment.lastStudyLecture === null}
           className="w-full px-4 py-2 text-white transition-colors duration-150 bg-blue-400 rounded-xl hover:bg-blue-600 hover:text-white"
           onClick={() => {
             // 현재 사용자가 수강 중인 강좌로 이동

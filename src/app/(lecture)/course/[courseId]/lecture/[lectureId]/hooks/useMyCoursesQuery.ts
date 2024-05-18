@@ -23,7 +23,7 @@ export const useMyCoursesQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<MyCourseResponse>({
-    queryKey: ["myCourse", courseId],
+    queryKey: ["myCourse", courseId, accessToken],
     queryFn: () => getMyCourses(courseId, accessToken),
     enabled: !!accessToken,
   });

@@ -20,7 +20,7 @@ export const useProgressQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<IProgressResult>({
-    queryKey: ["progress", courseId],
+    queryKey: ["progress", courseId, accessToken],
     queryFn: () => getProgress(courseId, accessToken),
     enabled: !!accessToken,
   });

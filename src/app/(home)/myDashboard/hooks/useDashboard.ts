@@ -22,7 +22,7 @@ export const useFetchDashboardQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<DashBoardResponse>({
-    queryKey: ["dashboard"],
+    queryKey: ["dashboard", accessToken],
     queryFn: () => getDashboard(accessToken),
     enabled: !!accessToken,
   });

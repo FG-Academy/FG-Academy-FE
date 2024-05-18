@@ -19,8 +19,9 @@ export default function Header() {
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {
       console.log("세션 만료.");
-      router.push("/");
       router.refresh();
+      router.push("/");
+      // location.reload();
       // queryClient.invalidateQueries();
       signOut({ redirect: false });
     }
@@ -90,8 +91,9 @@ export default function Header() {
                         className="w-full text-left hover:text-blue-900"
                         href="/"
                         onClick={() => {
-                          router.push("/");
+                          // location.reload();
                           router.refresh();
+                          router.push("/");
                           signOut({ redirect: false });
                         }}
                       >
@@ -145,8 +147,9 @@ export default function Header() {
                   className="mr-5 hover:text-blue-900"
                   href="/"
                   onClick={() => {
-                    router.push("/");
+                    // location.reload();
                     router.refresh();
+                    router.push("/");
                     signOut({ redirect: false });
                   }}
                 >
