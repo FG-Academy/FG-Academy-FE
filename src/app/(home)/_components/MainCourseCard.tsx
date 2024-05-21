@@ -5,9 +5,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { useFetchAllCourseListQuery } from "../_hooks/useCourseQuery";
+import useOpenMenuStore from "@/store/useHeaderMenuStore";
 
 export default function CourseCard() {
   const router = useRouter();
+  const { isOpen, setIsOpen } = useOpenMenuStore((state) => state);
   const [categories, setCategories] = useState<{ [key: string]: any[] }>({});
 
   const { data: courses, isPending, error } = useFetchAllCourseListQuery();
@@ -60,6 +62,7 @@ export default function CourseCard() {
                   <button
                     className="w-full px-4 py-2 text-sm lg:text-lg md:text-base text-blue-600 transition-colors duration-150 bg-white border border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white"
                     onClick={() => {
+                      setIsOpen(false);
                       router.push(`/course/${course.courseId}`);
                     }}
                   >

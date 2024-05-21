@@ -36,8 +36,37 @@ export default function CourseDetail({ courseId }: Props) {
           카테고리: {course.curriculum}
         </div>
       </header>
-      <main className="flex flex-row p-4 mt-6 h-fit">
-        <div className="flex flex-col items-center w-full space-y-4 p-4">
+      <main className="flex flex-col md:flex-row p-4 mt-6 h-fit">
+        {/* 강의 진행도 보여주는 컴포넌트 */}
+        <div className="flex-row md:flex-col w-full md:w-2/5 p-4 h-fit space-y-4 bg-blue-100 border-2 rounded-lg">
+          <h1 className="font-mono text-2xl font-bold text-center">
+            강의 진행
+          </h1>
+          <div className="flex flex-row justify-between">
+            <div className="justify-start w-fit">
+              {enrollment.completedLectures}/{enrollment.totalCount}
+            </div>
+            <div className="justify-end w-fit">
+              {enrollment.totalCount === 0
+                ? 0
+                : Math.floor(
+                    (enrollment.completedLectures / enrollment.totalCount) * 100
+                  )}
+              %
+            </div>
+          </div>
+          <Progress
+            indicatorColor="bg-blue-400"
+            className="border-gray-400 shadow-md border-1"
+            value={Math.floor(
+              (enrollment.completedLectures / enrollment.totalCount) * 100
+            )}
+          />
+          <EnrollButton enrollment={enrollment} courseId={courseId} />
+        </div>
+
+        {/* 강의정보 div */}
+        <div className="flex md:order-first flex-col items-center w-full mt-4  md:mt-0 space-y-4 md:px-4">
           <Image
             className="rounded justify-center"
             width={700}
@@ -101,7 +130,7 @@ export default function CourseDetail({ courseId }: Props) {
                 <h1 className="font-mono text-2xl">공지사항</h1>
                 <br />
                 <p className="text-base font-Pretendard">
-                  {/* 공지사항입니다. 많이 많이 공지사항이 필요한 상황입니다. */}
+                  {/* 공지사항입니다.*/}
                 </p>
               </div>
             )}
@@ -129,32 +158,6 @@ export default function CourseDetail({ courseId }: Props) {
               lastStudyLectureId={enrollment.lastStudyLecture}
             />
           </div>
-        </div>
-        <div className="flex flex-col w-2/5 p-4 h-fit space-y-4 bg-blue-100 border-2 rounded-lg">
-          <h1 className="font-mono text-2xl font-bold text-center">
-            강의 진행
-          </h1>
-          <div className="flex flex-row justify-between">
-            <div className="justify-start w-fit">
-              {enrollment.completedLectures}/{enrollment.totalCount}
-            </div>
-            <div className="justify-end w-fit">
-              {enrollment.totalCount === 0
-                ? 0
-                : Math.floor(
-                    (enrollment.completedLectures / enrollment.totalCount) * 100
-                  )}
-              %
-            </div>
-          </div>
-          <Progress
-            indicatorColor="bg-blue-400"
-            className="border-gray-400 shadow-md border-1"
-            value={Math.floor(
-              (enrollment.completedLectures / enrollment.totalCount) * 100
-            )}
-          />
-          <EnrollButton enrollment={enrollment} courseId={courseId} />
         </div>
       </main>
     </div>

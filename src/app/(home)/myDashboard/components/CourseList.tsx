@@ -22,20 +22,31 @@ export default function CourseList({
   completedCourses,
 }: Props) {
   const [isSelectedComplete, setIsSelectedComplete] = useState(false);
-  const [cardclassName, setCardClassName] = useState("basis-auto");
+  const [cardClassName, setCardClassName] = useState("basis-auto");
 
   useEffect(() => {
-    if (remainingCourses.length > 2 || completedCourses.length > 2) {
-      setCardClassName(`basis-full sm:basis-full md:basis-1/3`);
-    }
-  }, [remainingCourses, completedCourses]);
+    const updateCardClass = () => {
+      if (window.innerWidth < 640) {
+        setCardClassName("basis-full");
+      } else if (window.innerWidth < 768) {
+        setCardClassName("basis-1/2");
+      } else {
+        setCardClassName("basis-1/3");
+      }
+    };
+
+    updateCardClass();
+    window.addEventListener("resize", updateCardClass);
+
+    return () => window.removeEventListener("resize", updateCardClass);
+  }, []);
 
   const remainingCoursesLength = remainingCourses.length;
   const completedCoursesLength = completedCourses.length;
 
   return (
     <div className="flex-1 px-4">
-      <div className="mb-8 mt-4 ">
+      <div className="mb-8 mt-4">
         <h3 className="text-2xl font-semibold">전체 강의</h3>
         <div className="flex space-x-2 mt-4">
           <Button
@@ -43,9 +54,7 @@ export default function CourseList({
               !isSelectedComplete ? `bg-blue-300 text-black` : `none`
             }`}
             variant="outline"
-            onClick={() => {
-              setIsSelectedComplete(false);
-            }}
+            onClick={() => setIsSelectedComplete(false)}
           >
             수강 중 ({remainingCoursesLength})
           </Button>
@@ -54,9 +63,7 @@ export default function CourseList({
               isSelectedComplete ? `bg-blue-300 text-black` : `none`
             }`}
             variant="outline"
-            onClick={() => {
-              setIsSelectedComplete(true);
-            }}
+            onClick={() => setIsSelectedComplete(true)}
           >
             수강 완료({completedCoursesLength})
           </Button>
@@ -77,14 +84,14 @@ export default function CourseList({
                 <p className="mx-10">😅 수강 완료한 코스가 없습니다.</p>
               ) : (
                 completedCourses.map((ele, index) => (
-                  <CarouselItem key={index} className={`${cardclassName}`}>
+                  <CarouselItem key={index} className={cardClassName}>
                     <CourseCardDashboard data={ele} />
                   </CarouselItem>
                 ))
               )
             ) : (
               remainingCourses.map((ele, index) => (
-                <CarouselItem key={index} className={`${cardclassName}`}>
+                <CarouselItem key={index} className={cardClassName}>
                   <CourseCardDashboard data={ele} />
                 </CarouselItem>
               ))

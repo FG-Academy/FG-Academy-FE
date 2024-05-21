@@ -31,7 +31,7 @@ export default function MainHeader({ courseId, lectureId }: Props) {
   return (
     <div
       id="header"
-      className="relative flex flex-row items-center space-x-4 justify-start bg-blue-500 text-white"
+      className="text-sm md:text-base relative flex flex-row items-center space-x-4 justify-start bg-blue-500 text-white"
     >
       <Link
         href="/course"
@@ -40,7 +40,7 @@ export default function MainHeader({ courseId, lectureId }: Props) {
         <ChevronLeft />
         <div>강의 대시보드</div>
       </Link>
-      <div>
+      <div className="">
         {course.lectures.find((l) => l.lectureId === lectureId)?.lectureNumber}
         강: {course.lectures.find((l) => l.lectureId === lectureId)?.title}
       </div>

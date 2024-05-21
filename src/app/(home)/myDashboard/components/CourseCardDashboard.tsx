@@ -20,10 +20,12 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
   const router = useRouter();
 
   return (
-    <div className="w-full h-full">
+    <div className="md:w-full h-full">
       <Card className="h-full flex flex-col justify-betweenshadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
         <CardHeader>
-          <CardTitle className="text-lg">{data.title}</CardTitle>
+          <CardTitle className="text-sm md:text-base lg:text-lg">
+            {data.title}
+          </CardTitle>
           <CardDescription>{data.curriculum}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -35,7 +37,7 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
             alt="Thumbnail"
             priority
           />
-          <div className="mt-2 text-sm">{data.title}</div>
+          <div className="mt-2 text-xs md:text-sm lg:text-lg">{data.title}</div>
 
           <Progress
             className="w-full mt-2"
@@ -44,10 +46,10 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
             )}
             indicatorColor="bg-blue-400"
           />
-          <div className="mt-1 text-sm">
+          <div className="mt-1 text-xs md:text-sm">
             {data.completedLectures}/{data.totalCourseLength}
           </div>
-          <div className="mt-1 text-sm text-blue-500">
+          <div className="mt-1 text-xs md:text-sm text-blue-500">
             {data.totalCourseLength === 0
               ? 0
               : Math.floor(

@@ -54,7 +54,7 @@ export function InputForm() {
       <form
         autoComplete="off"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-2/5 space-y-6"
+        className="w-10/12 md:w-2/5 space-y-6"
       >
         <FormField
           control={form.control}
