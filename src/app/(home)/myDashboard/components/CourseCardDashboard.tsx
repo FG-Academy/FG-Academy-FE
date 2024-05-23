@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CourseDetail } from "../hooks/useDashboard";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface DashboardProps {
   data: CourseDetail;
@@ -21,7 +22,7 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
 
   return (
     <div className="md:w-full h-full">
-      <Card className="h-full flex flex-col justify-betweenshadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
+      <Card className="h-full flex w-[300px] flex-col justify-betweenshadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
         <CardHeader>
           <CardTitle className="text-sm md:text-base lg:text-lg">
             {data.title}
@@ -29,14 +30,15 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
           <CardDescription>{data.curriculum}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${data.thumbnailPath}`}
-            width={200}
-            height={200}
-            style={{ width: "100%", height: "auto" }}
-            alt="Thumbnail"
-            priority
-          />
+          <AspectRatio ratio={16 / 9} className="bg-muted">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${data.thumbnailPath}`}
+              fill
+              className="rounded-md object-contain"
+              alt="Thumbnail"
+              priority
+            />
+          </AspectRatio>
           <div className="mt-2 text-xs md:text-sm lg:text-lg">{data.title}</div>
 
           <Progress
@@ -61,13 +63,14 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
         <CardFooter>
           <Button
             className="w-full"
+            disabled={data.status === "inactive"}
             onClick={() => {
               router.push(
                 `/course/${data.courseId}/lecture/${data.lastStudyLectureId}`
               );
             }}
           >
-            이어보기
+            {data.status === "active" ? "이어보기" : "강의마감"}
           </Button>
         </CardFooter>
       </Card>

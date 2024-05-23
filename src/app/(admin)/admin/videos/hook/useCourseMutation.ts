@@ -13,7 +13,7 @@ export function useCourseMutation() {
   const router = useRouter(); // router 사용 설정
 
   return useMutation({
-    mutationKey: ["updateCourseByAdmin"],
+    mutationKey: ["createCourseByAdmin"],
     mutationFn: async ({ accessToken, data }: UserPatchRequest) => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/courses`,
@@ -49,8 +49,8 @@ export function useCourseMutation() {
       // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력
       toast({
         variant: "destructive",
-        title: "잘못된 양식입니다..",
-        description: "잠시 후 다시 시도해주세요.",
+        title: error.message,
+        description: "다시 시도해주세요.",
       });
       console.error(
         "There was a problem with your fetch operation:",

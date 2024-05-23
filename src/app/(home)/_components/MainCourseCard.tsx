@@ -14,6 +14,10 @@ export default function CourseCard() {
 
   const { data: courses, isPending, error } = useFetchAllCourseListQuery();
 
+  function numSort(a: number, b: number) {
+    return a - b;
+  }
+
   useEffect(() => {
     if (courses) {
       const newCategories: { [key: string]: any[] } = {};
@@ -39,7 +43,7 @@ export default function CourseCard() {
           <h2 className="text-2xl font-bold">{category}</h2>{" "}
           {/* 카테고리 이름 표시 */}
           <div className="p-6 grid grid-cols-1 place-items-center gap-10 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
-            {categories[category].map((course) => (
+            {categories[category].sort(numSort).map((course) => (
               <div
                 key={course.courseId}
                 className="min-w-0 shadow-xl rounded-2xl border flex flex-col justify-between max-w-[410px] w-full h-full mx-auto"
@@ -51,7 +55,9 @@ export default function CourseCard() {
                   // layout="fill" // This makes the image fill the container while respecting aspect ratio
                   // objectFit="none" // Adjust as needed: cover, contain, etc.
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
-                  style={{ objectFit: "contain" }}
+                  style={{
+                    objectFit: "contain",
+                  }}
                   alt="강의 썸네일"
                   priority
                 />

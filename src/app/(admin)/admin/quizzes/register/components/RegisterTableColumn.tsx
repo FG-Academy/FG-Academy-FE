@@ -22,19 +22,10 @@ export const RegisterQuizColumn: ColumnDef<AllLecturesResponse>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {
-      return (
-        <Button
-          className="w-full"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          강의 제목
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <SortingHeader column={column} title="강의 제목" />;
     },
     cell: (info) => {
-      return <div className="text-center">{`${info.getValue()}`}</div>;
+      return <div className="text-left">{`${info.getValue()}`}</div>;
     },
     enableHiding: false,
   },
@@ -45,7 +36,7 @@ export const RegisterQuizColumn: ColumnDef<AllLecturesResponse>[] = [
       return <SortingHeader column={column} title="강의 회차" />;
     },
     cell: (info) => {
-      return <div className="text-center">{`${info.getValue()}강`}</div>;
+      return <div className="text-left">{`${info.getValue()}강`}</div>;
     },
     enableHiding: false,
   },

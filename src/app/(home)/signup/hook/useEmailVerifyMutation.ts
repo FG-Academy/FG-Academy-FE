@@ -1,38 +1,23 @@
-import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+"use client";
+
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import { UserFormWithEmailSchema } from "../lib/UserFormSchema";
 import useEmailVerifyStore from "@/store/useEmailVerifyStore";
 
-type UserPatchRequest = {
-  data: z.infer<typeof UserFormWithEmailSchema>;
-};
-
-export function useUserCreateMutation() {
-  const queryClient = useQueryClient();
-  const router = useRouter(); // router 사용 설정
-  const { setVerificationSent, setVerificationCode } = useEmailVerifyStore(
-    (state) => state
-  );
+export function useEmailVerifyMutation(form: any) {
+  const { setVerificationSent, setVerificationCode, setLoading } =
+    useEmailVerifyStore((state) => state);
 
   return useMutation({
     mutationKey: ["createUser"],
-    mutationFn: async ({ data }: UserPatchRequest) => {
-      const { passwordVerify, isEmailValid, ...bodyData } = data;
-
+    mutationFn: async (email: string) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-up/emailCheck?email=${email}`,
         {
           next: {
-            tags: ["createUser"],
+            tags: ["emailCheck"],
           },
           credentials: "include",
-          headers: {
-            "content-type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify(bodyData),
         }
       );
       if (!response.ok) {
@@ -46,22 +31,19 @@ export function useUserCreateMutation() {
       return response.json(); // 성공 응답 데이터 반환
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["userProfile"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["allUsers"],
-      });
+      setVerificationCode(data.result);
+      setVerificationSent(true);
+      form.setValue("isEmailValid", true);
       toast({
-        title: "회원가입 성공",
-        description: "회원가입에 성공하였습니다.",
+        title: "이메일 전송 성공",
+        description: "이메일로 인증 코드를 보냈습니다.",
       });
-      setVerificationSent(false);
-      router.push("/login");
+      setLoading(false);
+      // router.push("/login");
     },
     onError: (error: any) => {
       // 이곳에서 error 객체의 status에 따라 다른 toast 메시지를 출력
-      if (error.status === 422) {
+      if (error.status === 409) {
         toast({
           variant: "destructive",
           title: "이미 존재하는 이메일입니다.",

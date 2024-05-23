@@ -46,14 +46,14 @@ export default function RegisterQuizPage() {
   }));
 
   return (
-    <main id="main" className="flex flex-col w-full h-screen items-start p-8">
+    <main id="main" className="flex flex-col w-full items-start p-8">
       <div
         id="div1"
         className="flex flex-row w-full items-start p-2 border-b-2 border-gray-300 "
       >
         <h2 className="text-2xl font-sans">퀴즈 등록 화면</h2>
       </div>
-      <div id="div2" className="flex flex-row p-2 mt-2  items-center">
+      <div id="div2" className="flex flex-row p-2 mt-2 items-center">
         <p className="text-base font-bold font-sans mr-4 text-center">
           코스 선택
         </p>
@@ -86,23 +86,12 @@ export default function RegisterQuizPage() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div id="div3" className="flex flex-col w-full h-full p-2 ">
-        <div
-          id="div3-1"
-          className="flex w-full h-full items-start justify-center overflow-y-scroll"
-        >
-          {lectures && selectedCourseId ? (
-            <RegisterQuizTable columns={RegisterQuizColumn} data={lectures} />
-          ) : (
-            <div>코스를 선택해주세요</div>
-          )}
-        </div>
-        {/* <div
-          id="div3-2"
-          className="flex flex-row w-full h-auto mt-2 bg-yellow-300 items-start justify-end p-4"
-        >
-          페이지 네이션 들어갈 곳
-        </div> */}
+      <div id="div3" className="flex flex-col w-full h-[540px] p-2">
+        {lectures && selectedCourseId ? (
+          <RegisterQuizTable columns={RegisterQuizColumn} data={lectures} />
+        ) : (
+          <div>코스를 선택해주세요</div>
+        )}
       </div>
     </main>
   );

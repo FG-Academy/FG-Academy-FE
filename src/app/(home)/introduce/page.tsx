@@ -1,6 +1,7 @@
 import Image from "next/image";
 import IntroImage from "../../../../public/images/introduceImage.jpeg";
 import IntroBackground from "../../../../public/images/introBackground.jpg";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function IntroducePage() {
   return (
@@ -10,7 +11,7 @@ export default function IntroducePage() {
           <div className="relative flex flex-col justify-center w-full h-40">
             <Image
               src={IntroBackground}
-              style={{ width: "100%", height: "160px", objectFit: "cover" }}
+              style={{ width: "100%", height: "100px", objectFit: "cover" }}
               alt="인트로 배경"
             />
             <div
@@ -24,12 +25,14 @@ export default function IntroducePage() {
 
           <div id="introText" className="flex flex-col md:flex-row">
             <div className="p-4 md:p-16 md:pr-48 flex flex-col md:flex-row w-full ">
-              <div className="flex w-full md:w-[580px] md:h-[480px] m-4">
-                <Image
-                  alt="Profile"
-                  className="rounded-lg animate-slide-in w-full h-auto"
-                  src={IntroImage}
-                />
+              <div className="flex w-full md:w-[580px] md:h-[480px] m-4 mb-10">
+                <AspectRatio ratio={4 / 3} className="">
+                  <Image
+                    alt="Profile"
+                    className="rounded-lg animate-slide-in w-full h-auto"
+                    src={IntroImage}
+                  />
+                </AspectRatio>
               </div>
               <div className="space-y-4 text-sm text-gray-600 flex flex-col w-full m-4 md:m-8 animate-slide-out">
                 <p>

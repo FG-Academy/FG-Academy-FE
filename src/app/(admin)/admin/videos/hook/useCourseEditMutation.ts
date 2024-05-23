@@ -21,6 +21,7 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
           body: data,
         }
       );
+      console.log(response);
       if (!response.ok) {
         const errorData = await response.json(); // 에러 메시지를 포함할 수 있는 응답의 본문
         throw {
@@ -51,11 +52,19 @@ export function useCourseEditMutation(accessToken: string, courseId: number) {
       });
     },
     onError: (error: any) => {
-      toast({
-        variant: "destructive",
-        title: "잘못된 양식입니다..",
-        description: "잠시 후 다시 시도해주세요.",
-      });
+      if (error.status === 413) {
+        toast({
+          variant: "destructive",
+          title: "파일 용량이 너무 큽니다.",
+          description: "파일 용량을 줄여주세요.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: error.message,
+          description: "다시 시도해주세요.",
+        });
+      }
       console.error(
         "There was a problem with your fetch operation:",
         error.message

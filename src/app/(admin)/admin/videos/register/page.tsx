@@ -78,6 +78,7 @@ export default function Page() {
 
     Object.keys(data).forEach((key) => {
       if (key === "thumbnailImage") {
+        console.log(imageFile);
         formData.append("thumbnailImage", imageFile as Blob);
       } else {
         formData.append(key, data[key as keyof typeof data]);

@@ -80,17 +80,19 @@ export default function Header() {
                   >
                     강의 목록
                   </Link>
-                  {session && session.user.level === "admin" && (
-                    <Link
-                      className="w-full text-left hover:text-blue-900"
-                      href="/admin/users"
-                      onClick={() => {
-                        setIsOpen(false);
-                      }}
-                    >
-                      관리자 페이지
-                    </Link>
-                  )}
+                  {session &&
+                    (session.user.level === "admin" ||
+                      session.user.level === "tutor") && (
+                      <Link
+                        className="w-full text-left hover:text-blue-900"
+                        href="/admin/users"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
+                        관리자 페이지
+                      </Link>
+                    )}
                   {session ? (
                     <>
                       <Link
@@ -110,6 +112,12 @@ export default function Header() {
                         }}
                       >
                         공지사항
+                      </Link>
+                      <Link
+                        className="w-full text-left hover:text-blue-900"
+                        href={`/qna`}
+                      >
+                        질문게시판
                       </Link>
                       <Link
                         className="w-full text-left hover:text-blue-900"
@@ -167,11 +175,13 @@ export default function Header() {
             <Link className="mr-5 hover:text-blue-900" href="/course">
               강의 목록
             </Link>
-            {session && session.user.level === "admin" && (
-              <Link className="mr-5 hover:text-blue-900" href="/admin/users">
-                관리자 페이지
-              </Link>
-            )}
+            {session &&
+              (session.user.level === "admin" ||
+                session.user.level === "tutor") && (
+                <Link className="mr-5 hover:text-blue-900" href="/admin/users">
+                  관리자 페이지
+                </Link>
+              )}
             {session ? (
               <>
                 <Link className="mr-5 hover:text-blue-900" href="/myDashboard">
@@ -182,6 +192,9 @@ export default function Header() {
                   href={`/notice?page=1`}
                 >
                   공지사항
+                </Link>
+                <Link className="mr-5 hover:text-blue-900" href={`/qna`}>
+                  질문게시판
                 </Link>
                 <Link
                   className="mr-5 hover:text-blue-900"

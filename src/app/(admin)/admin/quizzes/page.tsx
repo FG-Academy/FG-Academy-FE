@@ -18,16 +18,10 @@ export default function AdminQuizPage() {
             채점 관리 화면
             <div className="flex flex-row space-x-2 w-full p-4">
               <Link
-                href={"/admin/quizzes/multiple"}
-                className=" w-full max-w-xl p-10 items-center justify-center rounded-lg bg-blue-200 px-8 text-2xl  text-black shadow transition-colors hover:bg-blue-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 disabled:pointer-events-none disabled:opacity-50 dark:bg-blue-400 dark:hover:bg-blue-400 dark:focus-visible:ring-blue-300"
-              >
-                객관식 관리
-              </Link>
-              <Link
                 href={"/admin/quizzes/descriptive"}
                 className=" w-full max-w-xl p-10 items-center justify-center rounded-lg bg-orange-200 px-8 text-2xl  text-black shadow transition-colors hover:bg-orange-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 disabled:pointer-events-none disabled:opacity-50 dark:bg-blue-400 dark:hover:bg-blue-400 dark:focus-visible:ring-blue-300"
               >
-                주관식 관리
+                퀴즈 관리
               </Link>
             </div>
           </div>

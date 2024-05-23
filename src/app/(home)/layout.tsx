@@ -19,7 +19,7 @@ export default async function Layout({
 }>) {
   return (
     <>
-      <div className="flex flex-col min-w-screen min-h-screen">
+      <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-auto overflow-y-auto">{children}</main>
         <Footer />

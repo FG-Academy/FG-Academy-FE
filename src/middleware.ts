@@ -8,11 +8,26 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_HOST}/login`);
   }
 
-  if (
-    request.nextUrl.pathname.startsWith("/admin") &&
-    session.user.level !== "admin"
-  ) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_HOST}/`);
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    if (
+      session.user.level !== "admin" &&
+      session.user.level !== "tutor" &&
+      session.user.level !== "manager"
+    ) {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_HOST}/`);
+    } else if (
+      session.user.level === "tutor" &&
+      request.nextUrl.pathname !== "/admin/quizzes/descriptive"
+    ) {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_BASE_HOST}/admin/quizzes/descriptive`
+      );
+    } else if (
+      session.user.level === "manager" &&
+      request.nextUrl.pathname === "/admin/quizzes/users"
+    ) {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_HOST}/`);
+    }
   }
 
   const courseMatch = request.nextUrl.pathname.match(

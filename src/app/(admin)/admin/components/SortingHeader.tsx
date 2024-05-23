@@ -33,13 +33,15 @@ export function SortingHeader<TData, TValue>({
   }
 
   return (
-    <Button
-      className="w-full"
-      variant="ghost"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    >
-      {title}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
-    </Button>
+    <div className="w-full items-start">
+      <Button
+        className=""
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        {title}
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    </div>
   );
 }
