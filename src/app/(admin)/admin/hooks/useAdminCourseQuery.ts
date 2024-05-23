@@ -8,6 +8,8 @@ import { IEnrollment } from "@/model/enrollment";
 export interface AdminCoursesResponse extends ICourse {
   enrollments: IEnrollment[];
   enrollmentCount: number;
+  multipleCount: number;
+  descriptiveCount: number;
 }
 
 export interface AdminCourseReponse extends ICourse {

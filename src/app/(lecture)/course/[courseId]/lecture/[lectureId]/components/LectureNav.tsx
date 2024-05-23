@@ -134,7 +134,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             <AccordionItem
               disabled={!isClickable}
               key={lecture.lectureId}
-              value={lecture.title}
+              value={lecture.lectureNumber.toString()}
             >
               <AccordionTrigger>
                 {lecture.lectureNumber}강: {lecture.title}
@@ -196,7 +196,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                             if (
                               !(
                                 progress.lectureProgresses.find(
-                                  (lp) => lp.lectureId === lectureId
+                                  (lp) => lp.lectureId === lecture.lectureId
                                 )?.completed ||
                                 lecture.lectureNumber ===
                                   lastCompletedLectureIndex

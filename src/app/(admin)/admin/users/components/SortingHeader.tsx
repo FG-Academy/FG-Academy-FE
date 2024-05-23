@@ -34,6 +34,7 @@ export function SortingHeader<TData, TValue>({
 
   return (
     <Button
+      className="w-full"
       variant="ghost"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >

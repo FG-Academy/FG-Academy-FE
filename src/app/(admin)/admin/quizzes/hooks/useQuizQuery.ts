@@ -25,6 +25,7 @@ export const useFetchAdminLectureQuizList = (
 };
 
 interface Quiz extends IQuiz {
+  quizAnswers: IQuizAnswer[];
   lecture: Lecture;
 }
 interface Lecture extends ILecture {

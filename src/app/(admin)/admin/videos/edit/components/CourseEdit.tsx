@@ -147,22 +147,20 @@ export default function CourseEdit({ courseInfo }: Props) {
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-screen p-2 py-4">
+    <div className="relative flex flex-col items-center justify-center w-full h-full p-6">
       <X
         onClick={() => router.back()}
         className="absolute w-8 h-8 rounded-full right-10 top-10 hover:bg-black hover:bg-opacity-20"
       />
       <h2 className="mb-4 text-2xl">코스 편집</h2>
-      <div className="flex flex-row overflow-y-auto w-full p-2 space-x-2">
+      <div className="flex flex-row w-full p-2 space-x-2 h-full">
         <Form {...form}>
           <form
-            // id="courseEdit"
             autoComplete="off"
             autoFocus={false}
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col w-1/2 p-10 space-y-4 overflow-y-auto"
+            className="flex flex-col w-1/2 p-10 rounded-lg space-y-4 overflow-y-auto border"
           >
-            {/* <div className="flex flex-row w-full justify-between space-x-2 overflow-y-auto"> */}
             <div className="flex flex-col justify-between p-2 space-y-2 overflow-y-auto w-full">
               <FormField
                 control={form.control}
@@ -367,7 +365,6 @@ export default function CourseEdit({ courseInfo }: Props) {
                 )}
               />
             </div>
-            {/* </div> */}
             <Button className="w-full mt-10" type="submit">
               코스 정보 수정
             </Button>

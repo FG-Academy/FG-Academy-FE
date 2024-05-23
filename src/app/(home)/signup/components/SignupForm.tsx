@@ -24,12 +24,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { departments, positions } from "../../../types/type";
-import { UserFormSchema } from "../lib/UserFormSchema";
+import { UserFormWithEmailSchema } from "../lib/UserFormSchema";
 import { useUserCreateMutation } from "../hook/useCreateUserMutation";
+import { ClockLoader } from "react-spinners";
+import { useEmailVerifyMutation } from "../hook/useEmailVerifyMutation";
+import EmailVerification from "./EmailVerification";
+import useEmailVerifyStore from "@/store/useEmailVerifyStore";
+import { toast } from "@/components/ui/use-toast";
 
 export function InputForm() {
-  const form = useForm<z.infer<typeof UserFormSchema>>({
-    resolver: zodResolver(UserFormSchema),
+  const { isVerificationSent, setLoading, isLoading } = useEmailVerifyStore(
+    (state) => state
+  );
+
+  const form = useForm<z.infer<typeof UserFormWithEmailSchema>>({
+    resolver: zodResolver(UserFormWithEmailSchema),
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -40,12 +49,28 @@ export function InputForm() {
       phoneNumber: "",
       churchName: "fg",
       yearsOfService: 0,
+      isEmailValid: false,
     },
   });
 
   const { mutate } = useUserCreateMutation();
+  const { mutate: emailMutate } = useEmailVerifyMutation(form);
 
-  const onSubmit = async (data: z.infer<typeof UserFormSchema>) => {
+  const handleEmailVerification = () => {
+    setLoading(true);
+    const inputEmail = form.getValues("email");
+    emailMutate(inputEmail);
+  };
+
+  const onSubmit = async (data: z.infer<typeof UserFormWithEmailSchema>) => {
+    // if (!form.getValues("isEmailValid")) {
+    //   toast({
+    //     title: "이메일 인증을 완료해주세요.",
+    //     variant: "destructive",
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
     mutate({ data });
   };
 
@@ -109,6 +134,23 @@ export function InputForm() {
             </FormItem>
           )}
         />
+        <Button
+          type="button"
+          onClick={handleEmailVerification}
+          disabled={isVerificationSent}
+          className={`mt-2 w-full py-6 text-base bg-blue-500 hover:bg-blue-600`}
+        >
+          {isLoading ? (
+            <ClockLoader size={30} className="mx-auto" color="#ffffff" />
+          ) : (
+            <div className="mx-auto">
+              {isVerificationSent ? "인증 코드 확인 완료" : "이메일 인증하기"}
+            </div>
+          )}
+        </Button>
+        {isVerificationSent && (
+          <EmailVerification email={form.getValues("email")} />
+        )}
         <FormField
           control={form.control}
           name="password"
@@ -271,6 +313,17 @@ export function InputForm() {
                 />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isEmailValid"
+          render={({ field }) => (
+            <FormItem>
+              <FormMessage>
+                {!field.value && "이메일 인증을 완료해주세요."}
+              </FormMessage>
             </FormItem>
           )}
         />

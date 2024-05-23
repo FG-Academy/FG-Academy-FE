@@ -3,16 +3,36 @@ import { getAllUsers } from "../lib/getAllUsers";
 import { getOneUser } from "../lib/getOneUser";
 import { IUser } from "@/model/user";
 import getAdminSubmittedQuizList from "../lib/getAdminSubmittedQuizList";
+import { IQuizAnswer } from "@/model/quiz";
 
-interface Course {
-  courseId: number;
-  title: string;
+interface Quiz {
+  quizId: number;
+  quizAnswers: IQuizAnswer[];
+  quizType: string;
+  question: string;
+  answer: number[];
+  submitCount: number;
+  correctCount: number;
+  answerType: string;
 }
-
+interface Lecture {
+  lectureNumber: number;
+  lectureId: number;
+  lectureTitle: string;
+  quizzes: Quiz[];
+  quizTotalCount: number;
+  correctQuizCount: number;
+}
 interface Enrollment {
-  id: number;
-  completedNumber: number;
-  course: Course;
+  enrollmentId: number;
+  courseId: number;
+  courseTitle: string;
+  totalLecturesCount: number;
+  completedLecturesCount: number;
+  totalQuizCount: number;
+  userSubmittedQuizCount: number;
+  userCorrectQuizCount: number;
+  lectures: Lecture[];
 }
 
 interface UserProfileResponse extends IUser {

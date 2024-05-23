@@ -64,8 +64,14 @@ export const videoColumns: ColumnDef<AdminCoursesResponse>[] = [
       return <SortingHeader column={column} title="강의명" />;
     },
     cell: ({ row }) => {
-      return <div className="text-center">{row.getValue("title")}</div>;
+      return (
+        <div className="text-center w-full whitespace-normal break-words">
+          {row.getValue("title")}
+        </div>
+      );
     },
+    size: 50,
+    maxSize: 50,
   },
   {
     accessorKey: "enrollmentCount",
@@ -118,7 +124,21 @@ export const videoColumns: ColumnDef<AdminCoursesResponse>[] = [
       return <SortingHeader column={column} title="마감 기한" />;
     },
     cell: ({ row }) => {
-      return <div>{formatDate(new Date(row.getValue("finishDate")))}</div>;
+      return (
+        <div className="text-center">
+          {formatDate(new Date(row.getValue("finishDate")))}
+        </div>
+      );
+    },
+  },
+  {
+    id: "quizCount",
+    accessorFn: (row) => `객${row.multipleCount}/주${row.descriptiveCount}`,
+    header: ({ column }) => {
+      return <SortingHeader column={column} title="퀴즈갯수" />;
+    },
+    cell: (info) => {
+      return <div className="text-center">{info.getValue() as string}</div>;
     },
   },
   {

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { SortingHeader } from "../../../components/SortingHeader";
-import { departments, positions } from "@/app/types/type";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
 import { QuizSubmitResponse } from "../hooks/useQuizSubmitQuery";
 
@@ -28,6 +27,7 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
   },
   {
     accessorKey: "name",
+    size: 100,
     header: ({ column }) => {
       return (
         <Button
@@ -46,30 +46,25 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "position",
+    accessorKey: "positionLabel",
     header: ({ column }) => {
       return <SortingHeader column={column} title="직분" />;
     },
     cell: ({ row }) => {
-      const positionValue = row.getValue("position");
-      const positionLabel =
-        positions.find((pos) => pos.value === positionValue)?.label || "N/A";
+      const positionLabel = row.getValue("positionLabel") as string;
       return <div className="text-center">{positionLabel}</div>;
     },
     enableHiding: false,
   },
 
   {
-    accessorKey: "departmentName",
+    accessorKey: "departmentLabel",
     header: ({ column }) => {
       return <SortingHeader column={column} title="부서" />;
     },
     cell: ({ row }) => {
-      const departmentValue = row.getValue("departmentName");
-      const departmentLabel =
-        departments.find((dept) => dept.value === departmentValue)?.label ||
-        "N/A";
-      return <div className="text-center ">{departmentLabel}</div>;
+      const departmentValue = row.getValue("departmentLabel") as string;
+      return <div className="text-center ">{departmentValue}</div>;
     },
     enableHiding: false,
   },
@@ -83,25 +78,59 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
     },
     enableHiding: false,
   },
+  // {
+  //   accessorKey: "lectureTitle",
+  //   header: ({ column }) => {
+  //     return <SortingHeader column={column} title="강의 이름" />;
+  //   },
+  //   cell: ({ row }) => {
+  //     return <div className="text-center">{row.getValue("lectureTitle")}</div>;
+  //   },
+  //   enableHiding: false,
+  // },
   {
-    accessorKey: "lectureTitle",
+    accessorKey: "quizType",
     header: ({ column }) => {
-      return <SortingHeader column={column} title="강의 이름" />;
+      return <SortingHeader column={column} title="퀴즈 유형" />;
     },
     cell: ({ row }) => {
-      return <div className="text-center">{row.getValue("lectureTitle")}</div>;
+      const quizType = row.getValue("quizType") as string;
+      return <div className="text-center">{quizType}</div>;
+    },
+    meta: {
+      filterVariant: "select",
     },
     enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "answerType",
     header: ({ column }) => {
       return <SortingHeader column={column} title="채점 현황" />;
     },
     cell: ({ row }) => {
-      const status = row.getValue("status");
-      const result = status === 0 ? "미채점" : status === 1 ? "정답" : "오답";
-      return <div className="text-center">{result}</div>;
+      const answerType = row.getValue("answerType") as string;
+      // Define a function to return the appropriate class based on answerType
+      const getColorClass = (type: string) => {
+        switch (type) {
+          case "정답":
+            return "text-green-500";
+          case "오답":
+            return "text-red-500";
+          case "미채점":
+            return "text-orange-500";
+          default:
+            return "";
+        }
+      };
+
+      return (
+        <div className={`text-center ${getColorClass(answerType)}`}>
+          {answerType}
+        </div>
+      );
+    },
+    meta: {
+      filterVariant: "select",
     },
     enableHiding: false,
   },
@@ -111,6 +140,7 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       const { setOpen, setUserId, setQuizId } = useOpenDescriptiveDialogStore(
         (state) => state
       );
+      const quizType = row.getValue("quizType") as string;
       return (
         <Button
           variant="secondary"
@@ -121,7 +151,7 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
             setQuizId(parseInt(row.getValue("quizId")));
           }}
         >
-          채점 하기
+          {quizType === "주관식" ? "채점하기" : "상세보기"}
         </Button>
       );
     },

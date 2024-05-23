@@ -3,11 +3,15 @@
 import { Users } from "lucide-react";
 import { Video } from "lucide-react";
 import { MessageCircleQuestion } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function SideNav() {
+  const { data: session } = useSession();
+  const userLevel = session?.user.level;
+
   const pathname = usePathname();
   const linkClassName = (linkType: string) => {
     const isActivePage = pathname.includes(linkType);
@@ -29,7 +33,7 @@ export default function SideNav() {
 
   return (
     // h-screen 뺌
-    <div className="w-auto flex-1">
+    <div className="w-auto">
       <div className="w-[300px] h-full bg-blue-700 text-white flex flex-col items-center">
         <Link
           href="/"
@@ -48,52 +52,67 @@ export default function SideNav() {
           />
         </Link>
         <nav className="flex flex-col items-start justify-center w-full">
-          <Link href="/admin/users" className={linkClassName("users")}>
-            <Users />
-            <div>유저 관리</div>
-          </Link>
+          {userLevel === "tutor" ? (
+            <Link
+              href="/admin/quizzes"
+              className={`flex flex-col ${linkClassName("quizzes")}`}
+            >
+              <div className="flex flex-row space-x-2">
+                <MessageCircleQuestion />
+                <div>퀴즈 관리</div>
+              </div>
+            </Link>
+          ) : (
+            <>
+              <Link href="/admin/users" className={linkClassName("users")}>
+                <Users />
+                <div>유저 관리</div>
+              </Link>
 
-          <Link href="/admin/videos" className={linkClassName("videos")}>
-            <Video />
-            <div>강의 관리</div>
-          </Link>
-          <Link
-            href="/admin/quizzes"
-            className={`flex flex-col ${linkClassName("quizzes")}`}
-          >
-            <div className="flex flex-row space-x-2">
-              <MessageCircleQuestion />
-              <div>퀴즈 관리</div>
-            </div>
-          </Link>
-          <div className="w-full flex flex-col px-4 mt-2">
-            <ul className="list-disc pl-5">
-              <li>
-                <Link
-                  className={`${sublinkClassName("quizzes/multiple")}`}
-                  href="/admin/quizzes/multiple"
-                >
-                  객관식 퀴즈 현황
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`${sublinkClassName("quizzes/descriptive")}`}
-                  href="/admin/quizzes/descriptive"
-                >
-                  주관식 퀴즈 관리
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={`${sublinkClassName("quizzes/register")}`}
-                  href="/admin/quizzes/register"
-                >
-                  퀴즈 등록
-                </Link>
-              </li>
-            </ul>
-          </div>
+              <Link href="/admin/videos" className={linkClassName("videos")}>
+                <Video />
+                <div>강의 관리</div>
+              </Link>
+
+              <Link
+                href="/admin/quizzes"
+                className={`flex flex-col ${linkClassName("quizzes")}`}
+              >
+                <div className="flex flex-row space-x-2">
+                  <MessageCircleQuestion />
+                  <div>퀴즈 관리</div>
+                </div>
+              </Link>
+              <div className="w-full flex flex-col px-4 mt-2">
+                <ul className="list-disc pl-5">
+                  {/* <li>
+                    <Link
+                      className={`${sublinkClassName("quizzes/multiple")}`}
+                      href="/admin/quizzes/multiple"
+                    >
+                      객관식 퀴즈 현황
+                    </Link>
+                  </li> */}
+                  <li>
+                    <Link
+                      className={`${sublinkClassName("quizzes/descriptive")}`}
+                      href="/admin/quizzes/descriptive"
+                    >
+                      퀴즈 관리
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className={`${sublinkClassName("quizzes/register")}`}
+                      href="/admin/quizzes/register"
+                    >
+                      퀴즈 등록
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
         </nav>
       </div>
     </div>

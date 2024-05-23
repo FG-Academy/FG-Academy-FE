@@ -74,6 +74,8 @@ export const userLevelOptions = [
   { value: "L0", label: "L0" },
   { value: "L1", label: "L1" },
   { value: "L2", label: "L2" },
+  { value: "tutor", label: "강사" },
+  { value: "manager", label: "매니저" },
 ];
 export const userLevelSettingOptions = [
   { value: "L0", label: "L0" },

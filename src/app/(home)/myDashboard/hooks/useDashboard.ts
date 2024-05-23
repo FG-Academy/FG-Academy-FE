@@ -8,6 +8,7 @@ interface DashBoardResponse {
 
 export interface CourseDetail {
   courseId: number;
+  status: string;
   title: string;
   curriculum: string;
   thumbnailPath: string | null;

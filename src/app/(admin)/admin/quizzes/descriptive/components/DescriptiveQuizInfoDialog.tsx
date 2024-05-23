@@ -196,16 +196,7 @@ export default function DescriptiveQuizInfoDialog({ type }: Props) {
                                       <p className="text-base font-bold text-black mt-4 mb-2">
                                         피드백 현황
                                       </p>
-                                      {/* <div className="flex p-2 border-2 rounded">
-                                      <p className="flex-row text-base text-black dark:text-white mr-2">
-                                        {ele.feedback}
-                                      </p>
-                                    </div> */}
-                                      <Textarea
-                                        className="text-black"
-                                        // placeholder={`${ele.feedback}`}
-                                        disabled
-                                      >
+                                      <Textarea className="text-black" disabled>
                                         {ele.feedback}
                                       </Textarea>
                                     </div>

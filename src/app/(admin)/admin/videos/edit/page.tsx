@@ -23,10 +23,8 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full h-screen">
-      {/* <Suspense> */}
+    <div className="w-full h-screen p-4 overflow-hidden">
       <CourseEdit courseInfo={courseInfo} />
-      {/* </Suspense> */}
     </div>
   );
 }

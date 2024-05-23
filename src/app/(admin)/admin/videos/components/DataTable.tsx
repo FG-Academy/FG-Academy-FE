@@ -11,6 +11,7 @@ import {
   FilterFn,
   getFilteredRowModel,
   ColumnResizeMode,
+  ColumnSizing,
 } from "@tanstack/react-table";
 
 import {
@@ -63,6 +64,8 @@ export function DataTable<TData, TValue>({
   // const [columnResizeMode, setColumnResizeMode] =
   //   useState<ColumnResizeMode>("onChange");
 
+  // console.log("sdf");
+
   const router = useRouter();
 
   const table = useReactTable({
@@ -91,7 +94,13 @@ export function DataTable<TData, TValue>({
       sorting,
       rowSelection,
     },
+    defaultColumn: {
+      // size: 200, //starting column size
+      // minSize: 50, //enforced during column resizing
+      // maxSize: 200,
+    },
   });
+  // console.log(table.getCenterTotalSize());
 
   return (
     <div className="flex flex-col justify-between flex-1 overflow-y-auto">
@@ -128,7 +137,8 @@ export function DataTable<TData, TValue>({
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
-                      className={`w-[${header.getSize()}px] `}
+                      // style={{ width: `${header.getSize()}px` }}
+                      className={`w-[${header.getSize()}px]`}
                     >
                       {header.isPlaceholder
                         ? null
@@ -149,17 +159,19 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      className={`cursor-pointer w-[${cell.column.getSize()}]`}
-                      key={cell.id}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell
+                        className={`w-[${cell.column.getSize()}px]`}
+                        key={cell.id}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (

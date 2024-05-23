@@ -34,7 +34,8 @@ export default function Page({
       <div className="w-full p-8">
         <DataTable columns={columns} data={posts.posts || []} />
       </div>
-      {session?.user.level === "admin" && (
+      {(session?.user.level === "admin" ||
+        session?.user.level === "manager") && (
         <Link
           className="p-4 text-white bg-blue-500 border hover:bg-blue-700"
           href="/notice/register"

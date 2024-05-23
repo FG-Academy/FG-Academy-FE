@@ -17,9 +17,9 @@ export default function AdminQuizPage() {
   }
 
   return (
-    <div className="h-full w-full p-4 space-y-2">
+    <div className="flex-1 flex flex-col p-4 space-y-2">
       <div className="text-xl font-bold font-sans">주관식 퀴즈 관리</div>
-      <div className="flex flex-col p-2 h-full">
+      <div className="flex flex-col p-2 h-[650px]">
         <DescriptiveDataTableQuiz
           columns={DescriptiveQuizColumn}
           data={quizSubmits}
