@@ -56,9 +56,11 @@ export function UserInfoDialog({ userId }: Props) {
                       </div>
                       <div className="w-full">
                         (
-                        {(enrollment.completedLecturesCount /
-                          enrollment.totalLecturesCount) *
-                          100}
+                        {Math.round(
+                          (enrollment.completedLecturesCount /
+                            enrollment.totalLecturesCount) *
+                            100
+                        )}
                         %)
                       </div>
                     </div>

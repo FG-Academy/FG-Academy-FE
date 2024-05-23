@@ -35,6 +35,7 @@ import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 
 import useOpenDialogStore from "@/store/useOpenDialogStore";
 import RegisterQuizDialog from "./RegisterQuizDialog";
+import { DataTablePagination } from "../../../users/components/DataTablePagination";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -146,6 +147,7 @@ export function RegisterQuizTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      <DataTablePagination table={table} />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}

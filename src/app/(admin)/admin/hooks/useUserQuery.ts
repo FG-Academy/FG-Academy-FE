@@ -39,6 +39,10 @@ interface UserProfileResponse extends IUser {
   enrollments: Enrollment[];
 }
 
+export interface User extends IUser {
+  departmentLabel: string;
+  positionLabel: string;
+}
 /** [관리자 화면 - 유저, 객관식 퀴즈] 전체 유저 가져오기 */
 export const useFetchAllUserListQuery = (
   accessToken: string,
@@ -46,7 +50,7 @@ export const useFetchAllUserListQuery = (
     enabled?: boolean;
   }
 ) => {
-  return useQuery<IUser[]>({
+  return useQuery<User[]>({
     queryKey: ["users"],
     queryFn: () => getAllUsers(accessToken),
     enabled: !!accessToken,
