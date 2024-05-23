@@ -7,9 +7,13 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import useOpenMenuStore from "@/store/useHeaderMenuStore";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+
+  const { isOpen, setIsOpen } = useOpenMenuStore((state) => state);
+
   const { data: session, status } = useSession();
 
   const queryClient = useQueryClient();
@@ -32,7 +36,12 @@ export default function Header() {
       {status !== "loading" && (
         <div className="container relative flex flex-row flex-wrap items-center justify-between p-5 mx-auto md:flex-row">
           <div className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
-            <Link href="/">
+            <Link
+              href="/"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
               <Image
                 alt="logo"
                 src="/images/logo_black.png"
@@ -56,12 +65,18 @@ export default function Header() {
                   <Link
                     className="w-full text-left hover:text-blue-900"
                     href="/introduce"
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
                   >
                     아카데미 소개
                   </Link>
                   <Link
                     className="w-full text-left hover:text-blue-900"
                     href="/course"
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
                   >
                     강의 목록
                   </Link>
@@ -69,6 +84,9 @@ export default function Header() {
                     <Link
                       className="w-full text-left hover:text-blue-900"
                       href="/admin/users"
+                      onClick={() => {
+                        setIsOpen(false);
+                      }}
                     >
                       관리자 페이지
                     </Link>
@@ -78,12 +96,18 @@ export default function Header() {
                       <Link
                         className="w-full text-left hover:text-blue-900"
                         href="/myDashboard"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
                       >
                         내 강의실
                       </Link>
                       <Link
                         className="w-full text-left hover:text-blue-900"
                         href={`/notice?page=1`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
                       >
                         공지사항
                       </Link>
@@ -94,6 +118,7 @@ export default function Header() {
                           // location.reload();
                           router.refresh();
                           router.push("/");
+                          setIsOpen(false);
                           signOut({ redirect: false });
                         }}
                       >
@@ -102,16 +127,31 @@ export default function Header() {
                       <Link
                         className="w-full text-left hover:text-blue-900"
                         href="/userInfo"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
                       >
                         회원정보
                       </Link>
                     </>
                   ) : (
                     <>
-                      <Link className="mr-5 hover:text-blue-900" href="/login">
+                      <Link
+                        className="mr-5 hover:text-blue-900"
+                        href="/login"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
                         로그인
                       </Link>
-                      <Link className="mr-5 hover:text-blue-900" href="/signup">
+                      <Link
+                        className="mr-5 hover:text-blue-900"
+                        href="/signup"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
                         회원가입
                       </Link>
                     </>

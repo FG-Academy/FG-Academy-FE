@@ -66,7 +66,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
     return (
       <div
         onClick={() => changeActiveNavbar(!isActiveNavbar)}
-        className="duration-200 flex justify-center items-center w-[48px] hover:bg-black hover:bg-opacity-20"
+        className="md:duration-200 flex justify-center items-center w-[48px] hover:bg-black hover:bg-opacity-20"
       >
         <ChevronLeft className=" rounded-full" />
       </div>
@@ -76,7 +76,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   return (
     <div
       id="nav"
-      className="duration-200 flex flex-col w-[480px] h-screen overflow-y-auto "
+      className="duration-0 md:duration-200 flex flex-col w-full md:w-[480px] absolute right-0 md:relative bg-white h-screen overflow-y-auto "
     >
       <div
         id="nav-header"
