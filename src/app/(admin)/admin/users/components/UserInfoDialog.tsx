@@ -41,7 +41,7 @@ export function UserInfoDialog({ userId }: Props) {
             {userProfile.enrollments.map((enrollment) => {
               return (
                 <AccordionItem
-                  className="border w-full border-black"
+                  className="border w-full border-gray-400"
                   value={enrollment.enrollmentId.toString()}
                   key={enrollment.enrollmentId}
                 >
@@ -159,11 +159,14 @@ export function UserInfoDialog({ userId }: Props) {
                                           <div className="flex flex-row justify-between items-center">
                                             (주관식) 질문: {quiz.question}
                                             {quiz.answerType === "정답" ? (
-                                              <Circle color="green" />
+                                              <Circle size={24} color="green" />
                                             ) : quiz.answerType === "오답" ? (
-                                              <X color="red" />
+                                              <X size={24} color="red" />
                                             ) : (
-                                              <FaCircleMinus color="orange" />
+                                              <FaCircleMinus
+                                                size={24}
+                                                color="orange"
+                                              />
                                             )}
                                           </div>
                                           {quiz.answer ? (

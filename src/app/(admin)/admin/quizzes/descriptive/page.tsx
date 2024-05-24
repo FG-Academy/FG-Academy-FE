@@ -10,10 +10,18 @@ export default function AdminQuizPage() {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
-  const { data: quizSubmits } = useQuizSubmitQuery(accessToken);
+  const {
+    data: quizSubmits,
+    isFetching,
+    error,
+    status,
+  } = useQuizSubmitQuery(accessToken);
 
-  if (!quizSubmits) {
+  if (status === "pending") {
     return <Loading />;
+  }
+  if (error) {
+    return <div>error</div>;
   }
 
   return (
