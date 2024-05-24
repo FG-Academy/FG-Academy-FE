@@ -89,7 +89,9 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             className=" hover:bg-black hover:bg-opacity-20 rounded-full"
           />
         </div>
-        <div className="text-lg">{myCourse.title}</div>
+        <div className="text-lg">
+          {myCourse.title.replace(/\(\d+\)\s*/, "")}
+        </div>
         <div className="flex flex-col space-y-2 text-gray-500">
           <p>
             수강 기한 : {formatDate(new Date(myCourse.openDate))} ~{" "}

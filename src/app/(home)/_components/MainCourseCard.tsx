@@ -14,10 +14,6 @@ export default function CourseCard() {
 
   const { data: courses, isPending, error } = useFetchAllCourseListQuery();
 
-  function numSort(a: number, b: number) {
-    return a - b;
-  }
-
   useEffect(() => {
     if (courses) {
       const newCategories: { [key: string]: any[] } = {};
@@ -43,7 +39,7 @@ export default function CourseCard() {
           <h2 className="text-2xl font-bold">{category}</h2>{" "}
           {/* 카테고리 이름 표시 */}
           <div className="p-6 grid grid-cols-1 place-items-center gap-10 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
-            {categories[category].sort(numSort).map((course) => (
+            {categories[category].map((course) => (
               <div
                 key={course.courseId}
                 className="min-w-0 shadow-xl rounded-2xl border flex flex-col justify-between max-w-[410px] w-full h-full mx-auto"
@@ -62,7 +58,7 @@ export default function CourseCard() {
                   priority
                 />
                 <div className="p-4 md:text-base overflow-hidden lg:text-lg text-base">
-                  {course.title}
+                  {course.title.replace(/\(\d+\)\s*/, "")}
                 </div>
                 <div className="p-2">
                   <button

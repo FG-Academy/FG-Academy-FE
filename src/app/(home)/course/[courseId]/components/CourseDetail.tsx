@@ -31,7 +31,9 @@ export default function CourseDetail({ courseId }: Props) {
   return (
     <div className="flex flex-col w-full h-auto">
       <header className="flex flex-col p-6 border-b-2 border-gray-200 space-y-2">
-        <div className="text-2xl font-bold font-Pretendard">{course.title}</div>
+        <div className="text-2xl font-bold font-Pretendard">
+          {course.title.replace(/\(\d+\)\s*/, "")}
+        </div>
         <div className="text-sm font-semibold text-slate-400 font-Pretendard">
           카테고리: {course.curriculum}
         </div>

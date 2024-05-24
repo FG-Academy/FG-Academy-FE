@@ -25,7 +25,7 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
       <Card className="h-full flex w-full flex-col justify-between shadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
         <CardHeader>
           <CardTitle className="whitespace-normal break-words text-sm md:text-base lg:text-lg">
-            {data.title}
+            {data.title.replace(/\(\d+\)\s*/, "")}
           </CardTitle>
           <CardDescription>{data.curriculum}</CardDescription>
         </CardHeader>
