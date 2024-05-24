@@ -22,9 +22,9 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
 
   return (
     <div className="md:w-full h-full">
-      <Card className="h-full flex w-[300px] flex-col justify-betweenshadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
+      <Card className="h-full flex w-full flex-col justify-between shadow-xl rounded-2xl max-w-md md:max-w-lg flex-grow">
         <CardHeader>
-          <CardTitle className="text-sm md:text-base lg:text-lg">
+          <CardTitle className="whitespace-normal break-words text-sm md:text-base lg:text-lg">
             {data.title}
           </CardTitle>
           <CardDescription>{data.curriculum}</CardDescription>
@@ -39,7 +39,7 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
               priority
             />
           </AspectRatio>
-          <div className="mt-2 text-xs md:text-sm lg:text-lg">{data.title}</div>
+          {/* <div className="mt-2 text-xs md:text-sm lg:text-lg">{data.title}</div> */}
 
           <Progress
             className="w-full mt-2"

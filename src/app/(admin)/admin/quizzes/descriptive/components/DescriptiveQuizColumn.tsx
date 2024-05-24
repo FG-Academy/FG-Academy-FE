@@ -55,6 +55,9 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       return <div className="text-center">{positionLabel}</div>;
     },
     enableHiding: false,
+    meta: {
+      filterVariant: "select",
+    },
   },
 
   {
@@ -67,6 +70,9 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       return <div className="text-center ">{departmentValue}</div>;
     },
     enableHiding: false,
+    meta: {
+      filterVariant: "select",
+    },
   },
   {
     accessorKey: "courseTitle",
@@ -77,6 +83,11 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
       return <div className="text-center">{row.getValue("courseTitle")}</div>;
     },
     enableHiding: false,
+    meta: {
+      filterVariant: "select",
+    },
+    size: 50,
+    maxSize: 50,
   },
   // {
   //   accessorKey: "lectureTitle",

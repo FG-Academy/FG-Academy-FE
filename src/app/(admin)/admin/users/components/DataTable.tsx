@@ -10,6 +10,9 @@ import {
   getPaginationRowModel,
   FilterFn,
   getFilteredRowModel,
+  ColumnFiltersState,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
 } from "@tanstack/react-table";
 
 import {
@@ -37,6 +40,7 @@ import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import { UserInfoDialog } from "./UserInfoDialog";
 import DebouncedInput from "./DebouncedInput";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
+import Filter from "../../quizzes/descriptive/components/Filter";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -68,8 +72,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
   const [userId, setUserId] = useState(0);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const { open, setOpen } = useOpenDialogStore((state) => state);
 
@@ -79,13 +83,16 @@ export function DataTable<TData, TValue>({
     filterFns: {
       fuzzy: fuzzyFilter,
     },
-    getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
+    // onRowSelectionChange: setRowSelection,
     getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     globalFilterFn: fuzzyFilter,
     initialState: {
       columnVisibility: {
@@ -96,9 +103,10 @@ export function DataTable<TData, TValue>({
       },
     },
     state: {
+      columnFilters,
       globalFilter,
       sorting,
-      rowSelection,
+      // rowSelection,
     },
   });
 
@@ -151,6 +159,11 @@ export function DataTable<TData, TValue>({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
+                        {header.column.getCanFilter() ? (
+                          <div>
+                            <Filter column={header.column} />
+                          </div>
+                        ) : null}
                       </TableHead>
                     );
                   })}
