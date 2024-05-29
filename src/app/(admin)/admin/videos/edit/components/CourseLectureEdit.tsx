@@ -147,7 +147,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
         autoComplete="off"
         autoFocus={false}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/2 border overflow-y-auto border-gray-300 space-y-4 p-12 rounded-lg"
+        className="relative w-1/2 border h-full border-gray-300 space-y-4 p-12 rounded-lg"
       >
         <Button
           onClick={handleAddLecture}
@@ -155,7 +155,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
         >
           강의 추가
         </Button>
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto h-4/5">
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(droppableProvided) => (
@@ -242,7 +242,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
             </Droppable>
           </DragDropContext>
         </div>
-        <Button className="w-full mt-10" type="submit">
+        <Button className="flex w-full mt-10" type="submit">
           강의 저장
         </Button>
       </form>
