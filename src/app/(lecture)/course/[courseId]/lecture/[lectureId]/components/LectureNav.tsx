@@ -32,6 +32,7 @@ type Props = {
 export default function LectureNav({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
+  const userLevel = session?.user.level;
 
   const searchParams = useSearchParams();
   const currentQuizIndex = parseInt(searchParams.get("quizIndex") as string);
@@ -128,6 +129,9 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             }
           });
           const isClickable =
+            userLevel === "admin" ||
+            userLevel === "manager" ||
+            userLevel === "tutor" ||
             lectureIds.includes(lecture.lectureId) ||
             lecture.lectureNumber === lastCompletedLectureIndex + 1 ||
             index === 0;
@@ -220,8 +224,8 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                           </div>
                           <div>
                             {quiz.quizType === "multiple"
-                              ? "꼼꼼 Check! 헷갈리는 부분이 없는지 확인해보아요."
-                              : "[실행과제] 강의 내용에 대한 문제를 정확한 용어와 표현을 사용하여 설명해보세요."}
+                              ? "객관식 퀴즈"
+                              : "주관식 퀴즈"}
                           </div>
                           <div className="flex flex-row grow justify-end space-x-2">
                             <FaCircleCheck

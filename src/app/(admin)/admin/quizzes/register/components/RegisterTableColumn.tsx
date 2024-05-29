@@ -41,6 +41,17 @@ export const RegisterQuizColumn: ColumnDef<AllLecturesResponse>[] = [
     enableHiding: false,
   },
   {
+    id: "quizCount",
+    accessorFn: (row) =>
+      `객${row.multipleChoiceCount}/주${row.descriptiveCount}`,
+    header: ({ column }) => {
+      return <SortingHeader column={column} title="퀴즈갯수" />;
+    },
+    cell: (info) => {
+      return <div className="text-left">{info.getValue() as string}</div>;
+    },
+  },
+  {
     id: "button",
     cell: ({ row }) => {
       const { setOpen } = useOpenDialogStore((state) => state);

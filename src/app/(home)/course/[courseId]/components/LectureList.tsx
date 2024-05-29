@@ -26,6 +26,7 @@ export default function LectureList({
     <Accordion type="single" collapsible className="w-full">
       {lectures.map((ele, index) => (
         <AccordionItem
+          disabled={true}
           key={ele.lectureId}
           value={`item-${index}`}
           className="bg-blue-100 border border-blue-300 rounded-md mt-3"
