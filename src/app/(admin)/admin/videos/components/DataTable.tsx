@@ -33,10 +33,12 @@ import DebouncedInput from "../../users/components/DebouncedInput";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { DataTablePagination } from "./DataTablePagination";
+import { CourseTablePagination } from "../../quizzes/register/components/CourseTablePagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isQuizTable?: boolean;
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -52,6 +54,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isQuizTable = false,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([
@@ -61,10 +64,6 @@ export function DataTable<TData, TValue>({
     },
   ]);
   const [rowSelection, setRowSelection] = useState({});
-  // const [columnResizeMode, setColumnResizeMode] =
-  //   useState<ColumnResizeMode>("onChange");
-
-  // console.log("sdf");
 
   const router = useRouter();
 
@@ -82,7 +81,7 @@ export function DataTable<TData, TValue>({
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
     columnResizeDirection: "ltr",
-    columnResizeMode: "onChange", //change column resize mode to "onChange"
+    columnResizeMode: "onChange",
     globalFilterFn: fuzzyFilter,
     initialState: {
       columnVisibility: {
@@ -94,38 +93,35 @@ export function DataTable<TData, TValue>({
       sorting,
       rowSelection,
     },
-    defaultColumn: {
-      // size: 200, //starting column size
-      // minSize: 50, //enforced during column resizing
-      // maxSize: 200,
-    },
+    defaultColumn: {},
   });
-  // console.log(table.getCenterTotalSize());
 
   return (
     <div className="flex flex-col justify-between flex-1 overflow-y-auto">
       <div className="flex flex-col justify-start overflow-y-auto">
-        <div className="relative flex items-center justify-between flex-1 w-full h-full mb-6 mr-auto md:grow-0">
-          <div>
-            <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
-            <DebouncedInput
-              value={globalFilter ?? ""}
-              onChange={(value) => setGlobalFilter(String(value))}
-              type="search"
-              placeholder="검색..."
-              className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
-            />
+        {!isQuizTable && (
+          <div className="relative flex items-center justify-between flex-1 w-full h-full mb-6 mr-auto md:grow-0">
+            <div>
+              <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
+              <DebouncedInput
+                value={globalFilter ?? ""}
+                onChange={(value) => setGlobalFilter(String(value))}
+                type="search"
+                placeholder="검색..."
+                className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
+              />
+            </div>
+            <Button
+              className="bg-blue-700"
+              onClick={() => {
+                router.push("/admin/videos/register");
+              }}
+            >
+              새 강의 추가
+              <Plus className="w-4 h-4 ml-2 text-white" />
+            </Button>
           </div>
-          <Button
-            className="bg-blue-700"
-            onClick={() => {
-              router.push("/admin/videos/register");
-            }}
-          >
-            새 강의 추가
-            <Plus className="w-4 h-4 ml-2 text-white" />
-          </Button>
-        </div>
+        )}
         <Table
           className={`relative container w-[${table.getCenterTotalSize()}px] justify-start mx-auto py-2 overflow-y-auto`}
         >
@@ -187,7 +183,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      {isQuizTable ? (
+        <div className="flex justify-end">
+          <CourseTablePagination table={table} />
+        </div>
+      ) : (
+        <DataTablePagination table={table} />
+      )}
     </div>
   );
 }
