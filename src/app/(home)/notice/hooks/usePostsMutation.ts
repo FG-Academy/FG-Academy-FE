@@ -39,7 +39,7 @@ export function useQnaPostsMutation(accessToken: string) {
       });
       toast({
         title: "공지사항 등록 성공",
-        description: "공지사항 등록 성공에 성공했습니다.",
+        description: "공지사항 등록에 성공했습니다.",
       });
       router.push("/notice?page=1");
     },

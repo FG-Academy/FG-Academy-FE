@@ -64,10 +64,12 @@ export default function SideNav() {
             </Link>
           ) : (
             <>
-              <Link href="/admin/users" className={linkClassName("users")}>
-                <Users />
-                <div>유저 관리</div>
-              </Link>
+              {userLevel === "admin" && (
+                <Link href="/admin/users" className={linkClassName("users")}>
+                  <Users />
+                  <div>유저 관리</div>
+                </Link>
+              )}
 
               <Link href="/admin/videos" className={linkClassName("videos")}>
                 <Video />
@@ -93,14 +95,18 @@ export default function SideNav() {
                       객관식 퀴즈 현황
                     </Link>
                   </li> */}
-                  <li>
-                    <Link
-                      className={`${sublinkClassName("quizzes/descriptive")}`}
-                      href="/admin/quizzes/descriptive"
-                    >
-                      퀴즈 관리
-                    </Link>
-                  </li>
+
+                  {userLevel === "admin" && (
+                    <li>
+                      <Link
+                        className={`${sublinkClassName("quizzes/descriptive")}`}
+                        href="/admin/quizzes/descriptive"
+                      >
+                        퀴즈 관리
+                      </Link>
+                    </li>
+                  )}
+
                   <li>
                     <Link
                       className={`${sublinkClassName("quizzes/register")}`}

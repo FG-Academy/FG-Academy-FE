@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import { PostFormSchema } from "../lib/PostFormSchema";
-import { useQnaPostsMutation } from "../hooks/usePostsMutation";
+import { useQnaMutation } from "../hooks/useQnaMutation";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Page() {
@@ -32,16 +32,16 @@ export default function Page() {
     },
   });
 
-  const { mutate } = useQnaPostsMutation(accessToken);
+  const { mutate } = useQnaMutation(accessToken);
 
   const onSubmit = async (data: z.infer<typeof PostFormSchema>) => {
     mutate(data);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-10">
-      <div className="text-2xl font-bold">공지사항 작성</div>
-      <div className="w-1/2">
+    <div className="flex flex-col items-center justify-center w-full h-full p-3 md:p-10">
+      <div className="text-2xl font-bold">질문 게시글 작성</div>
+      <div className=" w-full md:w-1/2">
         <Form {...form}>
           <form
             autoComplete="off"

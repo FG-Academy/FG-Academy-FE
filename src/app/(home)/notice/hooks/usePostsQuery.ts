@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getQnaPosts } from "../lib/getQnaPosts";
+import { getQnaPosts } from "../lib/getPosts";
 import { getOnePost } from "../lib/getOnePost";
 
 interface Response {
