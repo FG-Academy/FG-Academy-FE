@@ -155,19 +155,26 @@ export function UserInfoDialog({ userId }: Props) {
                                     ) {
                                       // 주관식 퀴즈
                                       return (
-                                        <div className="" key={quiz.quizId}>
-                                          <div className="flex flex-row justify-between items-center">
-                                            (주관식) 질문: {quiz.question}
-                                            {quiz.answerType === "정답" ? (
-                                              <Circle size={24} color="green" />
-                                            ) : quiz.answerType === "오답" ? (
-                                              <X size={24} color="red" />
-                                            ) : (
-                                              <FaCircleMinus
-                                                size={24}
-                                                color="orange"
-                                              />
-                                            )}
+                                        <div key={quiz.quizId}>
+                                          <div className="flex flex-row w-full space-x-2 justify-between items-center p-2">
+                                            <div>
+                                              (주관식) 질문: {quiz.question}
+                                            </div>
+                                            <div className="">
+                                              {quiz.answerType === "정답" ? (
+                                                <Circle
+                                                  size={24}
+                                                  color="green"
+                                                />
+                                              ) : quiz.answerType === "오답" ? (
+                                                <X size={24} color="red" />
+                                              ) : (
+                                                <FaCircleMinus
+                                                  size={24}
+                                                  color="orange"
+                                                />
+                                              )}
+                                            </div>
                                           </div>
                                           {quiz.answer ? (
                                             <div className="border p-2">

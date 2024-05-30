@@ -3,9 +3,9 @@
 import { formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PostsResponse } from "../hooks/usePostsQuery";
+import { QuestionList } from "../hooks/useQnaPostsQuery";
 
-export const columns: ColumnDef<PostsResponse>[] = [
+export const columns: ColumnDef<QuestionList>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -29,14 +29,14 @@ export const columns: ColumnDef<PostsResponse>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "announcementId",
+    accessorKey: "questionId",
     header: ({ column }) => {
       return <div className="text-center text-xs md:text-base">No</div>;
     },
     cell: ({ row }) => {
       return (
         <div className="text-center text-xs md:text-base">
-          {row.getValue("announcementId")}
+          {row.getValue("questionId")}
         </div>
       );
     },
@@ -54,19 +54,20 @@ export const columns: ColumnDef<PostsResponse>[] = [
       );
     },
   },
-  {
-    id: "author",
-    header: ({ column }) => {
-      return <div className="text-center text-xs md:text-base">작성자</div>;
-    },
-    cell: ({ row }) => {
-      return <div className="text-center text-xs md:text-base">관리자</div>;
-    },
-  },
+  // TODO: 데이터 가져오는 API를 연결시킨 후에 가져오는 데이터에 따라 다시 작업하자.
+  // {
+  //   id: "author",
+  //   header: ({ column }) => {
+  //     return <div className="text-center">작성자</div>;
+  //   },
+  //   cell: ({ row }) => {
+  //     return <div className="text-center">관리자</div>;
+  //   },
+  // },
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
-      return <div className="text-center text-xs md:text-base">제목</div>;
+      return <div className="text-center text-xs md:text-base">작성일자</div>;
     },
     cell: ({ row }) => {
       return (

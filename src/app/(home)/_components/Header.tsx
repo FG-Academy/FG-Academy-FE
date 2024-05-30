@@ -82,7 +82,8 @@ export default function Header() {
                   </Link>
                   {session &&
                     (session.user.level === "admin" ||
-                      session.user.level === "tutor") && (
+                      session.user.level === "tutor" ||
+                      session.user.level === "manager") && (
                       <Link
                         className="w-full text-left hover:text-blue-900"
                         href="/admin/users"
@@ -177,7 +178,8 @@ export default function Header() {
             </Link>
             {session &&
               (session.user.level === "admin" ||
-                session.user.level === "tutor") && (
+                session.user.level === "tutor" ||
+                session.user.level === "manager") && (
                 <Link className="mr-5 hover:text-blue-900" href="/admin/users">
                   관리자 페이지
                 </Link>

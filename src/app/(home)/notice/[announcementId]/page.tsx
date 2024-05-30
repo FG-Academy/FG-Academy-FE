@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useFetchOnePostQuery } from "../hooks/useQnaPostsQuery";
+import { useFetchOnePostQuery } from "../hooks/usePostsQuery";
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { dateFormat } from "@/lib/dateFormat";
 import { Button } from "@/components/ui/button";

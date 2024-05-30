@@ -24,9 +24,14 @@ export async function middleware(request: NextRequest) {
       );
     } else if (
       session.user.level === "manager" &&
-      request.nextUrl.pathname === "/admin/quizzes/users"
+      !(
+        request.nextUrl.pathname === "/admin/videos" ||
+        request.nextUrl.pathname === "/admin/quizzes/register"
+      )
     ) {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_HOST}/`);
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_BASE_HOST}/admin/videos`
+      );
     }
   }
 
