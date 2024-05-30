@@ -98,10 +98,13 @@ export function useQuizMutation(
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["adminQuizzes"],
+        queryKey: ["courses"],
       });
       queryClient.invalidateQueries({
         queryKey: ["lectures"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["adminQuizzes"],
       });
       toast({
         title: "퀴즈 등록 완료",
