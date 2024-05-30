@@ -19,6 +19,7 @@ declare module "next-auth" {
     user: {
       name: string;
       level: string;
+      id: number;
       accessToken: any & DefaultSession["user"];
       enrollmentIds: number[];
       department: string;

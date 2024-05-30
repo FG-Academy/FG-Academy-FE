@@ -75,7 +75,7 @@ export default function QuizDetailContents({ data }: Props) {
                       )}
                     </div>
                     {data.multipleAnswer ? (
-                      <div>
+                      <div className="space-y-2">
                         {data.quizAnswers.map((answer) => (
                           <div
                             key={answer.id}

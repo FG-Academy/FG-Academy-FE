@@ -7,6 +7,7 @@ import { dateFormat } from "@/lib/dateFormat";
 import { Button } from "@/components/ui/button";
 import { usePostDeleteMutation } from "../hooks/usePostDeleteMutation";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: { announcementId: string };
@@ -15,6 +16,8 @@ type Props = {
 export default function Page({ params }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
+
+  const router = useRouter();
 
   const announcementId = parseInt(params.announcementId);
 
@@ -52,6 +55,7 @@ export default function Page({ params }: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-10">
+      <div className="font-bold text-2xl mb-4">공지사항</div>
       <div className="flex flex-row justify-between w-full p-2 px-6 bg-gray-100 border-gray-300 border-y-2">
         <div className="text-xl font-bold">{post.title}</div>
         <div>{dateFormat(new Date(post.createdAt))}</div>
@@ -64,14 +68,22 @@ export default function Page({ params }: Props) {
           }}
         />
       </div>
-      <div className="flex flex-row justify-between w-full p-2">
-        {/* <Button className="hidden">수정</Button> */}
-        {session?.user.level === "admin" && (
+      {(session?.user.level === "admin" ||
+        session?.user.level === "magager") && (
+        <div className="flex flex-row justify-between w-full p-2">
+          <Button
+            onClick={() => {
+              router.push(`/notice/${announcementId}/edit`);
+            }}
+            className="bg-blue-500"
+          >
+            수정
+          </Button>
           <Button onClick={handleButton} className="bg-red-500">
             삭제
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -101,8 +101,8 @@ export function useCommentDeleteMutation(accessToken: string) {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "네트워크 오류가 발생했습니다.",
-        description: "잠시 후 다시 시도해주세요.",
+        title: error.message,
+        description: "확인 후 다시 시도해주세요.",
       });
 
       console.error(

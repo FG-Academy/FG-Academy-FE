@@ -23,10 +23,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useQnaPatchMutation } from "../hooks/useQnaPatchMutation";
-import { useCommentMuation, useQnaMutation } from "../hooks/useQnaMutation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Trash2, TrashIcon } from "lucide-react";
+import { useCommentMuation } from "../hooks/useQnaMutation";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: { questionId: string };
@@ -37,6 +37,8 @@ export default function Page({ params }: Props) {
   const accessToken = session?.user.accessToken;
 
   const questionId = parseInt(params.questionId);
+
+  const router = useRouter();
 
   const { data: post, isError } = useFetchOneQnAQuery(accessToken, questionId);
   const { mutate } = useQnaDeleteMutation(accessToken);
@@ -71,16 +73,16 @@ export default function Page({ params }: Props) {
 
   const deleteComment = async (answerId: number) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
-      try {
-        commentDeleteMutate(answerId);
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "요청이 불안정합니다..",
-          description: "잠시 후 다시 시도해주세요.",
-        });
-        console.error("Failed to delete courses:", error);
-      }
+      // try {
+      commentDeleteMutate(answerId);
+      // } catch (error) {
+      //   toast({
+      //     variant: "destructive",
+      //     title: "요청이 불안정합니다..",
+      //     description: "잠시 후 다시 시도해주세요.",
+      //   });
+      //   console.error("Failed to delete courses:", error);
+      // }
     } else {
       // User clicked 'Cancel'
       console.log("Deletion cancelled.");
@@ -102,6 +104,7 @@ export default function Page({ params }: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-10">
+      <div className="font-bold text-2xl mb-4">질문 게시판</div>
       <div className="flex flex-row justify-between w-full p-2 px-6 bg-gray-100 border-gray-300 border-y-2">
         <div className="text-xl font-bold">{post.title}</div>
         <div>{dateFormat(new Date(post.createdAt))}</div>
@@ -114,21 +117,32 @@ export default function Page({ params }: Props) {
           }}
         />
       </div>
-      <div className="flex flex-row justify-between w-full p-2">
-        <Button className="bg-blue-400">수정</Button>
-        {(session?.user.level === "admin" ||
-          session?.user.level === "manager") && (
+
+      {(session?.user.level === "admin" ||
+        session?.user.level === "manager") && (
+        <div className="flex flex-row justify-between w-full p-2">
+          {session.user.id === post.user.userId && (
+            <Button
+              className="bg-blue-400"
+              onClick={() => {
+                router.push(`/qna/${questionId}/edit`);
+              }}
+            >
+              수정
+            </Button>
+          )}
           <Button onClick={handleButton} className="bg-red-500">
             삭제
           </Button>
-        )}
-      </div>
+        </div>
+      )}
       {/* 댓글이 보여지는 곳 */}
-
+      <div className="h-[1px] w-full border-b-2 border-blue-900"></div>
+      {/* <Separator color="blue" /> */}
       {post.answers.map((ele) => (
         <div
           key={ele.answerId}
-          className="flex w-full items-start justify-start my-6"
+          className="flex w-full items-start justify-start my-4"
         >
           <div className="flex justify-between w-full items-start space-x-4">
             <div className="flex space-x-2">

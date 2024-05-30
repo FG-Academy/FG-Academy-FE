@@ -4,7 +4,10 @@ import { z } from "zod";
 import { toast } from "@/components/ui/use-toast";
 import { PostPatchFormSchema } from "../lib/PostFormSchema";
 
-export function useQnaPatchMutation(accessToken: string, questionId: number) {
+export function usePostPatchMutation(
+  accessToken: string,
+  announcementId: number
+) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -16,7 +19,7 @@ export function useQnaPatchMutation(accessToken: string, questionId: number) {
       data: z.infer<typeof PostPatchFormSchema>;
     }) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/qna?questionId=${questionId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/${announcementId}`,
         {
           next: {
             tags: ["patchQuestion"],
@@ -41,13 +44,13 @@ export function useQnaPatchMutation(accessToken: string, questionId: number) {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["qna"],
+        queryKey: ["post"],
       });
       toast({
-        title: "질문 게시글 수정 성공",
-        description: "질문 게시글 수정에 성공했습니다.",
+        title: "공지사항 수정 성공",
+        description: "공지사항 수정에 성공했습니다.",
       });
-      router.push(`/qna/${questionId}`);
+      router.push(`/notice/${announcementId}`);
     },
     onError: (error: any) => {
       toast({
