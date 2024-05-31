@@ -75,12 +75,17 @@ const config = {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "slide-in": "slide-in 1s ease-out forwards",
         "slide-out": "slide-out 1s ease-out forwards",
+        marquee: "marquee 5s linear infinite",
       },
     },
   },

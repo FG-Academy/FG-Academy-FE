@@ -142,7 +142,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
               key={lecture.lectureId}
               value={lecture.lectureNumber.toString()}
             >
-              <AccordionTrigger>
+              <AccordionTrigger className="text-start break-all whitespace-normal">
                 {lecture.lectureNumber}강: {lecture.title}
               </AccordionTrigger>
               <AccordionContent>
@@ -205,7 +205,8 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                                   (lp) => lp.lectureId === lecture.lectureId
                                 )?.completed ||
                                 lecture.lectureNumber ===
-                                  lastCompletedLectureIndex
+                                  lastCompletedLectureIndex ||
+                                isClickable
                               )
                             ) {
                               e.preventDefault();
