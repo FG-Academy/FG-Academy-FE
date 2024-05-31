@@ -66,7 +66,7 @@ export const columns: ColumnDef<PostsResponse>[] = [
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
-      return <div className="text-center text-xs md:text-base">제목</div>;
+      return <div className="text-center text-xs md:text-base">작성일자</div>;
     },
     cell: ({ row }) => {
       return (
