@@ -225,8 +225,8 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                           </div>
                           <div>
                             {quiz.quizType === "multiple"
-                              ? "객관식 퀴즈"
-                              : "주관식 퀴즈"}
+                              ? `${lecture.lectureNumber}-${quiz.quizIndex}번 객관식 퀴즈`
+                              : `${lecture.lectureNumber}-${quiz.quizIndex}번 주관식 퀴즈`}
                           </div>
                           <div className="flex flex-row grow justify-end space-x-2">
                             <FaCircleCheck
