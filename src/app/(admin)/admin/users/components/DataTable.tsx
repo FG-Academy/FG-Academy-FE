@@ -40,7 +40,7 @@ import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import { UserInfoDialog } from "./UserInfoDialog";
 import DebouncedInput from "./DebouncedInput";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
-import Filter from "../../quizzes/descriptive/components/Filter";
+import { Filter } from "../../quizzes/descriptive/components/Filter";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {

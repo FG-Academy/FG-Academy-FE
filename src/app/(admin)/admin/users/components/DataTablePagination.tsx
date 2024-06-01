@@ -29,25 +29,6 @@ export function DataTablePagination<TData>({
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
-  const { mutate } = useCourseDeleteMutation(accessToken);
-
-  const deleteSelectedRows = async () => {
-    const selectedRowIds = table
-      .getSelectedRowModel()
-      .rows.map((row) => row.getValue("courseId") as number);
-    try {
-      mutate(selectedRowIds);
-      table.setRowSelection({}); // Reset selection after deletion
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "요청이 불안정합니다..",
-        description: "잠시 후 다시 시도해주세요.",
-      });
-      console.error("Failed to delete courses:", error);
-    }
-  };
-
   return (
     <div className="flex items-center justify-between p-2">
       <div className="flex-1 text-sm text-muted-foreground">

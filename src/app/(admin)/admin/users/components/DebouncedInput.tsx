@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function DebouncedInput({
   value: initialValue,
   onChange,
-  debounce = 10,
+  debounce = 100,
   ...props
 }: {
   value: string | number;
