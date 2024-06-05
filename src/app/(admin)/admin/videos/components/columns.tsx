@@ -52,6 +52,7 @@ export const videoColumns: ColumnDef<AdminCoursesResponse>[] = [
           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.getValue(
             "thumbnailImagePath"
           )}`}
+          style={{ width: "100%", height: "auto" }}
           alt="강의 썸네일"
           priority
         />

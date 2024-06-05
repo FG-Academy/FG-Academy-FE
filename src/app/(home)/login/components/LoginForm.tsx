@@ -99,7 +99,10 @@ export default function LoginForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base font-bold">
-                  비밀번호 <span className="text-red-500">*</span>
+                  비밀번호 <span className="text-red-500">*</span>{" "}
+                  <span className="text-sm font-light">
+                    (초기 비밀번호는 생일4자리 입니다. - ex.0605)
+                  </span>
                 </FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
@@ -108,6 +111,11 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
+
+          <div className="text-red-500">
+            <span className="text-red-500">*</span> 보안을 위해 로그인 이후
+            회원정보 페이지에서 반드시 비밀번호를 수정해주세요.
+          </div>
 
           <Button className="w-full" type="submit">
             로그인
