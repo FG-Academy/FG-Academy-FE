@@ -3,6 +3,7 @@ import MainBanner from "../../../public/images/main-banner02.jpg";
 import MainCourseCard from "@/app/(home)/_components/MainCourseCard";
 import { auth } from "@/auth";
 import Loading from "../(lecture)/course/[courseId]/lecture/[lectureId]/loading";
+import { AnnouncementList } from "./_components/AnnouncementBanner";
 
 export default async function Home() {
   // const session = await auth();
@@ -20,6 +21,9 @@ export default async function Home() {
           style={{ width: "100%" }}
           alt="메인 배너 이미지"
         />
+      </section>
+      <section id="notificationPart">
+        <AnnouncementList />
       </section>
       <section id="infoPart" className="flex justify-center w-full sm:p-10">
         <MainCourseCard />

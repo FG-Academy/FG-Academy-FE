@@ -26,7 +26,7 @@ export const useFetchQnaPostsQuery = (
   return useQuery<Response>({
     queryKey: ["posts", "qna", page],
     queryFn: () => getQnaPosts(accessToken, page),
-    enabled: !!accessToken,
+    // enabled: !!accessToken,
   });
 };
 
@@ -39,6 +39,6 @@ export const useFetchOnePostQuery = (
   return useQuery<PostsResponse>({
     queryKey: ["post", announcementId],
     queryFn: () => getOnePost(accessToken, announcementId),
-    enabled: !!accessToken,
+    // enabled: !!accessToken,
   });
 };
