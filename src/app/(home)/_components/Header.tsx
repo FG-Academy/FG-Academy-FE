@@ -117,6 +117,9 @@ export default function Header() {
                       <Link
                         className="w-full text-left hover:text-blue-900"
                         href={`/qna`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
                       >
                         질문게시판
                       </Link>
@@ -162,6 +165,15 @@ export default function Header() {
                         }}
                       >
                         회원가입
+                      </Link>
+                      <Link
+                        className="w-full text-left hover:text-blue-900"
+                        href={`/notice?page=1`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
+                        공지사항
                       </Link>
                     </>
                   )}

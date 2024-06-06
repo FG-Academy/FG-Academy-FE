@@ -101,7 +101,7 @@ export function AnnouncementList() {
   return (
     <div className="flex mt-4 mx-auto justify-center items-center text-center h-12 w-11/12 rounded-lg bg-blue-100">
       <div className="flex items-center text-nowrap h-full my-auto rounded-lg p-4 bg-blue-200">
-        <div className="font-bold text-lg">공지사항</div>
+        <div className="font-bold text-base md:text-lg">공지사항</div>
       </div>
       <div className="relative overflow-hidden ml-4 h-10 w-full">
         <div
@@ -111,7 +111,7 @@ export function AnnouncementList() {
           {posts.posts.map((announcement, i) => (
             <div key={i} className="h-10 flex items-center">
               <Link
-                className="mr-5 hover:text-blue-900"
+                className="mr-5 hover:text-blue-900 text-sm md:text-base"
                 href={`/notice/${announcement.announcementId}`}
               >
                 {announcement.title}
