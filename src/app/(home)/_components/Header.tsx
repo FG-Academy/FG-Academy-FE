@@ -117,6 +117,9 @@ export default function Header() {
                       <Link
                         className="w-full text-left hover:text-blue-900"
                         href={`/qna`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
                       >
                         질문게시판
                       </Link>
@@ -163,6 +166,15 @@ export default function Header() {
                       >
                         회원가입
                       </Link>
+                      <Link
+                        className="w-full text-left hover:text-blue-900"
+                        href={`/notice?page=1`}
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
+                        공지사항
+                      </Link>
                     </>
                   )}
                 </div>
@@ -175,6 +187,15 @@ export default function Header() {
             </Link>
             <Link className="mr-5 hover:text-blue-900" href="/course">
               강의 목록
+            </Link>
+            <Link
+              className="mr-5 hover:text-blue-900"
+              href={`/notice?page=1`}
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              공지사항
             </Link>
             {session &&
               (session.user.level === "admin" ||
@@ -189,12 +210,12 @@ export default function Header() {
                 <Link className="mr-5 hover:text-blue-900" href="/myDashboard">
                   내 강의실
                 </Link>
-                <Link
+                {/* <Link
                   className="mr-5 hover:text-blue-900"
                   href={`/notice?page=1`}
                 >
                   공지사항
-                </Link>
+                </Link> */}
                 <Link className="mr-5 hover:text-blue-900" href={`/qna`}>
                   질문게시판
                 </Link>
