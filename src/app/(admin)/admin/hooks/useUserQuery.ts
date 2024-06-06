@@ -4,13 +4,16 @@ import { getOneUser } from "../lib/getOneUser";
 import { IUser } from "@/model/user";
 import getAdminSubmittedQuizList from "../lib/getAdminSubmittedQuizList";
 import { IQuizAnswer } from "@/model/quiz";
+import { IEnrollment } from "@/model/enrollment";
+import { getOneUserEnrollments } from "../lib/getOneUserEnrollments";
+import { getUserLecturesDetail } from "../lib/getUserLecturesDetail";
 
 interface Quiz {
   quizId: number;
   quizAnswers: IQuizAnswer[];
   quizType: string;
   question: string;
-  answer: number[];
+  answer: number[] | string;
   submitCount: number;
   correctCount: number;
   answerType: string;
@@ -35,7 +38,7 @@ interface Enrollment {
   lectures: Lecture[];
 }
 
-interface UserProfileResponse extends IUser {
+export interface UserProfileResponse extends IUser {
   enrollments: Enrollment[];
 }
 
@@ -57,6 +60,13 @@ export const useFetchAllUserListQuery = (
   });
 };
 
+interface UserEnrollmentResponse extends IEnrollment {
+  course: {
+    courseId: number;
+    title: string;
+    totalLectureLength: number;
+  };
+}
 /** [관리자 화면 - 유저] 한 유저 프로필 가져오기*/
 export const useFetchUserProfileByIdQuery = (
   accessToken: string,
@@ -69,6 +79,36 @@ export const useFetchUserProfileByIdQuery = (
     queryKey: ["users", userId],
     queryFn: () => getOneUser(accessToken, userId),
     enabled: !!accessToken,
+  });
+};
+
+/** [관리자 화면 - 유저] 한 유저 수강신청 정보 가져오기*/
+export const useFetchUserEnrollmentsByIdQuery = (
+  accessToken: string,
+  userId: number,
+  options?: {
+    enabled?: boolean;
+  }
+) => {
+  return useQuery<UserEnrollmentResponse[]>({
+    queryKey: ["users", userId, "enrollments"],
+    queryFn: () => getOneUserEnrollments(accessToken, userId),
+    enabled: !!accessToken,
+  });
+};
+
+export const useFetchUserLecturesDetailQuery = (
+  accessToken: string,
+  userId: number,
+  courseId: number | null,
+  options?: {
+    enabled?: boolean;
+  }
+) => {
+  return useQuery<Lecture[]>({
+    queryKey: ["users", userId, "enrollments", courseId],
+    queryFn: () => getUserLecturesDetail(accessToken, userId, courseId),
+    enabled: !!accessToken && !!courseId,
   });
 };
 
