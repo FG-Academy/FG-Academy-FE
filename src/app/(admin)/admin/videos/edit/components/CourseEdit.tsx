@@ -150,7 +150,7 @@ export default function CourseEdit({ courseInfo }: Props) {
     <div className="relative flex flex-col items-center justify-center w-full h-full p-6">
       <X
         onClick={() => router.back()}
-        className="absolute w-8 h-8 rounded-full right-10 top-10 hover:bg-black hover:bg-opacity-20"
+        className="absolute z-10 w-8 h-8 rounded-full right-10 top-10 hover:bg-black hover:bg-opacity-20"
       />
       <h2 className="mb-4 text-2xl">코스 편집</h2>
       <div className="flex flex-row w-full p-2 space-x-2 h-full">
