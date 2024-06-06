@@ -32,7 +32,7 @@ import { useSession } from "next-auth/react";
 import { IUser } from "@/model/user";
 
 type Props = {
-  userProfile: IUser;
+  userProfile: Partial<IUser>;
   userId: number;
 };
 
@@ -44,13 +44,13 @@ export default function UserForm({ userProfile, userId }: Props) {
     resolver: zodResolver(ProfileFormSchema),
     mode: "onChange",
     defaultValues: {
-      birthDate: dateFormat(new Date(userProfile.birthDate)),
+      birthDate: dateFormat(new Date(userProfile.birthDate as string)),
       name: userProfile.name ?? "",
       email: userProfile.email ?? "",
       phoneNumber: userProfile.phoneNumber ?? "",
-      churchName: userProfile.churchName ?? "",
-      departmentName: userProfile.departmentName ?? "",
-      position: userProfile.position ?? "",
+      churchName: userProfile.churchName,
+      departmentName: userProfile.departmentName,
+      position: userProfile.position,
       yearsOfService: userProfile.yearsOfService ?? 0,
       level: userProfile.level ?? "",
     },

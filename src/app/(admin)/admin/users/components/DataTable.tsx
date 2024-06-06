@@ -41,6 +41,8 @@ import { UserInfoDialog } from "./UserInfoDialog";
 import DebouncedInput from "./DebouncedInput";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
 import { Filter } from "../../quizzes/descriptive/components/Filter";
+import { IUser } from "@/model/user";
+import { Department, Position } from "@/app/types/type";
 
 declare module "@tanstack/react-table" {
   interface FilterFns {
@@ -74,6 +76,18 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [userId, setUserId] = useState(0);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [userProfile, setUserProfile] = useState<Partial<IUser>>({
+    userId: 0,
+    birthDate: "",
+    name: "",
+    email: "",
+    phoneNumber: "",
+    churchName: "fg",
+    departmentName: Department.ETC,
+    position: Position.ETC,
+    yearsOfService: 0,
+    level: "",
+  });
 
   const { open, setOpen } = useOpenDialogStore((state) => state);
 
@@ -100,6 +114,8 @@ export function DataTable<TData, TValue>({
         userId: false,
         email: false,
         phoneNumber: false,
+        departmentName: false,
+        position: false,
       },
     },
     state: {
@@ -123,7 +139,7 @@ export function DataTable<TData, TValue>({
               <DialogDescription>유저 정보를 수정합니다.</DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
-              <UserInfoDialog userId={userId} />
+              <UserInfoDialog userId={userId} userProfile={userProfile} />
             </div>
             <DialogFooter className="sm:justify-between">
               <DialogClose asChild>
@@ -177,6 +193,18 @@ export function DataTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
+                      setUserProfile({
+                        userId: row.getValue("userId"),
+                        birthDate: row.getValue("birthDate"),
+                        name: row.getValue("name"),
+                        email: row.getValue("email"),
+                        phoneNumber: row.getValue("phoneNumber"),
+                        churchName: row.getValue("churchName"),
+                        departmentName: row.getValue("departmentName"),
+                        position: row.getValue("position"),
+                        yearsOfService: row.getValue("yearsOfService"),
+                        level: row.getValue("level"),
+                      });
                       setUserId(row.getValue("userId"));
                       setOpen(true);
                     }}

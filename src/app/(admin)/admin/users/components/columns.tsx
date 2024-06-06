@@ -29,6 +29,16 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "departmentName",
+    cell: (info) => info.getValue(),
+    enableHiding: true,
+  },
+  {
+    accessorKey: "position",
+    cell: (info) => info.getValue(),
+    enableHiding: true,
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => {
       return (
