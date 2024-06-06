@@ -23,18 +23,10 @@ export default async function LectureLayout({ children, params }: Props) {
 
   const queryClient = new QueryClient();
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["lectures", courseId],
-  //   queryFn: () => getLectures(courseId, accessToken),
-  // });
   await queryClient.prefetchQuery({
     queryKey: ["progress", courseId],
     queryFn: () => getProgress(courseId, accessToken),
   });
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["courses", courseId],
-  //   queryFn: () => getCourses(courseId, accessToken),
-  // });
   await queryClient.prefetchQuery({
     queryKey: ["myCourses", courseId],
     queryFn: () => getMyCourses(courseId, accessToken),

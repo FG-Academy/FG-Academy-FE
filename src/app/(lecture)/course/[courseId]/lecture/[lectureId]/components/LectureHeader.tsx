@@ -41,12 +41,6 @@ export default function MainHeader({ courseId, lectureId }: Props) {
     return <Loading />;
   }
 
-  if (!course) {
-    return <Loading />;
-  }
-
-  console.log(isOverflowing);
-
   return (
     <div
       id="header"

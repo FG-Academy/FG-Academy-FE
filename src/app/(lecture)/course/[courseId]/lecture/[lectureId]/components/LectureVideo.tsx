@@ -87,7 +87,11 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
             actualLecture?.lectureId as number,
             accessToken
           );
-          updateCompleted(actualLecture?.lectureId as number, accessToken);
+          updateCompleted(
+            actualLecture?.lectureId as number,
+            accessToken,
+            courseId
+          );
           queryClient.invalidateQueries({ queryKey: ["myCourse"] });
           queryClient.invalidateQueries({ queryKey: ["lectureTimeRecord"] });
           queryClient.invalidateQueries({ queryKey: ["progress"] });

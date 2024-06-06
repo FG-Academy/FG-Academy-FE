@@ -3,11 +3,12 @@ import { auth } from "@/auth";
 // 데이터 저장 함수
 export const updateCompleted = async (
   lectureId: number,
-  accessToken: string
+  accessToken: string,
+  courseId: number
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/completed/${lectureId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/users/completed/${lectureId}/${courseId}`,
       {
         method: "PATCH",
         headers: {
