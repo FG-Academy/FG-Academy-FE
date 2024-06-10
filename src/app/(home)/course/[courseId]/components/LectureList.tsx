@@ -12,6 +12,7 @@ import { FaCirclePlay } from "react-icons/fa6";
 import { MdOutlineQuiz } from "react-icons/md";
 
 type Props = {
+  completedCount: number;
   lectures: AllLecturesResponse[];
   isTaking: boolean | null;
   lastStudyLectureId: number | null;
@@ -21,12 +22,14 @@ export default function LectureList({
   lectures,
   isTaking,
   lastStudyLectureId,
+  completedCount,
 }: Props) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {lectures.map((ele, index) => (
         <AccordionItem
-          disabled={true}
+          disabled={index >= completedCount}
+          // disabled={true}
           key={ele.lectureId}
           value={`item-${index}`}
           className="bg-blue-100 border border-blue-300 rounded-md mt-3"

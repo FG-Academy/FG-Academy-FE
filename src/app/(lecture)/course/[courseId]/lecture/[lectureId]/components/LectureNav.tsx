@@ -41,7 +41,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   const { data: progress } = useProgressQuery(accessToken, courseId);
   const { data: myCourse } = useMyCoursesQuery(accessToken, courseId);
 
-  const [isActiveNavbar, changeActiveNavbar] = useState(true);
+  const [isActiveNavbar, changeActiveNavbar] = useState(false);
 
   if (!progress || !myCourse) {
     return <Loading />;

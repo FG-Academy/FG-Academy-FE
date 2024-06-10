@@ -64,7 +64,11 @@ export default function CourseDetail({ courseId }: Props) {
               (enrollment.completedLectures / enrollment.totalCount) * 100
             )}
           />
-          <EnrollButton enrollment={enrollment} courseId={courseId} />
+          <EnrollButton
+            enrollment={enrollment}
+            courseId={courseId}
+            firstLectureId={lectures.length > 0 ? lectures[0].lectureId : null}
+          />
         </div>
 
         {/* 강의정보 div */}
@@ -155,6 +159,7 @@ export default function CourseDetail({ courseId }: Props) {
           </div>
           <div className="w-full h-auto mt-4">
             <LectureList
+              completedCount={enrollment.completedLectures}
               lectures={lectures}
               isTaking={enrollment.isTaking}
               lastStudyLectureId={enrollment.lastStudyLecture}
