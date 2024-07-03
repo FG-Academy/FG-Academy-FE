@@ -147,6 +147,7 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     width: "100%",
     playerVars: {
       host: "https://www.youtube-nocookie.com",
+      rel: 0,
       // controls: 0,
       // iv_load_policy: 3,
       // modestbranding: 1,
