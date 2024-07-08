@@ -59,14 +59,16 @@ export default function CourseCard() {
             >
               {uniqueCategories.map((cat) => (
                 <DropdownMenuRadioItem key={cat} value={cat}>
-                  {cat}
+                  {cat.replace(/^\d+\s*/, "")}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <h2 className="text-2xl font-bold mx-auto">{category}</h2>
+      <h2 className="text-2xl font-bold mx-auto">
+        {category.replace(/^\d+\s*/, "")}
+      </h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
         {filteredCourses.map((ele) => (
           <div
