@@ -129,6 +129,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             }
           });
           const isClickable =
+            myCourse.curriculum === "1세미나" ||
             userLevel === "admin" ||
             userLevel === "manager" ||
             userLevel === "tutor" ||

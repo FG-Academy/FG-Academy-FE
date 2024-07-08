@@ -36,7 +36,9 @@ export default function CourseCard() {
     <div className="p-4 space-y-6 flex flex-col">
       {Object.keys(categories).map((category) => (
         <div className="flex flex-col items-center space-y-2" key={category}>
-          <h2 className="text-2xl font-bold">{category}</h2>{" "}
+          <h2 className="text-2xl font-bold">
+            {category.replace(/^\d+\s*/, "")}
+          </h2>{" "}
           {/* 카테고리 이름 표시 */}
           <div className="p-6 grid grid-cols-1 place-items-center gap-10 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
             {categories[category].map((course) => (
