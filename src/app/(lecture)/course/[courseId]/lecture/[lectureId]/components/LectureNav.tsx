@@ -17,12 +17,13 @@ import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { FaCircleCheck } from "react-icons/fa6";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 import { useProgressQuery } from "../hooks/useProgressQuery";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 type Props = {
   courseId: number;
@@ -37,11 +38,15 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   const searchParams = useSearchParams();
   const currentQuizIndex = parseInt(searchParams.get("quizIndex") as string);
   const pathname = usePathname();
+  const isMobile = useIsMobile();
 
   const { data: progress } = useProgressQuery(accessToken, courseId);
   const { data: myCourse } = useMyCoursesQuery(accessToken, courseId);
 
-  const [isActiveNavbar, changeActiveNavbar] = useState(false);
+  const [isActiveNavbar, changeActiveNavbar] = useState(!isMobile);
+  useEffect(() => {
+    changeActiveNavbar(!isMobile);
+  }, [isMobile]);
 
   if (!progress || !myCourse) {
     return <Loading />;
@@ -123,18 +128,18 @@ export default function LectureNav({ courseId, lectureId }: Props) {
       >
         {myCourse.lectures.map((lecture, index) => {
           // 현재 강의가 완료되었거나, 완료한 마지막 강의의 바로 다음 강의이거나, 첫 번째 강의인 경우에만 클릭 가능
-          const lectureIds = progress.lectureProgresses.map((lp) => {
-            if (lp.completed === true) {
-              return lp.lectureId;
-            }
-          });
+          // const lectureIds = progress.lectureProgresses.map((lp) => {
+          //   if (lp.completed === true) {
+          //     return lp.lectureId;
+          //   }
+          // });
           const isClickable =
             myCourse.curriculum === "1세미나" ||
             userLevel === "admin" ||
             userLevel === "manager" ||
             userLevel === "tutor" ||
-            lectureIds.includes(lecture.lectureId) ||
-            lecture.lectureNumber === lastCompletedLectureIndex + 1 ||
+            lecture.lectureNumber === 1 ||
+            lecture.lectureNumber <= progress.completedCount + 1 || // 완료한 강의 + 1까지 클릭 가능하게 함
             index === 0;
 
           return (
@@ -200,15 +205,15 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                               : ""
                           }`}
                           onClick={(e) => {
+                            console.log(
+                              progress.lectureProgresses.find(
+                                (lp) => lp.lectureId === lecture.lectureId
+                              )?.completed
+                            );
                             if (
-                              !(
-                                progress.lectureProgresses.find(
-                                  (lp) => lp.lectureId === lecture.lectureId
-                                )?.completed ||
-                                lecture.lectureNumber ===
-                                  lastCompletedLectureIndex ||
-                                isClickable
-                              )
+                              !progress.lectureProgresses.find(
+                                (lp) => lp.lectureId === lecture.lectureId
+                              )?.completed
                             ) {
                               e.preventDefault();
                               toast({

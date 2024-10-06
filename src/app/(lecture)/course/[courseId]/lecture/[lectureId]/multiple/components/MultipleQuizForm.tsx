@@ -242,8 +242,9 @@ export default function MultipleQuizForm() {
               ) : (
                 <div>설문</div>
               )}
-
-              <div className="text-lg leading-none">{quizzes[0].question}</div>
+              <div className="text-lg leading-none">
+                {quizzes[search - 1].question}
+              </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               {quizzes[search - 1].quizAnswers.map((answer) => (
