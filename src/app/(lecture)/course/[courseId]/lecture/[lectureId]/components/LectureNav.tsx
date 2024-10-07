@@ -205,15 +205,15 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                               : ""
                           }`}
                           onClick={(e) => {
-                            console.log(
-                              progress.lectureProgresses.find(
-                                (lp) => lp.lectureId === lecture.lectureId
-                              )?.completed
-                            );
                             if (
                               !progress.lectureProgresses.find(
                                 (lp) => lp.lectureId === lecture.lectureId
-                              )?.completed
+                              )?.completed &&
+                              !(
+                                userLevel === "admin" ||
+                                userLevel === "manager" ||
+                                userLevel === "tutor"
+                              )
                             ) {
                               e.preventDefault();
                               toast({

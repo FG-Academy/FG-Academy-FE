@@ -45,6 +45,11 @@ export default function MultipleQuizForm() {
     setValue("items", selectedAnswers);
   }, [selectedAnswers, setValue]);
 
+  useEffect(() => {
+    setValue("items", []);
+    setSelectedAnswers([]);
+  }, [search]);
+
   // 단항 덧셈 연산자를 사용하여 문자열을 숫자로 변환
   const courseId = +params.courseId;
   const lectureId = +params.lectureId;
@@ -184,7 +189,7 @@ export default function MultipleQuizForm() {
                       index + 1
                     }번째 제출 답안>`}</div>
                     <div className="text-lg leading-none mb-4">
-                      문제: {quizzes[0].question}
+                      문제: {quizzes[search - 1].question}
                     </div>
                     {quizzes[search - 1].quizAnswers.map((answer) => (
                       <div key={answer.id} className="flex items-center gap-4">
