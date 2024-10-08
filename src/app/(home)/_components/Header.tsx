@@ -22,7 +22,7 @@ export default function Header() {
 
   useEffect(() => {
     if (session && session.user.error === "RefreshAccessTokenError") {
-      console.log("세션 만료.");
+      // console.log("세션 만료.");
       router.refresh();
       router.push("/");
       // location.reload();

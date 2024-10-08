@@ -29,7 +29,7 @@ import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { userLevelSettingOptions } from "@/app/types/type";
 import { Textarea } from "@/components/ui/textarea";
-import { useFetchAllCategoriesQuery } from "../category/hooks/useCategoryQuery";
+import { useFetchAllCategoriesQuery } from "../../category/hooks/useCategoryQuery";
 
 export default function Page() {
   const { data: session } = useSession();

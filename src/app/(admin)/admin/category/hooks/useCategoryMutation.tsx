@@ -1,12 +1,14 @@
 import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { QueryCache, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { CategoryFormSchema } from "../lib/CategoryFormSchema";
+import { useFetchAllCourseListQuery } from "@/app/(home)/_hooks/useCourseQuery";
 
 export function useCategoryMutation(accessToken: string) {
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const { refetch } = useFetchAllCourseListQuery();
+  const queryCache = new QueryCache();
 
   return useMutation({
     mutationKey: ["updateOrAddCategories"],
@@ -14,6 +16,7 @@ export function useCategoryMutation(accessToken: string) {
       categories: z.infer<typeof CategoryFormSchema>["categories"]
     ) => {
       // 기존 카테고리 업데이트
+
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/categories`, {
         method: "PUT",
         headers: {
@@ -29,6 +32,12 @@ export function useCategoryMutation(accessToken: string) {
       queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
+      queryCache.clear();
+      queryClient.invalidateQueries({
+        queryKey: ["courses"],
+        refetchType: "inactive",
+      });
+      // refetch();
       toast({
         title: "카테고리 저장 성공",
         description: "카테고리가 성공적으로 저장되었습니다.",

@@ -67,7 +67,7 @@ export default function Page({ params }: Props) {
       }
     } else {
       // User clicked 'Cancel'
-      console.log("Deletion cancelled.");
+      // console.log("Deletion cancelled.");
     }
   };
 

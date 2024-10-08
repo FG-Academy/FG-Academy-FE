@@ -44,7 +44,7 @@ export function UserInfoDialog({ userId, userProfile }: Props) {
   const { data: lectures, isLoading: isLecturesLoading } =
     useFetchUserLecturesDetailQuery(accessToken, userId, selectedCourseId);
 
-  console.log(userProfile);
+  // console.log(userProfile);
 
   if (!userProfile || !enrollments) {
     return <Loading />;

@@ -75,7 +75,7 @@ export default function SideNav() {
                 <div>강의 관리</div>
               </Link>
               <Link
-                href="/admin/videos/category"
+                href="/admin/category"
                 className={linkClassName("category")}
               >
                 <Video />

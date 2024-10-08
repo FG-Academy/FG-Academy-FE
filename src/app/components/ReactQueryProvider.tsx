@@ -10,7 +10,7 @@ export default function ReactQueryProviders({
     new QueryClient({
       defaultOptions: {
         queries: {
-          refetchOnWindowFocus: false, // 윈도우가 다시 포커스되었을때 데이터를 refetch
+          refetchOnWindowFocus: true, // 윈도우가 다시 포커스되었을때 데이터를 refetch
           refetchOnMount: true, // 데이터가 stale 상태이면 컴포넌트가 마운트될 때 refetch
           retryOnMount: false,
           refetchOnReconnect: true,

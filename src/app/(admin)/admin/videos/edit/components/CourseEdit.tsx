@@ -36,7 +36,7 @@ import { Separator } from "@/components/ui/separator";
 import { userLevelSettingOptions } from "@/app/types/type";
 import { Textarea } from "@/components/ui/textarea";
 import { AdminCourseReponse } from "../../../hooks/useAdminCourseQuery";
-import { useFetchAllCategoriesQuery } from "../../category/hooks/useCategoryQuery";
+import { useFetchAllCategoriesQuery } from "../../../category/hooks/useCategoryQuery";
 
 type Props = {
   courseInfo: AdminCourseReponse;

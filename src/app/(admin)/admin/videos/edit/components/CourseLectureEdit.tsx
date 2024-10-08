@@ -121,7 +121,7 @@ export default function CourseLectureEdit({ lecturesInfo, courseId }: Props) {
       }
     } else {
       // User clicked 'Cancel'
-      console.log("Deletion cancelled.");
+      // console.log("Deletion cancelled.");
     }
   };
 

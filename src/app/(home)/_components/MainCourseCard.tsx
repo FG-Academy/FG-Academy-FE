@@ -12,7 +12,12 @@ export default function CourseCard() {
   const { isOpen, setIsOpen } = useOpenMenuStore((state) => state);
   const [categories, setCategories] = useState<{ [key: string]: any[] }>({});
 
-  const { data: courses, isPending, error } = useFetchAllCourseListQuery();
+  const {
+    data: courses,
+    isPending,
+    error,
+    refetch,
+  } = useFetchAllCourseListQuery();
 
   useEffect(() => {
     if (courses) {
@@ -27,6 +32,10 @@ export default function CourseCard() {
       setCategories(newCategories);
     }
   }, [courses]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   if (isPending) return "로딩 중...";
   if (error) return `An error has occurred: ${error.message}`;

@@ -104,7 +104,6 @@ export default function CategoryEdit({ categoriesInfo }: Props) {
       ...field,
       order: index + 1,
     }));
-    console.log(updatedFields);
     form.setValue("categories", updatedFields, { shouldDirty: true });
   };
 
