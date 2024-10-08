@@ -18,7 +18,7 @@ export default function CourseCard() {
     if (courses) {
       const newCategories: { [key: string]: any[] } = {};
       courses.forEach((course) => {
-        const category = course.curriculum || "기타"; // Default category if none is specified
+        const category = course.category?.name || "기타"; // Default category if none is specified
         if (!newCategories[category]) {
           newCategories[category] = [];
         }
@@ -44,18 +44,16 @@ export default function CourseCard() {
             {categories[category].map((course) => (
               <div
                 key={course.courseId}
-                className="min-w-0 shadow-xl rounded-2xl border flex flex-col justify-between max-w-[410px] w-full h-full mx-auto"
+                className="min-w-0 relative shadow-xl rounded-2xl border flex flex-col justify-between max-w-[410px] w-full h-full mx-auto"
               >
                 <Image
-                  className="rounded-2xl h-full"
+                  className="rounded-2xl h-full object-contain"
                   width={500}
-                  height={500}
+                  height={200}
+                  // fill
                   // layout="fill" // This makes the image fill the container while respecting aspect ratio
                   // objectFit="none" // Adjust as needed: cover, contain, etc.
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
-                  style={{
-                    objectFit: "contain",
-                  }}
                   alt="강의 썸네일"
                   priority
                 />

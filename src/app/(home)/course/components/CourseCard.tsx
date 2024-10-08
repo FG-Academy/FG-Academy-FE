@@ -25,7 +25,9 @@ export default function CourseCard() {
   useEffect(() => {
     if (courses) {
       // Extract unique categories from courses using Set and convert to Array
-      const categoriesSet = new Set(courses.map((course) => course.curriculum));
+      const categoriesSet = new Set(
+        courses.map((course) => course.category.name)
+      );
       const categoriesArray = Array.from(categoriesSet);
       setUniqueCategories(["전체", ...categoriesArray]);
     }
@@ -35,7 +37,7 @@ export default function CourseCard() {
   if (error) return "An error has occurred: " + error.message;
 
   const filteredCourses = courses.filter(
-    (course) => category === "전체" || course.curriculum === category
+    (course) => category === "전체" || course.category.name === category
   );
 
   return (

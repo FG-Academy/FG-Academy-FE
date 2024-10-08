@@ -33,12 +33,10 @@ import CourseLectureEdit from "./CourseLectureEdit";
 import { toast } from "@/components/ui/use-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import {
-  courseCurriculumOptions,
-  userLevelSettingOptions,
-} from "@/app/types/type";
+import { userLevelSettingOptions } from "@/app/types/type";
 import { Textarea } from "@/components/ui/textarea";
 import { AdminCourseReponse } from "../../../hooks/useAdminCourseQuery";
+import { useFetchAllCategoriesQuery } from "../../category/hooks/useCategoryQuery";
 
 type Props = {
   courseInfo: AdminCourseReponse;
@@ -57,6 +55,7 @@ export default function CourseEdit({ courseInfo }: Props) {
   const [enabled, setEnabled] = useState(false);
 
   const { mutate } = useCourseEditMutation(accessToken, courseInfo.courseId);
+  const { data: category } = useFetchAllCategoriesQuery(accessToken);
 
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
@@ -73,7 +72,8 @@ export default function CourseEdit({ courseInfo }: Props) {
     defaultValues: {
       title: courseInfo.title,
       description: courseInfo.description,
-      curriculum: courseInfo.curriculum,
+      // categoryId: courseInfo.category.categoryId,
+      curriculum: courseInfo.category.name,
       openDate: dateFormat(new Date(courseInfo.openDate)),
       finishDate: dateFormat(new Date(courseInfo.finishDate)),
       level: courseInfo.level,
@@ -275,7 +275,7 @@ export default function CourseEdit({ courseInfo }: Props) {
                     <Select
                       name={field.name}
                       onValueChange={field.onChange}
-                      defaultValue={courseInfo.curriculum}
+                      defaultValue={courseInfo.category.name}
                     >
                       <SelectTrigger>
                         <SelectValue
@@ -286,9 +286,9 @@ export default function CourseEdit({ courseInfo }: Props) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {courseCurriculumOptions.map((ele, index) => (
-                            <SelectItem key={index} value={ele.value}>
-                              {ele.value}
+                          {category?.map((ele, index) => (
+                            <SelectItem key={index} value={ele.name}>
+                              {ele.name}
                             </SelectItem>
                           ))}
                         </SelectGroup>

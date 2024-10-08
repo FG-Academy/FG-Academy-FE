@@ -3,6 +3,7 @@ import styles from "./loading.module.css";
 export default function Loading() {
   return (
     <div
+      className="h-full"
       style={{
         display: "flex",
         justifyContent: "center",

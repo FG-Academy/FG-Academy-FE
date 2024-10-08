@@ -70,12 +70,17 @@ export default function SideNav() {
                   <div>유저 관리</div>
                 </Link>
               )}
-
               <Link href="/admin/videos" className={linkClassName("videos")}>
                 <Video />
                 <div>강의 관리</div>
               </Link>
-
+              <Link
+                href="/admin/videos/category"
+                className={linkClassName("category")}
+              >
+                <Video />
+                <div>카테고리 관리</div>
+              </Link>
               <Link
                 href="/admin/quizzes"
                 className={`flex flex-col ${linkClassName("quizzes")}`}

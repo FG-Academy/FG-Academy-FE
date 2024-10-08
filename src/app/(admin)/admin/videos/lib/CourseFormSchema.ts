@@ -47,6 +47,10 @@ export const AdminCourseFormSchema = z.object({
     .string()
     .min(1, { message: "필수 입력 항목입니다." })
     .optional(),
+  categoryId: z
+    .number()
+    .min(1, { message: "필수 입력 항목입니다." })
+    .optional(),
   openDate: z
     .string()
     .min(10, {

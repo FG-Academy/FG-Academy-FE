@@ -27,7 +27,7 @@ export default function CourseCardDashboard({ data }: DashboardProps) {
           <CardTitle className="whitespace-normal break-words text-sm md:text-base lg:text-lg">
             {data.title.replace(/\(\d+\)\s*/, "")}
           </CardTitle>
-          <CardDescription>{data.curriculum}</CardDescription>
+          <CardDescription>{data.category.name}</CardDescription>
         </CardHeader>
         <CardContent>
           <AspectRatio ratio={16 / 9} className="bg-muted">

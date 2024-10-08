@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 import { useProgressQuery } from "../hooks/useProgressQuery";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   courseId: number;
@@ -48,25 +49,16 @@ export default function LectureNav({ courseId, lectureId }: Props) {
     changeActiveNavbar(!isMobile);
   }, [isMobile]);
 
+  // if (!progress || !myCourse) {
+  //   return <Loading />;
+  // }
   if (!progress || !myCourse) {
-    return <Loading />;
+    return <Skeleton className="w-[400px] h-screen bg-gray-200 rounded-lg" />;
   }
 
   const currentLecture = myCourse.lectures.find(
     (lecture) => lecture.lectureId === lectureId
   );
-
-  // 완료한 마지막 강의 번호를 찾습니다.
-  const lastCompletedLectureIndex =
-    progress.lectureProgresses
-      .filter((lp) => lp.completed)
-      .reduce(
-        (maxIndex, current, currentIndex) =>
-          current.completed && currentIndex > maxIndex
-            ? currentIndex
-            : maxIndex,
-        -1
-      ) + 1;
 
   if (!isActiveNavbar) {
     return (
@@ -134,7 +126,7 @@ export default function LectureNav({ courseId, lectureId }: Props) {
           //   }
           // });
           const isClickable =
-            myCourse.curriculum === "1세미나" ||
+            myCourse.category.name === "세미나" ||
             userLevel === "admin" ||
             userLevel === "manager" ||
             userLevel === "tutor" ||

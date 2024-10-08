@@ -27,11 +27,9 @@ import { useSession } from "next-auth/react";
 import { ChangeEvent, useState } from "react";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import {
-  courseCurriculumOptions,
-  userLevelSettingOptions,
-} from "@/app/types/type";
+import { userLevelSettingOptions } from "@/app/types/type";
 import { Textarea } from "@/components/ui/textarea";
+import { useFetchAllCategoriesQuery } from "../category/hooks/useCategoryQuery";
 
 export default function Page() {
   const { data: session } = useSession();
@@ -40,6 +38,7 @@ export default function Page() {
   const router = useRouter();
 
   const [imageFile, setImageFile] = useState<File>();
+  const { data: categories } = useFetchAllCategoriesQuery(accessToken);
 
   const form = useForm<z.infer<typeof CourseFormSchema>>({
     resolver: zodResolver(CourseFormSchema),
@@ -78,7 +77,6 @@ export default function Page() {
 
     Object.keys(data).forEach((key) => {
       if (key === "thumbnailImage") {
-        console.log(imageFile);
         formData.append("thumbnailImage", imageFile as Blob);
       } else {
         formData.append(key, data[key as keyof typeof data]);
@@ -160,16 +158,11 @@ export default function Page() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {courseCurriculumOptions.map((ele, index) => (
-                        <SelectItem key={index} value={ele.value}>
-                          {ele.value}
+                      {categories?.map((ele, index) => (
+                        <SelectItem key={index} value={ele.name}>
+                          {ele.name}
                         </SelectItem>
                       ))}
-                      {/* {curriculums.data.map((ele, index) => (
-                        <SelectItem key={index} value={ele}>
-                          {ele}
-                        </SelectItem>
-                      ))} */}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

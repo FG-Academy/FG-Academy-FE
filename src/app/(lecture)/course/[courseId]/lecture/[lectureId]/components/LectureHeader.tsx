@@ -9,6 +9,7 @@ import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 import { useEffect, useRef, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   courseId: number;
@@ -37,8 +38,11 @@ export default function MainHeader({ courseId, lectureId }: Props) {
     }
   }, [course, lectureId]);
 
+  // if (!course) {
+  //   return <Loading />;
+  // }
   if (!course) {
-    return <Loading />;
+    return <Skeleton className="w-full h-[56px] rounded-full" />; // Skeleton 컴포넌트를 사용
   }
 
   return (

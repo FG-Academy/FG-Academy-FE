@@ -10,10 +10,16 @@ export interface AdminCoursesResponse extends ICourse {
   enrollmentCount: number;
   multipleCount: number;
   descriptiveCount: number;
+  category: Category;
 }
 
+export interface Category {
+  name: string;
+  order: number;
+}
 export interface AdminCourseReponse extends ICourse {
   lectures: ILecture[];
+  category: Category;
 }
 
 /** [관리자 화면 - 강의] 모든 강의 가져오기*/

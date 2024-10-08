@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDashboard } from "../lib/getDashboard";
+import { Category } from "@/app/(admin)/admin/hooks/useAdminCourseQuery";
 
 interface DashBoardResponse {
   message: string;
@@ -8,6 +9,7 @@ interface DashBoardResponse {
 
 export interface CourseDetail {
   courseId: number;
+  category: Category;
   status: string;
   title: string;
   curriculum: string;

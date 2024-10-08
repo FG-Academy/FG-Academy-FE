@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllCourses } from "../_lib/getAllCourses";
 import { getOneCourse } from "../_lib/getOneCourse";
+import { Category } from "@/app/(admin)/admin/hooks/useAdminCourseQuery";
 
 export interface MainCoursesResponse {
   courseId: number;
@@ -14,6 +15,7 @@ export interface MainCoursesResponse {
   status: string;
   createdAt: Date;
   updatedAt: Date;
+  category: Category;
 }
 
 /** [홈화면, 강의 목록 화면] 모든 코스 가져오기 (active) */

@@ -23,7 +23,7 @@ export default function Descriptive() {
   }
 
   return (
-    <div className="w-full h-full space-y-2 justify-center items-center p-10">
+    <div className="w-full h-full space-y-2 justify-center items-center p-10 overflow-y-auto">
       <h1 className="text-xl text-center">[실행과제]</h1>
       <h2 className="text-lg text-center">
         강의 내용에 대한 문제를 정확한 용어와 표현을 사용하여 설명해보세요.

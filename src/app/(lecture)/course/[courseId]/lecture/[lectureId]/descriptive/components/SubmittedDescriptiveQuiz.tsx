@@ -75,7 +75,7 @@ export default function SubmittedDescriptiveQuiz({
             name="descriptiveAnswer"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-bold text-lg">
+                <FormLabel className="font-bold text-lg whitespace-pre-line">
                   {question} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>

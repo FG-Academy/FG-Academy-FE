@@ -54,7 +54,7 @@ export default function DescriptiveQuizForm({ quizId, question }: Props) {
             name="descriptiveAnswer"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base font-bold">
+                <FormLabel className="text-base font-bold whitespace-pre-line">
                   {question} <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>

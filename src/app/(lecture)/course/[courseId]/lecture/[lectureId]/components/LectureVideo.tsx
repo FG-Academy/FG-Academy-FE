@@ -2,18 +2,18 @@
 
 import useDurationStore from "@/store/useDurationStore";
 import { useSecondsStore } from "@/store/useTimerStore";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { saveSeconds } from "../lib/saveSeconds";
-import { getProgress } from "../lib/getProgress";
 import Loading from "../loading";
-import { updateCompleted } from "../lib/updateCompleted";
 import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
 import { useLectureTimeRecordsQuery } from "../hooks/useLectureTimeRecords";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
-import { IProgressResult, useProgressQuery } from "../hooks/useProgressQuery";
+import { useProgressQuery } from "../hooks/useProgressQuery";
+import { useCompleteMutations } from "../lib/updateCompleted";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   courseId: number;
@@ -24,15 +24,23 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
-  const queryClient = useQueryClient();
-
-  const { data: course } = useMyCoursesQuery(accessToken, courseId);
-  const { data: progress } = useProgressQuery(accessToken, courseId);
-
-  const { data: lectureTimeRecord } = useLectureTimeRecordsQuery(
-    lectureId,
-    accessToken
+  const { data: course, refetch: refetchCourse } = useMyCoursesQuery(
+    accessToken,
+    courseId
   );
+  const { data: progress, refetch: refetchProgress } = useProgressQuery(
+    accessToken,
+    courseId
+  );
+  const { mutate } = useCompleteMutations({
+    accessToken,
+    lectureId,
+    courseId,
+    refetchProgress,
+  });
+
+  const { data: lectureTimeRecord, refetch: refetchLectureTimeRecord } =
+    useLectureTimeRecordsQuery(lectureId, accessToken);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { duration, setDuration } = useDurationStore((state) => state);
@@ -62,7 +70,7 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   // TODO: 얘는 탭 닫을 때 경고창 뜨는 건데 이때 PATCH 보내도록 하는 방식 고려 중
 
   if (!course || !progress || !lectureTimeRecord) {
-    return <Loading />;
+    return <Skeleton className="w-full h-full bg-gray-200 rounded-lg" />;
   }
 
   const actualLecture = course.lectures.find(
@@ -81,31 +89,27 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
       intervalRef.current = setInterval(() => {
         increaseSeconds();
         const currentSeconds = useSecondsStore.getState().seconds;
-        if (currentSeconds === duration - 2) {
-          saveSeconds(
-            currentSeconds,
-            actualLecture?.lectureId as number,
-            accessToken
-          );
-          updateCompleted(
-            actualLecture?.lectureId as number,
-            accessToken,
-            courseId
-          );
-          queryClient.invalidateQueries({ queryKey: ["myCourse"] });
-          queryClient.invalidateQueries({ queryKey: ["lectureTimeRecord"] });
-          queryClient.invalidateQueries({ queryKey: ["progress"] });
-          toast({
-            title: "수강을 완료하였습니다.",
-            duration: 3000,
-          });
-          // console.log("수강완료");
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
+        if (currentSeconds === duration - 3) {
+          try {
+            saveSeconds(
+              currentSeconds + 3,
+              actualLecture?.lectureId as number,
+              accessToken
+            );
+            mutate();
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+          } catch {
+            toast({
+              variant: "destructive",
+              title: "오류가 발생했습니다.",
+              duration: 3000,
+            });
           }
         }
-        if (!(seconds > duration) && currentSeconds % 60 === 0) {
+        if (!(currentSeconds > duration) && currentSeconds % 60 === 0) {
           saveSeconds(
             currentSeconds,
             actualLecture?.lectureId as number,
