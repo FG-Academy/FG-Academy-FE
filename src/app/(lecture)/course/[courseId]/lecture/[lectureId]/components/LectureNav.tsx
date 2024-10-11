@@ -60,6 +60,8 @@ export default function LectureNav({ courseId, lectureId }: Props) {
     (lecture) => lecture.lectureId === lectureId
   );
 
+  const defaultAccordionValue = currentLecture?.lectureNumber.toString();
+
   if (!isActiveNavbar) {
     return (
       <div
@@ -115,7 +117,9 @@ export default function LectureNav({ courseId, lectureId }: Props) {
       <Accordion
         className="flex flex-col justify-center bg-gray-100 border-y-2"
         type="single"
-        defaultValue={currentLecture?.title}
+        // defaultValue={currentLecture?.title}
+        defaultValue={defaultAccordionValue}
+        // defaultChecked
         collapsible
       >
         {myCourse.lectures.map((lecture, index) => {
