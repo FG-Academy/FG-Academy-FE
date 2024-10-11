@@ -5,7 +5,7 @@ import { AnnouncementList } from "./_components/AnnouncementBanner";
 
 export default async function Home() {
   return (
-    <main className="flex flex-col h-full">
+    <main className="flex flex-col w-screen h-full">
       <section className="w-full h-full">
         <Image
           priority

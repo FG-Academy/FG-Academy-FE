@@ -36,7 +36,7 @@ export default async function LectureLayout({ children, params }: Props) {
   return (
     <div id="container" className="flex flex-row w-screen h-screen">
       <HydrationBoundary state={dehydratedState}>
-        <div id="main-content" className="flex flex-1 flex-col h-auto">
+        <div id="main-content" className="flex flex-1 flex-col w-full h-auto">
           <LectureHeader courseId={courseId} lectureId={lectureId} />
           {children}
         </div>

@@ -16,6 +16,7 @@ import z from "zod";
 import { AnswerFormSchema } from "../lib/AnswerFornSchema";
 import { useSubmitDescriptiveAnswerMutation } from "../hooks/useSubmitDescriptiveAnswerMutation";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 type Props = {
   quizId: number;
@@ -39,6 +40,11 @@ export default function DescriptiveQuizForm({ quizId, question }: Props) {
   const onSubmit = async (data: z.infer<typeof AnswerFormSchema>) => {
     mutate(data);
   };
+  // console.log(quizId);
+
+  useEffect(() => {
+    form.reset();
+  }, [quizId]);
 
   return (
     <Form {...form}>
