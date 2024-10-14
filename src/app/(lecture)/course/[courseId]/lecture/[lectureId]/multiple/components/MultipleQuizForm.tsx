@@ -163,7 +163,7 @@ export default function MultipleQuizForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(onSubmit)} className="h-full space-y-8">
       <div className="flex flex-col mt-10 items-center h-full space-y-4 p-4">
         <h1 className="text-2xl">과제</h1>
         <h2>꼼꼼 Check! - 헷갈리는 부분이 없는지 확인해보아요.</h2>

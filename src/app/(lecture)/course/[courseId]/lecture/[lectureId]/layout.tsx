@@ -34,12 +34,9 @@ export default async function LectureLayout({ children, params }: Props) {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div
-      id="container"
-      className="flex flex-row w-screen h-screen overflow-hidden"
-    >
+    <div id="container" className="flex flex-row w-screen h-full">
       <HydrationBoundary state={dehydratedState}>
-        <div id="main-content" className="flex flex-1 flex-col w-full h-auto">
+        <div id="main-content" className="flex flex-1 flex-col w-full h-full">
           <LectureHeader courseId={courseId} lectureId={lectureId} />
           {children}
         </div>

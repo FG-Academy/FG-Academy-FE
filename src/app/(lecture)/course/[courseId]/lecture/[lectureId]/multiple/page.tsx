@@ -1,5 +1,9 @@
 import MultipleQuizForm from "./components/MultipleQuizForm";
 
 export default function Multiple() {
-  return <MultipleQuizForm />;
+  return (
+    <div className="w-full h-full">
+      <MultipleQuizForm />
+    </div>
+  );
 }
