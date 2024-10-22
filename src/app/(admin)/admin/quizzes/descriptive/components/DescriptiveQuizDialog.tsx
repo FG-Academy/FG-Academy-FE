@@ -3,7 +3,7 @@
 import Loading from "@/app/(lecture)/course/[courseId]/lecture/[lectureId]/loading";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -44,6 +44,13 @@ export default function DescriptiveQuizDialog() {
   const [value, setValue] = useState<string>(
     descriptiveQuiz?.feedbackComment ?? ""
   );
+
+  useEffect(() => {
+    if (descriptiveQuiz) {
+      setIsCorrected(descriptiveQuiz.status === 1);
+      setValue(descriptiveQuiz.feedbackComment!);
+    }
+  }, [descriptiveQuiz]);
 
   if (!descriptiveQuiz) return <Loading />;
 
