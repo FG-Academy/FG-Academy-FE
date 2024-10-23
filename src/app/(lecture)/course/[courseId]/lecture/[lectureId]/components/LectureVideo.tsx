@@ -24,10 +24,7 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
-  const { data: course, refetch: refetchCourse } = useMyCoursesQuery(
-    accessToken,
-    courseId
-  );
+  const { data: course } = useMyCoursesQuery(accessToken, courseId);
   const { data: progress, refetch: refetchProgress } = useProgressQuery(
     accessToken,
     courseId
@@ -39,8 +36,10 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     refetchProgress,
   });
 
-  const { data: lectureTimeRecord, refetch: refetchLectureTimeRecord } =
-    useLectureTimeRecordsQuery(lectureId, accessToken);
+  // const { data: lectureTimeRecord } = useLectureTimeRecordsQuery(
+  //   lectureId,
+  //   accessToken
+  // );
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { duration, setDuration } = useDurationStore((state) => state);
@@ -69,7 +68,7 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
 
   // TODO: 얘는 탭 닫을 때 경고창 뜨는 건데 이때 PATCH 보내도록 하는 방식 고려 중
 
-  if (!course || !progress || !lectureTimeRecord) {
+  if (!course || !progress) {
     return <Skeleton className="w-full h-full bg-gray-200 rounded-lg" />;
   }
 
@@ -77,14 +76,14 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     (lecture) => lecture.lectureId === lectureId
   );
 
-  // console.log(actualLecture);
-
   // 타이머 시작
   const startTimer = () => {
     if (
       !intervalRef.current &&
       seconds < duration &&
-      !lectureTimeRecord.status
+      !progress.lectureProgresses.find((lp) => lp.lectureId === lectureId)
+        ?.completed
+      // !lectureTimeRecord.status
     ) {
       intervalRef.current = setInterval(() => {
         increaseSeconds();

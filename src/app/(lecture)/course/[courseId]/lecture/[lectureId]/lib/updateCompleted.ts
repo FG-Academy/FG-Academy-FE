@@ -15,7 +15,7 @@ export function useCompleteMutations({
   refetchProgress,
 }: Props) {
   return useMutation({
-    mutationKey: ["updateLectureByAdmin"],
+    mutationKey: ["updateComplete"],
     mutationFn: async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/completed/${lectureId}/${courseId}`,

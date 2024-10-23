@@ -38,9 +38,6 @@ export default function MainHeader({ courseId, lectureId }: Props) {
     }
   }, [course, lectureId]);
 
-  // if (!course) {
-  //   return <Loading />;
-  // }
   if (!course) {
     return <Skeleton className="w-full h-[56px] rounded-full" />; // Skeleton 컴포넌트를 사용
   }
