@@ -12,24 +12,22 @@ import { toast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Loading from "../../loading";
-import { useQuizQuery } from "../../hooks/useQuizQuery";
+import { useOneQuizQuery } from "../../hooks/useQuizQuery";
 import { MultipleQuizFormSchema } from "../lib/MultipleQuizFormSchema";
 
 export default function MultipleQuizForm() {
-  // reactHook 모음
-  const router = useRouter();
-  const params = useParams();
-
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
 
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [retry, setRetry] = useState(false);
+  const [isMultipleAnswers, setMultipleAnswers] = useState(false);
+
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
 
-  const [retry, setRetry] = useState(false);
-
-  const search = parseInt(searchParams.get("quizIndex") as string);
+  const currentQuizId = parseInt(searchParams.get("quizId") as string);
+  const { data: quiz } = useOneQuizQuery(currentQuizId, accessToken);
 
   const {
     register,
@@ -48,59 +46,36 @@ export default function MultipleQuizForm() {
   useEffect(() => {
     setValue("items", []);
     setSelectedAnswers([]);
-  }, [search]);
+  }, [currentQuizId]);
 
-  // 단항 덧셈 연산자를 사용하여 문자열을 숫자로 변환
-  const courseId = +params.courseId;
-  const lectureId = +params.lectureId;
+  useEffect(() => {
+    if (quiz && quiz.quizAnswers.filter((qA) => qA.isAnswer).length > 1) {
+      setMultipleAnswers(true);
+    }
+  }, [quiz]);
 
-  // 퀴즈 데이터 받아오기
-  const { data: quizzes } = useQuizQuery(lectureId, accessToken);
-
-  // 퀴즈 데이터를 완전히 불러올 때까지 로딩
-  if (!quizzes) {
+  if (!quiz) {
     return <Loading />;
   }
-
-  // 객관식 itemIndex 별로 오름차순 정렬
-  quizzes[search - 1].quizAnswers.sort((a, b) => a.itemIndex - b.itemIndex);
-
-  // 정답이 여러 개 있는지 확인
-  const isMultipleAnswers =
-    quizzes[search - 1].quizAnswers.filter((a) => a.isAnswer).length > 1;
-
-  // 현재 사용자가 제출하지 않은 퀴즈가 남아있는지 확인
-  const nextQuiz = quizzes.filter((ele) => {
-    return ele.quizSubmits.length === 0 && search !== ele.quizIndex;
-  });
 
   // 정답이 여러 개 있는지 확인(isMultipleAnswer)에 따라 객관식 선택이 다양해짐
   const handleAnswerSelection = (itemIndex: number) => {
     if (isMultipleAnswers) {
-      // 여러 개의 정답을 선택할 수 있음
       setSelectedAnswers((prev) =>
         prev.includes(itemIndex)
           ? prev.filter((index) => index !== itemIndex)
           : [...prev, itemIndex]
       );
     } else {
-      // 오직 하나의 정답만 선택할 수 있음
       setSelectedAnswers([itemIndex]);
     }
   };
-
-  // const { mutate } = useSubmitMultipleAnswerMutation(
-  //   accessToken,
-  //   nextQuiz,
-  //   courseId,
-  //   lectureId
-  // );
 
   //! 퀴즈 제출 버튼을 클릭했을 때 동작
   const onSubmit = async (data: z.infer<typeof MultipleQuizFormSchema>) => {
     // 보낼 데이터 묶음
     const sendData = {
-      quizId: quizzes[search - 1].quizId,
+      quizId: quiz.quizId,
       multipleAnswer: 1,
       answer: JSON.stringify(data.items),
     };
@@ -119,35 +94,16 @@ export default function MultipleQuizForm() {
       }
     );
     if (response.ok) {
-      // 서버로부터 성공적인 응답을 받았을 때
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({ queryKey: ["myCourse"] });
+      queryClient.invalidateQueries({ queryKey: ["quizzes"] });
       setRetry(false);
 
       toast({
         title: "답변 제출을 완료 했습니다.",
         duration: 10000,
-        description: (
-          <div className="flex justify-end mt-2 w-[340px] rounded-md p-4">
-            {nextQuiz.length > 0 && (
-              <Button
-                className="shadow-md bg-blue-500 text-white hover:bg-slate-50 hover:text-black"
-                onClick={() => {
-                  router.push(
-                    `/course/${courseId}/lecture/${lectureId}/${nextQuiz[0].quizType}?quizIndex=${nextQuiz[0].quizIndex}`
-                  );
-                }}
-              >
-                다음 퀴즈로 이동
-              </Button>
-            )}
-          </div>
-        ),
       });
-
-      // 만약 퀴즈 제출이 중복이거나 실패할 경우
     } else if (response.status === 400) {
       const message = await response.json();
-      // 오류 처리
       toast({
         title: message.message,
         variant: "destructive",
@@ -167,13 +123,13 @@ export default function MultipleQuizForm() {
       <div className="flex flex-col mt-10 items-center h-full space-y-4 p-4">
         <h1 className="text-2xl">과제</h1>
         <h2>꼼꼼 Check! - 헷갈리는 부분이 없는지 확인해보아요.</h2>
-        {quizzes[search - 1].quizSubmits.length > 0 && !retry ? (
+        {quiz.quizSubmits.length > 0 && !retry ? (
           <Card className="w-full p-4 flex flex-col justify-center items-center">
             <CardHeader className="flex flex-col gap-1">
               <div className="text-lg font-bold">제출 현황</div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4 w-full">
-              {quizzes[search - 1].quizSubmits.map((submit, index) => {
+              {quiz.quizSubmits.map((submit, index) => {
                 return (
                   <div
                     key={submit.id}
@@ -189,9 +145,9 @@ export default function MultipleQuizForm() {
                       index + 1
                     }번째 제출 답안>`}</div>
                     <div className="text-lg leading-none mb-4">
-                      문제: {quizzes[search - 1].question}
+                      문제: {quiz.question}
                     </div>
-                    {quizzes[search - 1].quizAnswers.map((answer) => (
+                    {quiz.quizAnswers.map((answer) => (
                       <div key={answer.id} className="flex items-center gap-4">
                         <Checkbox
                           {...register("items")}
@@ -220,8 +176,8 @@ export default function MultipleQuizForm() {
             </CardContent>
             <Button
               disabled={
-                quizzes[search - 1].quizSubmits.length >= 3 ||
-                quizzes[search - 1].quizSubmits.some((submit) => {
+                quiz.quizSubmits.length >= 3 ||
+                quiz.quizSubmits.some((submit) => {
                   return submit.status === 1;
                 })
               }
@@ -229,30 +185,26 @@ export default function MultipleQuizForm() {
               className="w-full bg-blue-500"
             >
               {`${
-                quizzes[search - 1].quizSubmits.some((submit) => {
+                quiz.quizSubmits.some((submit) => {
                   return submit.status === 1;
                 })
                   ? "정답"
                   : "다시 풀기"
-              } (남은 기회 ${
-                3 - quizzes[search - 1].quizSubmits.length
-              }번 / 총 기회 3번)`}
+              } (남은 기회 ${3 - quiz.quizSubmits.length}번 / 총 기회 3번)`}
             </Button>
           </Card>
         ) : (
           <Card className="w-full h-3/4 p-4 pt-10 mx-auto">
             <CardHeader className="flex flex-col gap-1">
-              {quizzes[search - 1].quizType === "multiple" ? (
+              {quiz.quizType === "multiple" ? (
                 <div className="text-xl font-bold">객관식 퀴즈</div>
               ) : (
                 <div>설문</div>
               )}
-              <div className="text-lg leading-none">
-                {quizzes[search - 1].question}
-              </div>
+              <div className="text-lg leading-none">{quiz.question}</div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-              {quizzes[search - 1].quizAnswers.map((answer) => (
+              {quiz.quizAnswers.map((answer) => (
                 <div key={answer.itemIndex} className="flex items-center gap-4">
                   <Checkbox
                     {...register("items")}

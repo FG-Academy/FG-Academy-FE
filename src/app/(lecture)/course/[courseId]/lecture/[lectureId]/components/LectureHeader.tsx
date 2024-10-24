@@ -26,18 +26,6 @@ export default function MainHeader({ courseId, lectureId }: Props) {
   const { duration } = useDurationStore((state) => state);
   const seconds = useSecondsStore((state) => state.seconds);
 
-  const textRef = useRef<HTMLSpanElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-
-  useEffect(() => {
-    if (textRef.current && containerRef.current) {
-      setIsOverflowing(
-        textRef.current.scrollWidth > containerRef.current.clientWidth
-      );
-    }
-  }, [course, lectureId]);
-
   if (!course) {
     return <Skeleton className="w-full h-[56px] rounded-full" />; // Skeleton 컴포넌트를 사용
   }
@@ -56,18 +44,16 @@ export default function MainHeader({ courseId, lectureId }: Props) {
       </Link>
       <div className="flex flex-row justify-between items-center w-full space-x-1">
         <div className="relative flex overflow-x-hidden">
-          <span
-            // ref={textRef}
-            className="break-words"
-            // className={`${
-            //   isOverflowing ? "pl-[100%] animate-marquee whitespace-nowrap" : ""
-            // }`}
-          >
+          <span className="break-words">
             {
               course.lectures.find((l) => l.lectureId === lectureId)
                 ?.lectureNumber
             }
-            강: {course.lectures.find((l) => l.lectureId === lectureId)?.title}
+            강:{" "}
+            {
+              course.lectures.find((l) => l.lectureId === lectureId)
+                ?.lectureTitle
+            }
           </span>
         </div>
         {!(
@@ -77,7 +63,9 @@ export default function MainHeader({ courseId, lectureId }: Props) {
             {Math.floor(seconds / 60)}분/
             {Math.round(duration / 60)}분(
             {`${
-              Math.floor((seconds / (duration - 3)) * 100) >= 100
+              !seconds || !duration
+                ? 0
+                : Math.floor((seconds / (duration - 3)) * 100) >= 100
                 ? 100
                 : Math.floor((seconds / (duration - 3)) * 100)
             }%`}

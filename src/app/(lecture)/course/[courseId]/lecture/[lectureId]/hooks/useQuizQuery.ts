@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getQuiz } from "../lib/getQuiz";
+import { getOneQuiz, getQuiz } from "../lib/getQuiz";
 import { IQuiz, IQuizAnswer, IQuizSubmit } from "@/model/quiz";
 
 interface Quiz extends IQuiz {
@@ -16,6 +16,18 @@ export const useQuizQuery = (
   return useQuery<Quiz[]>({
     queryKey: ["quizzes", lectureId, accessToken],
     queryFn: () => getQuiz(lectureId, accessToken),
+    enabled: !!accessToken,
+  });
+};
+
+export const useOneQuizQuery = (
+  quizId: number,
+  accessToken: string,
+  options?: { enabled?: boolean }
+) => {
+  return useQuery<Quiz>({
+    queryKey: ["quizzes", quizId, accessToken],
+    queryFn: () => getOneQuiz(quizId, accessToken),
     enabled: !!accessToken,
   });
 };

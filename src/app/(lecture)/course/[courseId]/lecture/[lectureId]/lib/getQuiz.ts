@@ -16,3 +16,22 @@ export async function getQuiz(lectureId: number, accessToken: string) {
 
   return response.json();
 }
+
+export async function getOneQuiz(quizId: number, accessToken: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/quizzes/${quizId}`,
+    {
+      next: {
+        tags: ["quiz"],
+      },
+      headers: { authorization: `Bearer ${accessToken}` },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to get lectures");
+  }
+
+  return response.json();
+}

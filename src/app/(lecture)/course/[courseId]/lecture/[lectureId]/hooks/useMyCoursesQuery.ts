@@ -11,6 +11,7 @@ interface Quiz extends IQuiz {
 }
 interface Lecture extends ILecture {
   quizzes: Quiz[];
+  lectureTitle: string;
   // lectureTimeRecords: ILectureTimeRecord[];
 }
 interface MyCourseResponse extends ICourse {

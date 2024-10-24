@@ -25,6 +25,7 @@ import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 import { useProgressQuery } from "../hooks/useProgressQuery";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSidebarQuery } from "../hooks/useSidebarQuery";
 
 type Props = {
   courseId: number;
@@ -37,12 +38,13 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   const userLevel = session?.user.level;
 
   const searchParams = useSearchParams();
-  const currentQuizIndex = parseInt(searchParams.get("quizIndex") as string);
+  const currentQuizId = parseInt(searchParams.get("quizId") as string);
   const pathname = usePathname();
   const isMobile = useIsMobile();
 
   const { data: progress } = useProgressQuery(accessToken, courseId);
-  const { data: myCourse } = useMyCoursesQuery(accessToken, courseId);
+  // const { data: myCourse } = useMyCoursesQuery(accessToken, courseId);
+  const { data: sidebar } = useSidebarQuery(accessToken, courseId);
 
   const [isActiveNavbar, changeActiveNavbar] = useState(!isMobile);
   useEffect(() => {
@@ -52,11 +54,11 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   // if (!progress || !myCourse) {
   //   return <Loading />;
   // }
-  if (!progress || !myCourse) {
+  if (!progress || !sidebar) {
     return <Skeleton className="w-[400px] h-screen bg-gray-200 rounded-lg" />;
   }
 
-  const currentLecture = myCourse.lectures.find(
+  const currentLecture = sidebar.lectures.find(
     (lecture) => lecture.lectureId === lectureId
   );
 
@@ -91,23 +93,22 @@ export default function LectureNav({ courseId, lectureId }: Props) {
             />
           </div>
           <div className="text-lg">
-            {myCourse.title.replace(/\(\d+\)\s*/, "")}
+            {sidebar.title.replace(/\(\d+\)\s*/, "")}
           </div>
           <div className="flex flex-col space-y-2 text-gray-500">
             <p>
-              수강 기한 : {formatDate(new Date(myCourse.openDate))} ~{" "}
-              {formatDate(new Date(myCourse.finishDate))}
+              수강 기한 : {formatDate(new Date(sidebar.openDate))} ~{" "}
+              {formatDate(new Date(sidebar.finishDate))}
             </p>
             <p>
-              진도율 : {progress.completedCount}강/{myCourse.lectures.length}강
-              (
+              진도율 : {progress.completedCount}강/{sidebar.lectures.length}강 (
               {Math.floor(
-                (progress.completedCount / myCourse.lectures.length) * 100
+                (progress.completedCount / sidebar.lectures.length) * 100
               )}
               %)
             </p>
             <Progress
-              value={(progress.completedCount / myCourse.lectures.length) * 100}
+              value={(progress.completedCount / sidebar.lectures.length) * 100}
               indicatorColor="bg-blue-500"
             />
             <p className="text-black text-xs mt-2">
@@ -124,15 +125,9 @@ export default function LectureNav({ courseId, lectureId }: Props) {
           // defaultChecked
           collapsible
         >
-          {myCourse.lectures.map((lecture, index) => {
-            // 현재 강의가 완료되었거나, 완료한 마지막 강의의 바로 다음 강의이거나, 첫 번째 강의인 경우에만 클릭 가능
-            // const lectureIds = progress.lectureProgresses.map((lp) => {
-            //   if (lp.completed === true) {
-            //     return lp.lectureId;
-            //   }
-            // });
+          {sidebar.lectures.map((lecture, index) => {
             const isClickable =
-              myCourse.category.name === "세미나" ||
+              sidebar.category.name === "세미나" ||
               userLevel === "admin" ||
               userLevel === "manager" ||
               userLevel === "tutor" ||
@@ -147,12 +142,12 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                 value={lecture.lectureNumber.toString()}
               >
                 <AccordionTrigger className="text-start break-all whitespace-normal">
-                  {lecture.lectureNumber}강: {lecture.title}
+                  {lecture.lectureNumber}강: {lecture.lectureTitle}
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className={`flex flex-col bg-white`}>
                     <Link
-                      href={`/course/${lecture.courseId}/lecture/${lecture.lectureId}`}
+                      href={`/course/${courseId}/lecture/${lecture.lectureId}`}
                       className={`p-4 px-6 cursor-pointer grow flex flex-row items-center justify-start space-x-2 hover:text-blue-500 ${
                         !(
                           pathname.includes("multiple") ||
@@ -182,21 +177,21 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                       </div>
                     </Link>
                     {lecture.quizzes.length > 0 &&
-                      lecture.quizzes.map((quiz) => {
+                      lecture.quizzes.map((quiz, quizIdx) => {
                         return (
                           <Link
                             key={quiz.quizId}
-                            href={`/course/${lecture.courseId}/lecture/${
+                            href={`/course/${courseId}/lecture/${
                               lecture.lectureId
                             }/${
                               quiz.quizType === "multiple"
                                 ? "multiple"
                                 : "descriptive"
-                            }?quizIndex=${quiz.quizIndex}`}
+                            }?quizId=${quiz.quizId}`}
                             className={`p-4 px-6 cursor-pointer flex flex-row items-center justify-start space-x-2 hover:text-blue-500 ${
                               ((quiz.quizType === "multiple" &&
-                                currentQuizIndex === quiz.quizIndex) ||
-                                (currentQuizIndex === quiz.quizIndex &&
+                                currentQuizId === quiz.quizId) ||
+                                (currentQuizId === quiz.quizId &&
                                   pathname.includes("descriptive"))) &&
                               lectureId === lecture.lectureId
                                 ? "bg-blue-100 font-semibold"
@@ -229,21 +224,21 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                             </div>
                             <div>
                               {quiz.quizType === "multiple"
-                                ? `${lecture.lectureNumber}-${quiz.quizIndex}번 객관식 퀴즈`
-                                : `${lecture.lectureNumber}-${quiz.quizIndex}번 주관식 퀴즈`}
+                                ? `${lecture.lectureNumber}-${
+                                    quizIdx + 1
+                                  }번 객관식 퀴즈`
+                                : `${lecture.lectureNumber}-${
+                                    quizIdx + 1
+                                  }번 주관식 퀴즈`}
                             </div>
                             <div className="flex flex-row grow justify-end space-x-2">
                               <FaCircleCheck
                                 size={24}
                                 className={`${
                                   (quiz.quizType === "descriptive" &&
-                                    quiz.quizSubmits.length > 0) ||
+                                    quiz.submitted) ||
                                   (quiz.quizType === "multiple" &&
-                                    quiz.quizSubmits.length > 0 &&
-                                    quiz.quizSubmits.some((submit) => {
-                                      return submit.status === 1;
-                                    })) ||
-                                  quiz.quizSubmits.length >= 3
+                                    quiz.submitted)
                                     ? "text-blue-500"
                                     : "text-gray-300"
                                 }`}
