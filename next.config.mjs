@@ -27,6 +27,18 @@ const nextConfig = {
         port: "",
         pathname: "/asset/**",
       },
+      {
+        protocol: "http",
+        hostname: "3.35.133.209",
+        port: "",
+        pathname: "/asset/**",
+      },
+      {
+        protocol: "https",
+        hostname: "3.35.133.209",
+        port: "",
+        pathname: "/asset/**",
+      },
     ],
   },
   reactStrictMode: false,
