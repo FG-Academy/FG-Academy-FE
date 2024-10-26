@@ -1,0 +1,37 @@
+# Dockerfile
+FROM node:20.4.0-alpine3.18
+# Set the working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the entire project to the working directory
+COPY . .
+
+COPY .env ./.env.production
+# Build the Next.js application for production
+RUN npm run build
+# Set the environment variable to run the Next.js application in production mode
+ENV NODE_ENV production
+# ENV PORT 3000
+
+# COPY --from=builder /usr/src/app/public ./public
+# COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/standalone ./
+# COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/static
+
+# Expose the port that the application will run on
+EXPOSE 3000
+
+ENV NEXT_PUBLIC_IMAGE_URL=http://host.docker.internal
+# ENV NEXT_PUBLIC_API_URL=http://gongcheck.p-e.kr
+# ARG NEXT_PUBLIC_BASE_HOST
+# ENV NEXT_PUBLIC_BASE_HOST=http://gongcheck.p-e.kr
+# ARG AUTH_TRUST_HOST
+# ENV AUTH_TRUST_HOST=1
+
+# Start the application
+CMD ["npm", "start"]
