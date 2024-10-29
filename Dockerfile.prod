@@ -27,11 +27,11 @@ ENV NODE_ENV production
 EXPOSE 3000
 
 ENV NEXT_PUBLIC_IMAGE_URL=http://host.docker.internal
-# ENV NEXT_PUBLIC_API_URL=http://gongcheck.p-e.kr
-# ARG NEXT_PUBLIC_BASE_HOST
-# ENV NEXT_PUBLIC_BASE_HOST=http://gongcheck.p-e.kr
-# ARG AUTH_TRUST_HOST
-# ENV AUTH_TRUST_HOST=1
+ENV NEXT_PUBLIC_API_URL=http://fgcacademy.co.kr
+ARG NEXT_PUBLIC_BASE_HOST
+ENV NEXT_PUBLIC_BASE_HOST=http://fgcacademy.co.kr
+ARG AUTH_TRUST_HOST
+ENV AUTH_TRUST_HOST=1
 
 # Start the application
 CMD ["npm", "start"]
