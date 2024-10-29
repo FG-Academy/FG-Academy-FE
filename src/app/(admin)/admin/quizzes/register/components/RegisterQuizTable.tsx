@@ -38,9 +38,9 @@ import RegisterQuizDialog from "./RegisterQuizDialog";
 import { DataTablePagination } from "../../../users/components/DataTablePagination";
 
 declare module "@tanstack/react-table" {
-  interface FilterFns {
-    fuzzy: FilterFn<unknown>;
-  }
+  // interface FilterFns {
+  //   fuzzy: FilterFn<unknown>;
+  // }
   interface FilterMeta {
     itemRank: RankingInfo;
   }

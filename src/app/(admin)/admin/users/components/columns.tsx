@@ -40,36 +40,27 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        // <DataTableColumnHeader column={column} title="이름" />
-        <SortingHeader column={column} title="이름" />
-      );
+    header: () => {
+      return <div className="text-center">이름</div>;
     },
     cell: (info) => info.getValue(),
   },
   {
     accessorKey: "level",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="레벨" />;
-    },
-    meta: {
-      filterVariant: "select",
+    header: () => {
+      return <div className="text-center">레벨</div>;
     },
   },
   {
     accessorKey: "yearsOfService",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="근속년수" />;
-    },
-    meta: {
-      filterVariant: "select",
+    header: () => {
+      return <div className="text-center">근속년수</div>;
     },
   },
   {
     accessorKey: "positionLabel",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="직급" />;
+    header: () => {
+      return <div className="text-center">직분</div>;
     },
     cell: ({ row }) => {
       const positionLabel = row.getValue("positionLabel") as string;
@@ -78,30 +69,21 @@ export const columns: ColumnDef<User>[] = [
 
       return <div>{positionLabel}</div>;
     },
-    meta: {
-      filterVariant: "select",
-    },
   },
   {
     accessorKey: "departmentLabel",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="부서" />;
+    header: () => {
+      return <div className="text-center">부서</div>;
     },
     cell: ({ row }) => {
       const departmentLabel = row.getValue("departmentLabel") as string;
-      // const departmentLabel =
-      //   departments.find((dept) => dept.value === departmentValue)?.label ||
-      //   "N/A";
       return <div>{departmentLabel}</div>;
-    },
-    meta: {
-      filterVariant: "select",
     },
   },
   {
     accessorKey: "churchName",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="교회" />;
+    header: () => {
+      return <div className="text-center">교회</div>;
     },
     cell: ({ row }) => {
       const churchValue = row.getValue("churchName");
@@ -113,20 +95,14 @@ export const columns: ColumnDef<User>[] = [
           : "정보 없음";
       return <div>{churchLabel}</div>;
     },
-    meta: {
-      filterVariant: "select",
-    },
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="가입일자" />;
+    header: () => {
+      return <div className="text-center">가입일자</div>;
     },
     cell: ({ row }) => {
       return <div>{formatDate(new Date(row.getValue("createdAt")))}</div>;
-    },
-    meta: {
-      filterVariant: "text",
     },
   },
 ];

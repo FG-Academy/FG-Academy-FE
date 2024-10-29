@@ -5,14 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  SortingState,
-  getSortedRowModel,
-  getPaginationRowModel,
-  FilterFn,
-  getFilteredRowModel,
-  ColumnFiltersState,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
+  PaginationState,
 } from "@tanstack/react-table";
 
 import {
@@ -23,8 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useMemo, useState } from "react";
-// import { DataTablePagination } from "./DataTablePagination";
+import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,88 +27,44 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-} from "@tanstack/match-sorter-utils";
 import DescriptiveQuizInfoDialog from "./DescriptiveQuizDialog";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
 import { DataTablePagination } from "../../../users/components/DataTablePagination";
-// import Filter from "./Filter";
 import { useSession } from "next-auth/react";
 import { QuizSubmitResponse } from "../hooks/useQuizSubmitQuery";
-import { Filter } from "./Filter";
-
-declare module "@tanstack/react-table" {
-  // interface FilterFns {
-  //   fuzzy: FilterFn<unknown>;
-  // }
-  interface FilterMeta {
-    itemRank: RankingInfo;
-  }
-}
 
 interface DataTableProps<TData, TValue> {
+  totalPages: number;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pagination: PaginationState;
+  setPagination: Dispatch<SetStateAction<PaginationState>>;
 }
 
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value);
-
-  // Store the itemRank info
-  addMeta({
-    itemRank,
-  });
-
-  // Return if the item should be filtered in/out
-  return itemRank.passed;
-};
-
-export function DescriptiveDataTableQuiz<
+export function DescriptiveDataTableQuiz2<
   TData extends QuizSubmitResponse,
   TValue
->({ columns, data }: DataTableProps<TData, TValue>) {
+>({
+  totalPages,
+  columns,
+  data,
+  pagination,
+  setPagination,
+}: DataTableProps<TData, TValue>) {
   const { data: session } = useSession();
-  const myDepartment = session?.user?.department;
-  const userLevel = session?.user?.level;
-
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState<SortingState>([]);
-  // const [rowSelection, setRowSelection] = useState({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const { open, setOpen } = useOpenDescriptiveDialogStore((state) => state);
 
-  const filteredData = useMemo(() => {
-    if (userLevel === "admin") {
-      return data;
-    } else if (userLevel === "tutor") {
-      return data.filter((row) => row.departmentName === myDepartment);
-    } else {
-      return [];
-    }
-  }, [userLevel, data, myDepartment]);
-
   const table = useReactTable({
-    data: filteredData,
+    data,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
-    // onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
-    onColumnFiltersChange: setColumnFilters,
-    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    globalFilterFn: fuzzyFilter,
+    manualPagination: true,
+    manualFiltering: true,
+    pageCount: totalPages,
+    state: {
+      pagination,
+    },
     initialState: {
       columnVisibility: {
         userId: false,
@@ -129,12 +77,7 @@ export function DescriptiveDataTableQuiz<
       minSize: 50, //enforced during column resizing
       maxSize: 500, //enforced during column resizing
     },
-    state: {
-      columnFilters,
-      globalFilter,
-      sorting,
-      // rowSelection,
-    },
+    onPaginationChange: setPagination,
   });
 
   return (
@@ -153,11 +96,6 @@ export function DescriptiveDataTableQuiz<
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                      {header.column.getCanFilter() ? (
-                        <div>
-                          <Filter column={header.column} />
-                        </div>
-                      ) : null}
                     </TableHead>
                   );
                 })}
@@ -193,7 +131,7 @@ export function DescriptiveDataTableQuiz<
             )}
           </TableBody>
         </Table>
-        {/* <DataTablePagination table={table} /> */}
+        <DataTablePagination table={table} pagination={pagination} />
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent

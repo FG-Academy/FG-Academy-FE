@@ -28,17 +28,8 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
   {
     accessorKey: "name",
     size: 100,
-    header: ({ column }) => {
-      return (
-        <Button
-          className="w-full"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          이름
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div className="text-center">이름</div>;
     },
     cell: ({ row }) => {
       return <div className="text-center">{row.getValue("name")}</div>;
@@ -47,8 +38,8 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
   },
   {
     accessorKey: "positionLabel",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="직분" />;
+    header: () => {
+      return <div className="text-center">직분</div>;
     },
     cell: ({ row }) => {
       const positionLabel = row.getValue("positionLabel") as string;
@@ -62,8 +53,8 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
 
   {
     accessorKey: "departmentLabel",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="부서" />;
+    header: () => {
+      return <div className="text-center">부서</div>;
     },
     cell: ({ row }) => {
       const departmentValue = row.getValue("departmentLabel") as string;
@@ -76,8 +67,8 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
   },
   {
     accessorKey: "courseTitle",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="코스 이름" />;
+    header: () => {
+      return <div className="text-center">코스이름</div>;
     },
     cell: ({ row }) => {
       return <div className="text-center">{row.getValue("courseTitle")}</div>;
@@ -89,20 +80,10 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
     size: 50,
     maxSize: 50,
   },
-  // {
-  //   accessorKey: "lectureTitle",
-  //   header: ({ column }) => {
-  //     return <SortingHeader column={column} title="강의 이름" />;
-  //   },
-  //   cell: ({ row }) => {
-  //     return <div className="text-center">{row.getValue("lectureTitle")}</div>;
-  //   },
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "quizType",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="퀴즈 유형" />;
+    header: () => {
+      return <div className="text-center">퀴즈 유형</div>;
     },
     cell: ({ row }) => {
       const quizType = row.getValue("quizType") as string;
@@ -115,8 +96,8 @@ export const DescriptiveQuizColumn: ColumnDef<QuizSubmitResponse>[] = [
   },
   {
     accessorKey: "answerType",
-    header: ({ column }) => {
-      return <SortingHeader column={column} title="채점 현황" />;
+    header: () => {
+      return <div className="text-center">채점 현황</div>;
     },
     cell: ({ row }) => {
       const answerType = row.getValue("answerType") as string;

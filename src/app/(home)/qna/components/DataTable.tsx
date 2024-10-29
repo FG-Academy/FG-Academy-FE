@@ -38,9 +38,9 @@ import DebouncedInput from "@/app/(admin)/admin/users/components/DebouncedInput"
 import { useRouter } from "next/navigation";
 
 declare module "@tanstack/react-table" {
-  interface FilterFns {
-    fuzzy: FilterFn<unknown>;
-  }
+  // interface FilterFns {
+  //   fuzzy: FilterFn<unknown>;
+  // }
   interface FilterMeta {
     itemRank: RankingInfo;
   }

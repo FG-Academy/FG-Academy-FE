@@ -60,7 +60,7 @@ export const {
           );
           const newTokens = await response.json();
 
-          if (!response.ok) throw response.body;
+          if (!response.ok) throw newTokens;
 
           return {
             ...token,

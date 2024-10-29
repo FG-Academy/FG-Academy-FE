@@ -86,7 +86,7 @@ export default function Header() {
                       session.user.level === "manager") && (
                       <Link
                         className="w-full text-left hover:text-blue-900"
-                        href="/admin/users"
+                        href="/admin/videos"
                         onClick={() => {
                           setIsOpen(false);
                         }}
@@ -201,7 +201,7 @@ export default function Header() {
               (session.user.level === "admin" ||
                 session.user.level === "tutor" ||
                 session.user.level === "manager") && (
-                <Link className="mr-5 hover:text-blue-900" href="/admin/users">
+                <Link className="mr-5 hover:text-blue-900" href="/admin/videos">
                   관리자 페이지
                 </Link>
               )}

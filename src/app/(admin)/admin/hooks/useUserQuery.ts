@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "../lib/getAllUsers";
 import { getOneUser } from "../lib/getOneUser";
 import { IUser } from "@/model/user";
@@ -42,20 +42,44 @@ export interface UserProfileResponse extends IUser {
   enrollments: Enrollment[];
 }
 
+export interface UserFilter {
+  name: string;
+  level: string;
+  position: string;
+  department: string;
+  church: string;
+}
+
 export interface User extends IUser {
   departmentLabel: string;
   positionLabel: string;
 }
+interface Result {
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: User[];
+}
+
+interface ApiResponse {
+  result: Result;
+}
+
 /** [관리자 화면 - 유저, 객관식 퀴즈] 전체 유저 가져오기 */
 export const useFetchAllUserListQuery = (
   accessToken: string,
+  pagination: { pageIndex: number; pageSize: number },
+  filters: UserFilter,
+  sortBy: string,
   options?: {
     enabled?: boolean;
   }
 ) => {
-  return useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => getAllUsers(accessToken),
+  return useQuery<ApiResponse>({
+    queryKey: ["users", pagination, filters, sortBy],
+    queryFn: () => getAllUsers(accessToken, pagination, filters, sortBy),
+    placeholderData: keepPreviousData,
     enabled: !!accessToken,
   });
 };

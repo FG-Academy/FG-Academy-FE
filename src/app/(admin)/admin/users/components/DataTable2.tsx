@@ -5,14 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  SortingState,
-  getSortedRowModel,
-  getPaginationRowModel,
-  FilterFn,
-  getFilteredRowModel,
-  ColumnFiltersState,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
+  PaginationState,
 } from "@tanstack/react-table";
 
 import {
@@ -23,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { DataTablePagination } from "./DataTablePagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,44 +28,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Search } from "lucide-react";
-import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import { UserInfoDialog } from "./UserInfoDialog";
-import DebouncedInput from "./DebouncedInput";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
 import { Filter } from "../../quizzes/descriptive/components/Filter";
 import { IUser } from "@/model/user";
 import { Department, Position } from "@/app/types/type";
 
-declare module "@tanstack/react-table" {
-  interface FilterMeta {
-    itemRank: RankingInfo;
-  }
-}
-
 interface DataTableProps<TData, TValue> {
+  totalPages: number;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pagination: PaginationState;
+  setPagination: Dispatch<SetStateAction<PaginationState>>;
 }
 
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value);
-
-  addMeta({
-    itemRank,
-  });
-
-  return itemRank.passed;
-};
-
-export function DataTable<TData, TValue>({
+export function DataTable2<TData, TValue>({
+  totalPages,
   columns,
   data,
+  pagination,
+  setPagination,
 }: DataTableProps<TData, TValue>) {
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [userId, setUserId] = useState(0);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [userId, setUserId] = useState();
   const [userProfile, setUserProfile] = useState<Partial<IUser>>({
     userId: 0,
     birthDate: "",
@@ -91,20 +68,13 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
-    onColumnFiltersChange: setColumnFilters,
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    // onRowSelectionChange: setRowSelection,
-    getFilteredRowModel: getFilteredRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    globalFilterFn: fuzzyFilter,
+    manualPagination: true,
+    manualFiltering: true,
+    pageCount: totalPages,
+    state: {
+      pagination,
+    },
     initialState: {
       columnVisibility: {
         birthDate: false,
@@ -115,29 +85,23 @@ export function DataTable<TData, TValue>({
         position: false,
       },
     },
-    state: {
-      columnFilters,
-      globalFilter,
-      sorting,
-      // rowSelection,
-    },
+    onPaginationChange: setPagination,
   });
-  console.log(table.getState().columnFilters);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex flex-col justify-between flex-1 overflow-y-auto">
+      <div className="flex flex-col w-full justify-between flex-1 overflow-y-auto">
         <div className="flex flex-col justify-start overflow-y-auto">
           <DialogContent
             onOpenAutoFocus={(e) => e.preventDefault()}
-            className="w-[600px] h-[646px] overflow-y-auto"
+            className=" h-[646px] overflow-y-auto"
           >
             <DialogHeader>
               <DialogTitle>유저 관리</DialogTitle>
               <DialogDescription>유저 정보를 수정합니다.</DialogDescription>
             </DialogHeader>
             <div className="flex items-center space-x-2">
-              <UserInfoDialog userId={userId} userProfile={userProfile} />
+              <UserInfoDialog userId={userId!} userProfile={userProfile} />
             </div>
             <DialogFooter className="sm:justify-between">
               <DialogClose asChild>
@@ -150,17 +114,7 @@ export function DataTable<TData, TValue>({
               </Button>
             </DialogFooter>
           </DialogContent>
-          <div className="relative flex items-center justify-start flex-1 w-full h-full mb-6 mr-auto md:grow-0">
-            <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
-            <DebouncedInput
-              value={globalFilter ?? ""}
-              onChange={(value) => setGlobalFilter(String(value))}
-              type="search"
-              placeholder="검색..."
-              className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
-            />
-          </div>
-          <Table className="container relative justify-start py-2 mx-auto overflow-y-auto">
+          <Table className="container relative py-2 mx-auto overflow-y-auto">
             <TableHeader className="sticky top-0 bg-gray-100">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -173,11 +127,6 @@ export function DataTable<TData, TValue>({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                        {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} />
-                          </div>
-                        ) : null}
                       </TableHead>
                     );
                   })}
@@ -230,7 +179,7 @@ export function DataTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        {/* <DataTablePagination table={table} /> */}
+        <DataTablePagination table={table} pagination={pagination} />
       </div>
     </Dialog>
   );
