@@ -42,8 +42,6 @@ import {
 } from "@tanstack/match-sorter-utils";
 import DescriptiveQuizInfoDialog from "./DescriptiveQuizDialog";
 import useOpenDescriptiveDialogStore from "@/store/useOpenDescriptiveDialogStore";
-import { DataTablePagination } from "../../../users/components/DataTablePagination";
-// import Filter from "./Filter";
 import { useSession } from "next-auth/react";
 import { QuizSubmitResponse } from "../hooks/useQuizSubmitQuery";
 import { Filter } from "./Filter";

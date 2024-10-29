@@ -10,6 +10,7 @@ import {
   getPaginationRowModel,
   FilterFn,
   getFilteredRowModel,
+  PaginationState,
 } from "@tanstack/react-table";
 
 import {
@@ -71,6 +72,10 @@ export function RegisterQuizTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   //! zustand 새로 만들 것
   const { open, setOpen } = useOpenDialogStore((state) => state);
@@ -147,7 +152,7 @@ export function RegisterQuizTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} pagination={pagination} />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}
