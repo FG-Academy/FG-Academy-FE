@@ -3,12 +3,6 @@ const nextConfig = {
   // output: "standalone",
   images: {
     remotePatterns: [
-      // {
-      //   protocol: "http",
-      //   hostname: "localhost",
-      //   port: "",
-      //   pathname: "/asset/**",
-      // },
       {
         protocol: "http",
         hostname: "localhost",
@@ -23,19 +17,13 @@ const nextConfig = {
       },
       {
         protocol: "http",
-        hostname: "43.202.237.172",
-        port: "",
-        pathname: "/asset/**",
-      },
-      {
-        protocol: "http",
-        hostname: "43.202.24.242",
+        hostname: "fgcacademy.co.kr",
         port: "",
         pathname: "/asset/**",
       },
       {
         protocol: "https",
-        hostname: "43.202.24.242",
+        hostname: "fgcacademy.co.kr",
         port: "",
         pathname: "/asset/**",
       },
