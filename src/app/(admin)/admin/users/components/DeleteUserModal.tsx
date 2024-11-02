@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useDeleteUserMutation } from "../hook/useDeleteUserMutation";
 import { useSession } from "next-auth/react";
-import { dlopen } from "process";
 
 type Props = {
   userId: number;

@@ -15,6 +15,7 @@ type Props = {
   courseId: number;
   lectureId: number;
 };
+
 export default function MainHeader({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
@@ -59,9 +60,10 @@ export default function MainHeader({ courseId, lectureId }: Props) {
         {!(
           pathname.includes("multiple") || pathname.includes("descriptive")
         ) && (
-          <div className="text-center w-[140px] text-nowrap">
+          <div className="text-center text-nowrap px-4">
             {Math.floor(seconds / 60)}분/
-            {Math.round(duration / 60)}분(
+            {Math.floor(duration / 60)}분
+            {/* (
             {`${
               !seconds || !duration
                 ? 0
@@ -69,7 +71,7 @@ export default function MainHeader({ courseId, lectureId }: Props) {
                 ? 100
                 : Math.floor((seconds / (duration - 3)) * 100)
             }%`}
-            )
+            ) */}
           </div>
         )}
       </div>

@@ -47,13 +47,11 @@ export default function LectureNav({ courseId, lectureId }: Props) {
   const { data: sidebar } = useSidebarQuery(accessToken, courseId);
 
   const [isActiveNavbar, changeActiveNavbar] = useState(!isMobile);
+
   useEffect(() => {
     changeActiveNavbar(!isMobile);
   }, [isMobile]);
 
-  // if (!progress || !myCourse) {
-  //   return <Loading />;
-  // }
   if (!progress || !sidebar) {
     return <Skeleton className="w-[400px] h-screen bg-gray-200 rounded-lg" />;
   }
@@ -132,8 +130,17 @@ export default function LectureNav({ courseId, lectureId }: Props) {
               userLevel === "manager" ||
               userLevel === "tutor" ||
               lecture.lectureNumber === 1 ||
-              lecture.lectureNumber <= progress.completedCount + 1 || // 완료한 강의 + 1까지 클릭 가능하게 함
-              index === 0;
+              lecture.lectureNumber < progress.completedCount + 1 || // 완료한 강의 + 1까지 클릭 가능하게 함
+              index === 0 ||
+              (lecture.lectureNumber === progress.completedCount + 1 &&
+                (sidebar.lectures.find(
+                  (lec) => lec.lectureNumber === progress.completedCount
+                )?.quizzes.length === 0 ||
+                  sidebar.lectures
+                    .find(
+                      (lec) => lec.lectureNumber === progress.completedCount
+                    )
+                    ?.quizzes.at(-1)?.submitted));
 
             return (
               <AccordionItem
@@ -198,6 +205,26 @@ export default function LectureNav({ courseId, lectureId }: Props) {
                                 : ""
                             }`}
                             onClick={(e) => {
+                              // 이전 퀴즈가 제출되지 않은 경우 막기
+                              if (
+                                quizIdx > 0 &&
+                                !lecture.quizzes[quizIdx - 1].submitted &&
+                                !(
+                                  userLevel === "admin" ||
+                                  userLevel === "manager" ||
+                                  userLevel === "tutor"
+                                )
+                              ) {
+                                e.preventDefault();
+                                toast({
+                                  title: "이전 퀴즈를 먼저 풀어주세요",
+                                  variant: "destructive",
+                                  duration: 2000,
+                                });
+                                return false;
+                              }
+
+                              // 강의 미수강 상태일 때 막기
                               if (
                                 !progress.lectureProgresses.find(
                                   (lp) => lp.lectureId === lecture.lectureId

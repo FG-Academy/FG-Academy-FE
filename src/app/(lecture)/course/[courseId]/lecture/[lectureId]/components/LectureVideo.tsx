@@ -2,18 +2,16 @@
 
 import useDurationStore from "@/store/useDurationStore";
 import { useSecondsStore } from "@/store/useTimerStore";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { saveSeconds } from "../lib/saveSeconds";
-import Loading from "../loading";
 import { useSession } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
-import { useLectureTimeRecordsQuery } from "../hooks/useLectureTimeRecords";
 import { useMyCoursesQuery } from "../hooks/useMyCoursesQuery";
 import { useProgressQuery } from "../hooks/useProgressQuery";
 import { useCompleteMutations } from "../lib/updateCompleted";
 import { Skeleton } from "@/components/ui/skeleton";
+import CompleteModal from "./CompleteModal";
 
 type Props = {
   courseId: number;
@@ -23,6 +21,9 @@ type Props = {
 export default function LectureVideo({ courseId, lectureId }: Props) {
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken as string;
+
+  const [completed, setCompleted] = useState<boolean>(false);
+  const [nextUrl, setNextUrl] = useState<string | null>(null);
 
   const { data: course } = useMyCoursesQuery(accessToken, courseId);
   const { data: progress, refetch: refetchProgress } = useProgressQuery(
@@ -35,11 +36,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     courseId,
     refetchProgress,
   });
-
-  // const { data: lectureTimeRecord } = useLectureTimeRecordsQuery(
-  //   lectureId,
-  //   accessToken
-  // );
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { duration, setDuration } = useDurationStore((state) => state);
@@ -66,7 +62,34 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
     }
   }, [progress, lectureId, setSeconds]);
 
-  // TODO: 얘는 탭 닫을 때 경고창 뜨는 건데 이때 PATCH 보내도록 하는 방식 고려 중
+  // 다음 URL 설정
+  useEffect(() => {
+    if (course && lectureId) {
+      const actualLectureIndex = course.lectures.findIndex(
+        (lecture) => lecture.lectureId === lectureId
+      );
+
+      if (actualLectureIndex !== -1) {
+        const actualLecture = course.lectures[actualLectureIndex];
+
+        if (actualLecture.quizzes?.length > 0) {
+          const quiz = actualLecture.quizzes[0];
+          setNextUrl(
+            `/course/${courseId}/lecture/${lectureId}/${
+              quiz.quizType === "multiple" ? "multiple" : "descriptive"
+            }?quizId=${quiz.quizId}`
+          );
+        } else {
+          const nextLecture = course.lectures[actualLectureIndex + 1];
+          if (nextLecture) {
+            setNextUrl(`/course/${courseId}/lecture/${nextLecture.lectureId}`);
+          } else {
+            setNextUrl(null);
+          }
+        }
+      }
+    }
+  }, [course, courseId, lectureId]);
 
   if (!course || !progress) {
     return <Skeleton className="w-full h-full bg-gray-200 rounded-lg" />;
@@ -79,50 +102,23 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   // 타이머 시작
   const startTimer = () => {
     if (
-      !intervalRef.current &&
-      seconds < duration &&
-      !progress.lectureProgresses.find((lp) => lp.lectureId === lectureId)
+      !intervalRef.current && // 새 타이머이면서
+      seconds < duration && // 현재 재생 시간이 영상 시간보다 작고
+      !progress.lectureProgresses.find((lp) => lp.lectureId === lectureId) // 수강한 강의가 아닐 때
         ?.completed
-      // !lectureTimeRecord.status
     ) {
       intervalRef.current = setInterval(() => {
         increaseSeconds();
         const currentSeconds = useSecondsStore.getState().seconds;
-        if (currentSeconds === duration - 3) {
-          try {
-            saveSeconds(
-              currentSeconds + 3,
-              actualLecture?.lectureId as number,
-              accessToken
-            );
-            mutate();
-            if (intervalRef.current) {
-              clearInterval(intervalRef.current);
-              intervalRef.current = null;
-            }
-          } catch {
-            toast({
-              variant: "destructive",
-              title: "오류가 발생했습니다.",
-              duration: 3000,
-            });
-          }
-        }
         if (!(currentSeconds > duration) && currentSeconds % 60 === 0) {
-          saveSeconds(
-            currentSeconds,
-            actualLecture?.lectureId as number,
-            accessToken
-          );
+          saveSeconds(currentSeconds, lectureId, accessToken);
         }
       }, 1 * 1000);
     }
   };
 
   // 타이머 멈춤
-
   const stopTimer = () => {
-    // console.log("stop", intervalRef);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -130,7 +126,6 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   };
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
-    // console.log("ready");
     event.target.unMute();
     event.target.pauseVideo();
     event.target.setVolume(50);
@@ -141,6 +136,19 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   };
 
   const onPlayerEnd: YouTubeProps["onEnd"] = (event) => {
+    if (
+      seconds >= duration * 0.9 && // 90% 이상이면서
+      !progress.lectureProgresses.find((lp) => lp.lectureId === lectureId) // 수강한 강의가 아닐 때
+        ?.completed
+    ) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      saveSeconds(0, lectureId, accessToken);
+      mutate();
+      setCompleted(true);
+    }
     event.target.pauseVideo();
     stopTimer();
   };
@@ -160,14 +168,17 @@ export default function LectureVideo({ courseId, lectureId }: Props) {
   };
 
   return (
-    <YouTube
-      className="h-screen"
-      videoId={actualLecture?.videoLink}
-      opts={opts}
-      onReady={onPlayerReady}
-      onPlay={startTimer}
-      onPause={stopTimer}
-      onEnd={onPlayerEnd}
-    />
+    <>
+      <CompleteModal open={completed} nextUrl={nextUrl} />
+      <YouTube
+        className="h-screen"
+        videoId={actualLecture?.videoLink}
+        opts={opts}
+        onReady={onPlayerReady}
+        onPlay={startTimer}
+        onPause={stopTimer}
+        onEnd={onPlayerEnd}
+      />
+    </>
   );
 }

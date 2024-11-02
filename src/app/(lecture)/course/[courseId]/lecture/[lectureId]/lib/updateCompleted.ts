@@ -16,6 +16,7 @@ export function useCompleteMutations({
 }: Props) {
   return useMutation({
     mutationKey: ["updateComplete"],
+    retry: 3,
     mutationFn: async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/completed/${lectureId}/${courseId}`,
@@ -41,16 +42,12 @@ export function useCompleteMutations({
     },
     onSuccess: (data) => {
       refetchProgress();
-      toast({
-        title: "수강을 완료하였습니다.",
-        duration: 3000,
-      });
     },
     onError: (error: any) => {
       toast({
         variant: "destructive",
         title: "잘못된 양식입니다..",
-        description: "잠시 후 다시 시도해주세요.",
+        description: error.message,
       });
       console.error(
         "There was a problem with your fetch operation:",

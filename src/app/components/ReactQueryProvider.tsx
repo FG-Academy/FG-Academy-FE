@@ -15,7 +15,7 @@ export default function ReactQueryProviders({
           retryOnMount: false,
           refetchOnReconnect: true,
           retry: 2, //// API 요청 실패시 재시도 하는 옵션 (설정값 만큼 재시도)
-          retryDelay: 1000,
+          retryDelay: 1500,
           staleTime: 1000 * 60 * 10, // 10분 동안 데이터가 stale 상태이면 refetch
           gcTime: 1000 * 60 * 60,
         },
