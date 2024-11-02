@@ -30,9 +30,9 @@ import {
 } from "@/components/ui/dialog";
 import { UserInfoDialog } from "./UserInfoDialog";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
-import { Filter } from "../../quizzes/descriptive/components/Filter";
 import { IUser } from "@/model/user";
 import { Department, Position } from "@/app/types/type";
+import { useDeleteUserMutation } from "../hook/useDeleteUserMutation";
 
 interface DataTableProps<TData, TValue> {
   totalPages: number;
@@ -100,6 +100,7 @@ export function DataTable2<TData, TValue>({
               <DialogTitle>유저 관리</DialogTitle>
               <DialogDescription>유저 정보를 수정합니다.</DialogDescription>
             </DialogHeader>
+
             <div className="flex items-center space-x-2">
               <UserInfoDialog userId={userId!} userProfile={userProfile} />
             </div>

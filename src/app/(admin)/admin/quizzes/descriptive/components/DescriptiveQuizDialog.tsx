@@ -40,12 +40,14 @@ export default function DescriptiveQuizDialog() {
 
   const { mutate } = useQuizFeedbackMutation(accessToken, userId);
 
-  const [isCorrected, setIsCorrected] = useState(descriptiveQuiz?.status === 1);
+  const [isCorrected, setIsCorrected] = useState(descriptiveQuiz?.status === 1); // 정답인 경우
   const [value, setValue] = useState<string>(
     descriptiveQuiz?.feedbackComment ?? ""
   );
+  const [active, setActive] = useState<boolean>(true); // 재채점토글
 
   useEffect(() => {
+    setActive(false);
     if (descriptiveQuiz) {
       setIsCorrected(descriptiveQuiz.status === 1);
       setValue(descriptiveQuiz.feedbackComment!);
@@ -56,6 +58,7 @@ export default function DescriptiveQuizDialog() {
 
   function onSubmit(quizId: number) {
     mutate({ feedbackComment: value, corrected: isCorrected, quizId: quizId });
+    setActive(false);
   }
 
   return (
@@ -75,7 +78,7 @@ export default function DescriptiveQuizDialog() {
             ? "정답"
             : "오답"}
         </div>
-        {descriptiveQuiz.multipleAnswer === 1 ? (
+        {descriptiveQuiz.multipleAnswer === 1 ? ( // 객관식인 경우
           <div>
             {descriptiveQuiz.quiz.quizAnswers.map((answer) => {
               return (
@@ -96,6 +99,7 @@ export default function DescriptiveQuizDialog() {
             })}
           </div>
         ) : (
+          // 주관식인 경우
           <>
             <div>
               <div className="text-sm">제출한 답변</div>
@@ -104,7 +108,7 @@ export default function DescriptiveQuizDialog() {
             <div>
               <div className="text-sm">피드백 내용</div>
               <Textarea
-                disabled={descriptiveQuiz.status !== 0}
+                disabled={descriptiveQuiz.status !== 0 && !active}
                 value={value}
                 placeholder="피드백을 남겨주세요..."
                 onChange={onChange}
@@ -112,29 +116,41 @@ export default function DescriptiveQuizDialog() {
               <div className="flex flex-row mt-2 space-x-4">
                 <div className="flex flex-row items-center justify-center gap-2">
                   <Checkbox
-                    disabled={descriptiveQuiz.status !== 0}
+                    defaultChecked={false}
+                    disabled={descriptiveQuiz.status !== 0 && !active} // 채점이 된 경우
                     id="correct"
                     onCheckedChange={() => setIsCorrected(true)}
-                    checked={isCorrected}
+                    checked={descriptiveQuiz.status !== 0 && isCorrected}
                   />
                   <Label htmlFor="correct">정답</Label>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-2">
                   <Checkbox
-                    disabled={descriptiveQuiz.status !== 0}
+                    defaultChecked={false}
+                    disabled={descriptiveQuiz.status !== 0 && !active}
                     id="incorrect"
                     onCheckedChange={() => setIsCorrected(false)}
-                    checked={!isCorrected}
+                    checked={descriptiveQuiz.status !== 0 && !isCorrected}
                   />
                   <Label htmlFor="incorrect">오답</Label>
                 </div>
               </div>
             </div>
             <AlertDialogTrigger asChild>
-              <Button disabled={descriptiveQuiz.status !== 0} type="submit">
+              <Button
+                disabled={descriptiveQuiz.status !== 0 && !active} // 채점을 했거나 버튼을 안 누르면
+                type="submit"
+              >
                 피드백 남기기
               </Button>
             </AlertDialogTrigger>
+            <Button
+              disabled={active}
+              className="bg-blue-500"
+              onClick={() => setActive(true)}
+            >
+              피드백 다시 하기
+            </Button>
           </>
         )}
       </div>

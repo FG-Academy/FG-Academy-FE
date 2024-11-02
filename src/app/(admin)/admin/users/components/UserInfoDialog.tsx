@@ -19,6 +19,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Circle, X } from "lucide-react";
 import { IUser } from "@/model/user";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useDeleteUserMutation } from "../hook/useDeleteUserMutation";
+import DeleteUserModal from "./DeleteUserModal";
 
 type Props = {
   userId: number;
@@ -31,11 +34,6 @@ export function UserInfoDialog({ userId, userProfile }: Props) {
 
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
-  // const { data: userProfile } = useFetchUserProfileByIdQuery(
-  //   accessToken,
-  //   userId
-  // );
-
   const { data: enrollments } = useFetchUserEnrollmentsByIdQuery(
     accessToken,
     userId
@@ -44,14 +42,13 @@ export function UserInfoDialog({ userId, userProfile }: Props) {
   const { data: lectures, isLoading: isLecturesLoading } =
     useFetchUserLecturesDetailQuery(accessToken, userId, selectedCourseId);
 
-  // console.log(userProfile);
-
   if (!userProfile || !enrollments) {
     return <Loading />;
   }
 
   return (
     <div className="flex flex-col space-y-4 w-full">
+      <DeleteUserModal userId={userId} />
       <UserForm userProfile={userProfile} userId={userId} />
       <div className="space-y-2">
         <h1 className="font-semibold text-lg">수강 중인 강의</h1>

@@ -51,8 +51,6 @@ export function DescriptiveDataTableQuiz2<
   pagination,
   setPagination,
 }: DataTableProps<TData, TValue>) {
-  const { data: session } = useSession();
-
   const { open, setOpen } = useOpenDescriptiveDialogStore((state) => state);
 
   const table = useReactTable({

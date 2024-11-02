@@ -22,6 +22,7 @@ export function useQuizFeedbackMutation(accessToken: string, userId: number) {
       corrected,
       quizId,
     }: FeedbackPostRequest) => {
+      console.log(feedbackComment, corrected);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/quizzes/feedback/${userId}/${quizId}`,
         {

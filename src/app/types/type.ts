@@ -28,6 +28,7 @@ export const Position = {
   EVANGELIST: "evangelist",
   ELDER: "elder",
   TEACHER: "teacher",
+  PREACHER: "preacher",
   ETC: "etc",
 } as const;
 
@@ -64,6 +65,7 @@ export const departments = [
 export const positions = [
   { value: Position.PASTOR, label: "목사" },
   { value: Position.EVANGELIST, label: "전도사" },
+  { value: Position.PREACHER, label: "강도사" },
   { value: Position.ELDER, label: "장로" },
   { value: Position.TEACHER, label: "교사" },
   { value: Position.ETC, label: "기타" },
