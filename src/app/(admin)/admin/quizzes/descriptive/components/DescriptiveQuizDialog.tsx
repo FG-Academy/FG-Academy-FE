@@ -40,7 +40,7 @@ export default function DescriptiveQuizDialog() {
 
   const { mutate } = useQuizFeedbackMutation(accessToken, userId);
 
-  const [isCorrected, setIsCorrected] = useState(descriptiveQuiz?.status === 1); // 정답인 경우
+  const [isCorrected, setIsCorrected] = useState<boolean>(false); // 정답인 경우
   const [value, setValue] = useState<string>(
     descriptiveQuiz?.feedbackComment ?? ""
   );
@@ -116,21 +116,21 @@ export default function DescriptiveQuizDialog() {
               <div className="flex flex-row mt-2 space-x-4">
                 <div className="flex flex-row items-center justify-center gap-2">
                   <Checkbox
-                    defaultChecked={false}
+                    // defaultChecked={false}
                     disabled={descriptiveQuiz.status !== 0 && !active} // 채점이 된 경우
                     id="correct"
                     onCheckedChange={() => setIsCorrected(true)}
-                    checked={descriptiveQuiz.status !== 0 && isCorrected}
+                    checked={isCorrected}
                   />
                   <Label htmlFor="correct">정답</Label>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-2">
                   <Checkbox
-                    defaultChecked={false}
+                    // defaultChecked={false}
                     disabled={descriptiveQuiz.status !== 0 && !active}
                     id="incorrect"
                     onCheckedChange={() => setIsCorrected(false)}
-                    checked={descriptiveQuiz.status !== 0 && !isCorrected}
+                    checked={!isCorrected}
                   />
                   <Label htmlFor="incorrect">오답</Label>
                 </div>
@@ -145,7 +145,7 @@ export default function DescriptiveQuizDialog() {
               </Button>
             </AlertDialogTrigger>
             <Button
-              disabled={active}
+              disabled={descriptiveQuiz.status === 0 || active}
               className="bg-blue-500"
               onClick={() => setActive(true)}
             >
