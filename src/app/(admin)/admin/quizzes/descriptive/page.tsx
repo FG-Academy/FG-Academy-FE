@@ -57,6 +57,13 @@ export default function AdminQuizPage() {
     };
   }, [nameInputValue]);
 
+  useEffect(() => {
+    setPagination({
+      ...pagination,
+      pageIndex: 0,
+    });
+  }, [filters]);
+
   if (!quizSubmits || !courses) {
     return <Loading />;
   }
