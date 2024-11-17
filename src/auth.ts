@@ -21,7 +21,6 @@ export const {
     // 토큰 관련 action 시 호출되는 Callback
     async jwt({ token, user, trigger, session }) {
       if (trigger === "update" && session !== null) {
-        const { name, level } = session;
         if (session.name) {
           token.name = session.name;
         }
@@ -30,6 +29,9 @@ export const {
         }
         if (session.enrollmentIds) {
           token.enrollmentIds = session.enrollmentIds;
+        }
+        if (session.department) {
+          token.department = session.department;
         }
       }
       if (user) {

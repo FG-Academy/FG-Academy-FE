@@ -30,6 +30,7 @@ import { ProfileUpdateFormSchema } from "../lib/profileFormSchema";
 import { departments, positions } from "../../../types/type";
 import { toast } from "@/components/ui/use-toast";
 import { IUser } from "@/model/user";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   userInfo: IUser;
@@ -38,6 +39,8 @@ type Props = {
 export function UserInfo({ userInfo }: Props) {
   const { data: session, update } = useSession();
   const accessToken = session?.user.accessToken;
+
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof ProfileUpdateFormSchema>>({
     resolver: zodResolver(ProfileUpdateFormSchema),
@@ -72,9 +75,13 @@ export function UserInfo({ userInfo }: Props) {
       if (data.level !== undefined) {
         updatePayload.level = data.level;
       }
+      if (data.departmentName !== undefined) {
+        updatePayload.department = data.departmentName;
+      }
 
       update(updatePayload);
       mutate({ accessToken, data: updatedData });
+      queryClient.invalidateQueries({ queryKey: ["quizSubmits"] });
     } else {
       toast({
         title: "수정된 정보가 없습니다.",
