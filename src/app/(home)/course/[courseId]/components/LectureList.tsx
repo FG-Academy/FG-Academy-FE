@@ -16,6 +16,7 @@ type Props = {
   lectures: AllLecturesResponse[];
   isTaking: boolean | null;
   lastStudyLectureId: number | null;
+  courseCurriculum: string;
 };
 
 export default function LectureList({
@@ -23,13 +24,13 @@ export default function LectureList({
   isTaking,
   lastStudyLectureId,
   completedCount,
+  courseCurriculum,
 }: Props) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {lectures.map((ele, index) => (
         <AccordionItem
-          disabled={index >= completedCount}
-          // disabled={true}
+          disabled={courseCurriculum !== "1세미나" && index >= completedCount}
           key={ele.lectureId}
           value={`item-${index}`}
           className="bg-blue-100 border border-blue-300 rounded-md mt-3"

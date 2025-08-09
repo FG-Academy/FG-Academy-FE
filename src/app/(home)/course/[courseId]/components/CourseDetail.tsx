@@ -163,6 +163,7 @@ export default function CourseDetail({ courseId }: Props) {
               lectures={lectures}
               isTaking={enrollment.isTaking}
               lastStudyLectureId={enrollment.lastStudyLecture}
+              courseCurriculum={course.curriculum}
             />
           </div>
         </div>
