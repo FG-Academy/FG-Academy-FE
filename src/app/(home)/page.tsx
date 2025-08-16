@@ -5,13 +5,13 @@ import { AnnouncementList } from "./_components/AnnouncementBanner";
 
 export default async function Home() {
   return (
-    <main className="flex flex-col w-screen h-full">
+    <main className="flex flex-col">
       <section className="w-full h-full">
         <Image
           priority
           src={MainBanner}
-          style={{ width: "100%" }}
           alt="메인 배너 이미지"
+          className="w-full h-auto object-cover"
         />
       </section>
       <section id="notificationPart">
