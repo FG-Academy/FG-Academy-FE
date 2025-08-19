@@ -1,6 +1,6 @@
 // Importing create function from the Zustand library
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 // Defining an interface for the store's state
 interface AuthStoreInterface {

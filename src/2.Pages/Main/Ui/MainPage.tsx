@@ -1,8 +1,8 @@
-import Image from "next/image";
-import MainBanner from "../../../../public/images/main-banner.jpeg";
 import { Suspense } from "react";
-import { CourseList } from "@/5.Entities/Course/Ui";
-import { AnnouncementBanner } from "@/5.Entities/Announcement/Ui";
+import Image from "next/image";
+import { AnnouncementBanner } from "@/5.entities/announcement";
+import { CourseList } from "@/5.entities/course";
+import MainBanner from "../../../../public/images/main-banner.jpeg";
 
 const MainPage = () => {
   return (

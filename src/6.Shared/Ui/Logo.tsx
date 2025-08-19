@@ -1,14 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 
-interface LogoProps {
-  onClick?: () => void;
-}
-
-export function Logo({ onClick }: LogoProps) {
+export function Logo() {
   return (
     <div className="flex items-center font-medium">
-      <Link href="/" onClick={onClick}>
+      <a href="/">
         <Image
           alt="logo"
           src="/images/logo_black.png"
@@ -17,7 +12,7 @@ export function Logo({ onClick }: LogoProps) {
           height={180}
           priority={true}
         />
-      </Link>
+      </a>
     </div>
   );
 }

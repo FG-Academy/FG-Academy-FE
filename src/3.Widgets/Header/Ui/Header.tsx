@@ -10,10 +10,10 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/6.Shared/Ui/shadcn/ui/collapsible";
-import { ADMIN_LEVELS } from "@/6.Shared/Config";
-import { Logo } from "@/6.Shared/Ui";
-import { useRefreshTokenGuard } from "@/6.Shared/lib";
+} from "@/6.shared/ui";
+import { ADMIN_LEVELS } from "@/6.shared/config";
+import { Logo } from "@/6.shared/ui";
+import { useRefreshTokenGuard } from "@/6.shared/lib";
 
 type Variant = "mobile" | "desktop";
 

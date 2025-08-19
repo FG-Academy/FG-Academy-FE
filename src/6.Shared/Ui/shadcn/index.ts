@@ -23,5 +23,8 @@ export * from "./ui/skeleton";
 export * from "./ui/table";
 export * from "./ui/textarea";
 export * from "./ui/tooltip";
+export * from "./ui/toaster";
 export * from "./ui/use-toast";
 export * from "./ui/typography";
+export * from "./ui/spinner";
+export * from "./ui/tabs";

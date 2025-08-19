@@ -8,6 +8,10 @@ type TypographyName =
   | "h3"
   | "h4"
   | "p"
+  | "body1"
+  | "body2"
+  | "body3"
+  | "body4"
   | "blockquote"
   | "table"
   | "list"
@@ -93,6 +97,30 @@ export function Typography({
           {children}
         </p>
       );
+    case "body1":
+      return (
+        <p className={cn("m-0 text-lg", className)} {...rest}>
+          {children}
+        </p>
+      );
+    case "body2":
+      return (
+        <p className={cn("m-0 text-base", className)} {...rest}>
+          {children}
+        </p>
+      );
+    case "body3":
+      return (
+        <p className={cn("m-0 text-sm", className)} {...rest}>
+          {children}
+        </p>
+      );
+    case "body4":
+      return (
+        <p className={cn("m-0 text-xs", className)} {...rest}>
+          {children}
+        </p>
+      );
     case "blockquote":
       return (
         <blockquote
@@ -172,7 +200,7 @@ export function Typography({
 // Demo components matching the provided examples
 export function TypographyH1() {
   return (
-    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
+    <h1 className="text-4xl font-extrabold tracking-tight text-center scroll-m-20 text-balance">
       Taxing Laughter: The Joke Tax Chronicles
     </h1>
   );
@@ -180,7 +208,7 @@ export function TypographyH1() {
 
 export function TypographyH2() {
   return (
-    <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+    <h2 className="pb-2 text-3xl font-semibold tracking-tight border-b scroll-m-20 first:mt-0">
       The People of the Kingdom
     </h2>
   );
@@ -188,7 +216,7 @@ export function TypographyH2() {
 
 export function TypographyH3() {
   return (
-    <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+    <h3 className="text-2xl font-semibold tracking-tight scroll-m-20">
       The Joke Tax
     </h3>
   );
@@ -196,7 +224,7 @@ export function TypographyH3() {
 
 export function TypographyH4() {
   return (
-    <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+    <h4 className="text-xl font-semibold tracking-tight scroll-m-20">
       People stopped telling jokes
     </h4>
   );
@@ -213,7 +241,7 @@ export function TypographyP() {
 
 export function TypographyBlockquote() {
   return (
-    <blockquote className="mt-6 border-l-2 pl-6 italic">
+    <blockquote className="pl-6 mt-6 italic border-l-2">
       &quot;After all,&quot; he said, &quot;everyone enjoys a good joke, so
       it&apos;s only fair that they should pay for the privilege.&quot;
     </blockquote>
@@ -222,10 +250,10 @@ export function TypographyBlockquote() {
 
 export function TypographyTable() {
   return (
-    <div className="my-6 w-full overflow-y-auto">
+    <div className="w-full my-6 overflow-y-auto">
       <table className="w-full">
         <thead>
-          <tr className="even:bg-muted m-0 border-t p-0">
+          <tr className="p-0 m-0 border-t even:bg-muted">
             <th className="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">
               King&apos;s Treasury
             </th>
@@ -235,7 +263,7 @@ export function TypographyTable() {
           </tr>
         </thead>
         <tbody>
-          <tr className="even:bg-muted m-0 border-t p-0">
+          <tr className="p-0 m-0 border-t even:bg-muted">
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
               Empty
             </td>
@@ -243,7 +271,7 @@ export function TypographyTable() {
               Overflowing
             </td>
           </tr>
-          <tr className="even:bg-muted m-0 border-t p-0">
+          <tr className="p-0 m-0 border-t even:bg-muted">
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
               Modest
             </td>
@@ -251,7 +279,7 @@ export function TypographyTable() {
               Satisfied
             </td>
           </tr>
-          <tr className="even:bg-muted m-0 border-t p-0">
+          <tr className="p-0 m-0 border-t even:bg-muted">
             <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
               Full
             </td>
@@ -285,7 +313,7 @@ export function TypographyInlineCode() {
 
 export function TypographyLead() {
   return (
-    <p className="text-muted-foreground text-xl">
+    <p className="text-xl text-muted-foreground">
       A modal dialog that interrupts the user with important content and expects
       a response.
     </p>
@@ -298,12 +326,12 @@ export function TypographyLarge() {
 
 export function TypographySmall() {
   return (
-    <small className="text-sm leading-none font-medium">Email address</small>
+    <small className="text-sm font-medium leading-none">Email address</small>
   );
 }
 
 export function TypographyMuted() {
   return (
-    <p className="text-muted-foreground text-sm">Enter your email address.</p>
+    <p className="text-sm text-muted-foreground">Enter your email address.</p>
   );
 }

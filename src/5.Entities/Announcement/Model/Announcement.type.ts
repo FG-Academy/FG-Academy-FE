@@ -7,3 +7,8 @@ export interface Announcement {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface AnnouncementsResponse {
+  posts: Announcement[];
+  totalPages: number;
+}

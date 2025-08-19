@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MainLayout } from "@/2.Pages/Main/Ui";
+import { MainLayout } from "@/2.pages/main";
 import "../globals.css";
 
 export const metadata: Metadata = {
