@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { announcementQueries } from "@/5.entities/announcement/api/announcement.queries";
@@ -29,7 +28,11 @@ interface Props {
   page: number;
 }
 
-const AnnouncementPage = ({ page }: Props) => {
+/**
+ * 공지사항 목록 페이지 컨텐츠 (클라이언트 컴포넌트)
+ * SSR에서 HydrationBoundary로 감싸서 사용
+ */
+const AnnouncementPageContent = ({ page }: Props) => {
   const router = useRouter();
 
   const currentPage = Number.isFinite(page) && page > 0 ? page : 1;
@@ -37,8 +40,6 @@ const AnnouncementPage = ({ page }: Props) => {
   const { data: announcements } = useSuspenseQuery(
     announcementQueries.list(currentPage)
   );
-
-  console.log("client", announcements);
 
   const totalPages = announcements.totalPages ?? 1;
 
@@ -156,4 +157,7 @@ const AnnouncementPage = ({ page }: Props) => {
   );
 };
 
-export { AnnouncementPage };
+/** @deprecated Use AnnouncementPageContent instead */
+const AnnouncementPage = AnnouncementPageContent;
+
+export { AnnouncementPageContent, AnnouncementPage };

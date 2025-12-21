@@ -20,7 +20,7 @@ const useEditAnnouncementMutation = (announcementId: number) => {
         title: "공지사항 수정 성공",
         description: "공지사항 수정을 성공했습니다.",
       });
-      router.push("/announcement?page=1");
+      router.push(`/announcement/${announcementId}`);
     },
     onError: (error) => {
       toast({

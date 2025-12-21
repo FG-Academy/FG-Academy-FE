@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { AspectRatio } from "@/6.shared/ui";
-import introProfile from "../../../../public/images/introProfile.png";
-import IntroBackground from "../../../../public/images/introBackground.jpg";
+import IntroProfile from "@public/images/introProfile.png";
+import IntroBackground from "@public/images/introBackground.jpg";
 
 const IntroducePage = () => {
   return (
@@ -38,7 +38,7 @@ const IntroducePage = () => {
               >
                 <Image
                   alt="Profile"
-                  src={introProfile}
+                  src={IntroProfile}
                   placeholder="blur"
                   className="h-full w-full object-cover"
                   sizes="(min-width: 1280px) 288px, (min-width: 1024px) 25vw, (min-width: 768px) 35vw, 100vw"

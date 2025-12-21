@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
-
-const FALLBACK_IMAGE = "/images/fallbackImage.png";
+import FallbackImage from "@public/images/fallbackImage.png";
 
 export type ImageWithFallbackProps = React.ComponentProps<typeof Image>;
 
@@ -12,7 +11,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   alt,
   ...rest
 }) => {
-  const initialSrc = (typeof src === "string" && src) || FALLBACK_IMAGE;
+  const initialSrc = (typeof src === "string" && src) || FallbackImage;
   const [imgSrc, setImgSrc] = React.useState(initialSrc);
 
   return (
@@ -20,7 +19,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
       {...rest}
       src={imgSrc}
       alt={alt}
-      onError={() => setImgSrc(FALLBACK_IMAGE)}
+      onError={() => setImgSrc(FallbackImage)}
     />
   );
 };

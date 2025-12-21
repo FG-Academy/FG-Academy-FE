@@ -86,13 +86,13 @@ function AuthedLinks({
       <NavItem href="/me/course" variant={variant}>
         내 강의실
       </NavItem>
-      {/* <NavItem href={`/qna`} variant={variant}>
+      {/* <NavItem href="/qna?page=1" variant={variant}>
         질문게시판
       </NavItem> */}
       <NavItem href="/" variant={variant} onClick={onLogout}>
         로그아웃
       </NavItem>
-      <NavItem href="/userInfo" variant={variant}>
+      <NavItem href="/me/profile" variant={variant}>
         회원정보
       </NavItem>
     </>

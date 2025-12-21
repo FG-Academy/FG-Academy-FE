@@ -117,7 +117,6 @@ export default function CategoryEdit({ categoriesInfo }: Props) {
         title: "수정한 정보가 없습니다.",
         description: "정보를 수정하고 다시 시도해주세요.",
       });
-      console.log("No changes detected, no mutation occurred.");
     }
   };
 

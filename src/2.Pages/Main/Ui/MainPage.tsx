@@ -2,10 +2,14 @@ import { Suspense } from "react";
 import Image from "next/image";
 import { AnnouncementBanner } from "@/5.entities/announcement";
 import { CourseList } from "@/5.entities/course";
-import MainBanner from "../../../../public/images/main-banner.jpeg";
+import MainBanner from "@public/images/main-banner.jpeg";
 import { Skeleton, Spinner } from "@/6.shared/ui";
 
-const MainPage = () => {
+/**
+ * 메인 페이지 컨텐츠 컴포넌트
+ * SSR에서 HydrationBoundary로 감싸서 사용
+ */
+const MainPageContent = () => {
   return (
     <main className="flex flex-col">
       <section className="w-full h-full">
@@ -36,4 +40,7 @@ const MainPage = () => {
   );
 };
 
-export { MainPage };
+/** @deprecated Use MainPageContent instead */
+const MainPage = MainPageContent;
+
+export { MainPageContent, MainPage };

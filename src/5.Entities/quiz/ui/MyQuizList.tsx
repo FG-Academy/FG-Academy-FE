@@ -92,7 +92,6 @@ interface QuizListProps {
   selectedLecture: LectureForQuiz;
 }
 const QuizList = ({ selectedLecture }: QuizListProps) => {
-  console.log(selectedLecture);
   const [filterType, setFilterType] = useState<
     "all" | "correct" | "incorrect" | "feedback"
   >("all");

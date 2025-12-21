@@ -1,6 +1,6 @@
 import Image from "next/image";
-import IntroImage from "../../../../public/images/introduceImage.jpeg";
-import IntroBackground from "../../../../public/images/introBackground.jpg";
+import IntroImage from "@public/images/introduceImage.jpeg";
+import IntroBackground from "@public/images/introBackground.jpg";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function IntroducePage() {

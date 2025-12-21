@@ -45,7 +45,7 @@ const AnnouncementBanner = () => {
             <div key={idx} className="h-10 flex items-center">
               <Link
                 className="mr-5 hover:text-blue-900 hover:underline text-sm md:text-base"
-                href={`/notice/${announcement.announcementId}`}
+                href={`/announcement/${announcement.announcementId}`}
               >
                 {announcement.title}
               </Link>

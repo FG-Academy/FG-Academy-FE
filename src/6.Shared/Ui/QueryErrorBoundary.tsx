@@ -3,8 +3,6 @@ import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import BasicErrorFallback from "./BasicErrorFallback";
 
 function QueryErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
-  console.log(error);
-
   return <BasicErrorFallback resetErrorBoundary={resetErrorBoundary} />;
 }
 

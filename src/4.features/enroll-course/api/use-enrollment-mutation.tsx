@@ -18,8 +18,6 @@ export function useEnrollmentMutation(
     mutationKey: ["registerEnrollment"],
     mutationFn: async () => addEnrollment(courseId),
     onSuccess: (data) => {
-      console.log(data);
-
       update({
         enrollmentIds: [...(session?.user.enrollmentIds || []), courseId],
       });

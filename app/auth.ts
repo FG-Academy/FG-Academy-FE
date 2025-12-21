@@ -103,7 +103,6 @@ export const {
         );
 
         if (!authResponse.ok) {
-          console.log("return null");
           return null;
         }
 

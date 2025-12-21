@@ -1,1 +1,4 @@
-export { AnnouncementPage } from "./ui/AnnouncementPage";
+export {
+  AnnouncementPage,
+  AnnouncementPageContent,
+} from "./ui/AnnouncementPage";

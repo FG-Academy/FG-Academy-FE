@@ -1,4 +1,5 @@
 import Image from "next/image";
+import LogoBlack from "@public/images/logo_black.png";
 
 export function Logo() {
   return (
@@ -6,7 +7,7 @@ export function Logo() {
       <a href="/">
         <Image
           alt="logo"
-          src="/images/logo_black.png"
+          src={LogoBlack}
           className="-mr-1"
           width={180}
           height={180}

@@ -1,66 +1,19 @@
-"use client";
-
+import { Suspense } from "react";
 import Image from "next/image";
-import { Suspense, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { ChevronDownIcon } from "lucide-react";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/6.shared/ui";
-import { CourseList, courseQueries } from "@/5.entities/course";
+import { CoursePageContent } from "./CoursePageContent";
+import { Spinner } from "@/6.shared/ui";
+import CourseBackground from "@public/images/courseBackground.jpeg";
 
-const CoursePageContent = () => {
-  const [selectedCategory, setSelectedCategory] = useState("전체");
-  const { data: categorizedCourses } = useSuspenseQuery(courseQueries.list());
-
-  const categories = categorizedCourses.map((category) => category.name);
-
-  return (
-    <div className="p-4 space-y-6 w-full">
-      <div className="flex">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="gap-2 px-4">
-              {selectedCategory}
-              <ChevronDownIcon size={14} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="min-w-[200px]">
-            <DropdownMenuLabel>카테고리</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <DropdownMenuRadioItem value="전체">전체</DropdownMenuRadioItem>
-              {categories.map((categoryName) => (
-                <DropdownMenuRadioItem key={categoryName} value={categoryName}>
-                  {categoryName}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <CourseList selectedCategory={selectedCategory} />
-    </div>
-  );
-};
-
-const CoursePage = () => {
+/**
+ * 강의 목록 페이지 레이아웃 컴포넌트
+ * SSR에서 HydrationBoundary로 감싸서 사용
+ */
+export const CoursePage = () => {
   return (
     <div>
       <div className="relative flex flex-col justify-center top-0 left-0 right-0 w-full">
         <Image
-          src="/images/courseBackground.jpeg"
+          src={CourseBackground}
           width={0}
           height={0}
           style={{ width: "100%", height: "240px", objectFit: "cover" }}
@@ -71,12 +24,16 @@ const CoursePage = () => {
         </h2>
       </div>
       <section className="flex justify-center w-full mx-auto h-max p-10">
-        <Suspense fallback={<div>Loading courses...</div>}>
+        <Suspense
+          fallback={
+            <div className="flex w-full items-center justify-center py-20">
+              <Spinner size="large" />
+            </div>
+          }
+        >
           <CoursePageContent />
         </Suspense>
       </section>
     </div>
   );
 };
-
-export { CoursePage };

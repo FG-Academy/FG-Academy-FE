@@ -1,5 +1,5 @@
 import Image from "next/image";
-import MainBanner from "../../../public/images/main-banner.jpeg";
+import MainBanner from "@public/images/main-banner.jpeg";
 import MainCourseCard from "@/app/(home)/_components/MainCourseCard";
 import { AnnouncementList } from "./_components/AnnouncementBanner";
 

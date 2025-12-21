@@ -1,13 +1,20 @@
 import { getSession } from "next-auth/react";
-import { API_URL } from "../config";
+import { API_URL, SERVER_API_URL } from "../config";
 import type { RequestOptions } from "./apiClient.type";
 import { auth } from "../../auth";
 
 export class ApiClient {
-  private baseUrl: string;
+  private clientUrl: string;
+  private serverUrl: string;
 
-  constructor(url: string) {
-    this.baseUrl = url;
+  constructor(clientUrl: string, serverUrl: string) {
+    this.clientUrl = clientUrl;
+    this.serverUrl = serverUrl;
+  }
+
+  private getBaseUrl(): string {
+    // 서버 사이드에서는 SERVER_API_URL 사용, 클라이언트에서는 API_URL 사용
+    return typeof window === "undefined" ? this.serverUrl : this.clientUrl;
   }
 
   private async getAuthToken(): Promise<string | null> {
@@ -42,7 +49,7 @@ export class ApiClient {
     endpoint: string,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
 
     const { params } = options || {};
 
@@ -73,7 +80,15 @@ export class ApiClient {
     body?: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
+
+    const { params } = options || {};
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value.toString());
+      });
+    }
 
     const token = await this.getAuthToken();
     const headers = {
@@ -97,7 +112,7 @@ export class ApiClient {
     body: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
 
     const token = await this.getAuthToken();
     const headers = {
@@ -121,7 +136,15 @@ export class ApiClient {
     body: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
+
+    const { params } = options || {};
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value.toString());
+      });
+    }
 
     const token = await this.getAuthToken();
     const headers = {
@@ -142,10 +165,18 @@ export class ApiClient {
 
   public async delete<TResult = unknown, TData = Record<string, unknown>>(
     endpoint: string,
-    body: TData,
+    body?: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
+
+    const { params } = options || {};
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value.toString());
+      });
+    }
 
     const token = await this.getAuthToken();
     const headers = {
@@ -158,11 +189,11 @@ export class ApiClient {
       method: "DELETE",
       headers,
       credentials: "include",
-      body: JSON.stringify(body),
+      ...(body && { body: JSON.stringify(body) }),
     });
 
     return this.handleResponse<TResult>(response);
   }
 }
 
-export const apiClient = new ApiClient(API_URL);
+export const apiClient = new ApiClient(API_URL, SERVER_API_URL);

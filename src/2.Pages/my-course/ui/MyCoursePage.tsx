@@ -3,14 +3,20 @@
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import { cn } from "@/6.shared/lib";
-import { Typography } from "@/6.shared/ui";
+import { Spinner, Typography } from "@/6.shared/ui";
 
 import { MyCourseList } from "@/5.entities/course";
 import { MyQuizList } from "@/5.entities/quiz";
 
-const MyCoursePage = () => {
+/**
+ * 내 강의 페이지 컨텐츠 (클라이언트 컴포넌트)
+ * SSR에서 HydrationBoundary로 감싸서 사용
+ * 인증은 미들웨어에서 처리됨
+ */
+const MyCoursePageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "course";
@@ -69,8 +75,16 @@ const MyCoursePage = () => {
             </div>
           </nav>
           <section className="flex flex-col w-full min-w-0">
-            {tab === "course" && <MyCourseList />}
-            {tab === "quiz" && <MyQuizList />}
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center min-h-[200px]">
+                  <Spinner />
+                </div>
+              }
+            >
+              {tab === "course" && <MyCourseList />}
+              {tab === "quiz" && <MyQuizList />}
+            </Suspense>
           </section>
         </div>
       </div>
@@ -78,4 +92,7 @@ const MyCoursePage = () => {
   );
 };
 
-export { MyCoursePage };
+/** @deprecated Use MyCoursePageContent instead */
+const MyCoursePage = MyCoursePageContent;
+
+export { MyCoursePage, MyCoursePageContent };
