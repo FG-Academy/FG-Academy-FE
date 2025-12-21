@@ -27,7 +27,24 @@ export interface CategorizedCourse {
   courses: CoursesResponse[];
 }
 
+export interface CourseDetail {
+  courseId: number;
+  category: Category;
+  status: string;
+  title: string;
+  curriculum: string;
+  thumbnailPath: string | null;
+  totalCourseLength: number;
+  completedLectures: number;
+  lastStudyLectureId: number;
+}
+
 /** API RESPONSE */
 export interface CoursesResponse extends Course {
   category: Category;
+}
+
+export interface MyCoursesResponse {
+  message: string;
+  courseDetail: CourseDetail[];
 }

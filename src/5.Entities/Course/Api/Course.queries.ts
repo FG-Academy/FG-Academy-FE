@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { getCourses } from "./get-courses";
 import { getCourseDetail } from "./get-course-detail";
+import { getMyCourses } from "./get-my-courses";
 
 export const courseQueries = {
   all: () => ["course"],
@@ -14,5 +15,10 @@ export const courseQueries = {
     queryOptions({
       queryKey: [...courseQueries.all(), courseId, "detail"],
       queryFn: () => getCourseDetail(courseId),
+    }),
+  myCourses: () =>
+    queryOptions({
+      queryKey: [...courseQueries.all(), "myCourse"],
+      queryFn: () => getMyCourses(),
     }),
 };

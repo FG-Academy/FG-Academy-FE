@@ -49,7 +49,7 @@ function BaseLinks({ variant }: { variant: Variant }) {
       <NavItem href="/course" variant={variant}>
         강의 목록
       </NavItem>
-      <NavItem href={`/notice?page=1`} variant={variant}>
+      <NavItem href={`/announcement?page=1`} variant={variant}>
         공지사항
       </NavItem>
     </>
@@ -83,12 +83,12 @@ function AuthedLinks({
 }) {
   return (
     <>
-      <NavItem href="/myDashboard" variant={variant}>
+      <NavItem href="/me/course" variant={variant}>
         내 강의실
       </NavItem>
-      <NavItem href={`/qna`} variant={variant}>
+      {/* <NavItem href={`/qna`} variant={variant}>
         질문게시판
-      </NavItem>
+      </NavItem> */}
       <NavItem href="/" variant={variant} onClick={onLogout}>
         로그아웃
       </NavItem>

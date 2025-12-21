@@ -12,7 +12,6 @@ import Link from "next/link";
 import { courseQueries } from "../api/course.queries";
 
 interface CourseListProps {
-  /** 선택된 카테고리로 필터링할지 여부. undefined면 모든 카테고리를 보여줌 */
   selectedCategory?: string;
 }
 

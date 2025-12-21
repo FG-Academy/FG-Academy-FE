@@ -24,7 +24,7 @@ export function EnrollmentProgress({ enrollment, children }: Props) {
       </Typography>
 
       <Progress
-        indicatorColor="bg-blue-400"
+        indicatorColor="bg-primary-blue"
         className="border-gray-400 shadow-md border-1"
         value={progressValue}
       />

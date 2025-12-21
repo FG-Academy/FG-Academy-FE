@@ -9,7 +9,9 @@ export const MainLayout = ({
   return (
     <div className="flex flex-col w-full min-h-screen">
       <Header />
-      <main className="relative flex-1">{children}</main>
+      <main className="relative flex flex-col flex-1 min-h-0 overflow-hidden overflow-x-hidden">
+        {children}
+      </main>
       <Footer />
     </div>
   );

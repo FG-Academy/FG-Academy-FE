@@ -11,6 +11,7 @@ import {
 import CourseCardDashboard from "./CourseCardDashboard";
 import { useEffect, useState } from "react";
 import { CourseDetail } from "../hooks/useDashboard";
+import { cn } from "@/6.shared/lib";
 
 type Props = {
   remainingCourses: CourseDetail[];
@@ -45,23 +46,25 @@ export default function CourseList({
   const completedCoursesLength = completedCourses.length;
 
   return (
-    <div className="flex-1 px-4">
-      <div className="mb-8 mt-4">
-        <h3 className="text-2xl font-semibold">전체 강의</h3>
-        <div className="flex space-x-2 mt-4">
+    <div className="flex flex-col px-6 gap-4 bg-red-50">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-2xl font-semibold">내 강의</h3>
+        <div className="flex gap-2">
           <Button
-            className={`text-blue-500 border-blue-300 ${
-              !isSelectedComplete ? `bg-blue-300 text-black` : `none`
-            }`}
+            className={cn(
+              "text-primary-blue",
+              !isSelectedComplete && "bg-blue-100"
+            )}
             variant="outline"
             onClick={() => setIsSelectedComplete(false)}
           >
             수강 중 ({remainingCoursesLength})
           </Button>
           <Button
-            className={`text-blue-500 border-blue-300 ${
-              isSelectedComplete ? `bg-blue-300 text-black` : `none`
-            }`}
+            className={cn(
+              "text-primary-blue border-blue-300",
+              isSelectedComplete && "bg-blue-100 text-black"
+            )}
             variant="outline"
             onClick={() => setIsSelectedComplete(true)}
           >
@@ -70,15 +73,15 @@ export default function CourseList({
         </div>
       </div>
 
-      <div id="carousel" className="flex w-full">
+      <div className="flex w-full h-full">
         <Carousel
           opts={{
             align: "start",
             dragFree: true,
           }}
-          className="w-full px-10 flex flex-row"
+          className="w-full px-10 flex bg-yellow-50"
         >
-          <CarouselContent className="-ml-2 p-2 flex w-full">
+          <CarouselContent className="-ml-2 p-2 flex w-full h-full bg-blue-50">
             {isSelectedComplete ? (
               completedCourses.length === 0 ? (
                 <p className="mx-10">😅 수강 완료한 코스가 없습니다.</p>

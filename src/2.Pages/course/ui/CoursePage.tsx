@@ -24,7 +24,7 @@ const CoursePageContent = () => {
 
   return (
     <div className="p-4 space-y-6 w-full">
-      <div className="flex justify-end">
+      <div className="flex">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="gap-2 px-4">
@@ -32,7 +32,7 @@ const CoursePageContent = () => {
               <ChevronDownIcon size={14} />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
+          <DropdownMenuContent className="min-w-[200px]">
             <DropdownMenuLabel>카테고리</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
@@ -42,7 +42,7 @@ const CoursePageContent = () => {
               <DropdownMenuRadioItem value="전체">전체</DropdownMenuRadioItem>
               {categories.map((categoryName) => (
                 <DropdownMenuRadioItem key={categoryName} value={categoryName}>
-                  {categoryName.replace(/^\d+\s*/, "")}
+                  {categoryName}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
@@ -58,10 +58,7 @@ const CoursePageContent = () => {
 const CoursePage = () => {
   return (
     <div>
-      <div
-        id="header"
-        className="relative flex flex-col justify-center top-0 left-0 right-0 w-full"
-      >
+      <div className="relative flex flex-col justify-center top-0 left-0 right-0 w-full">
         <Image
           src="/images/courseBackground.jpeg"
           width={0}
@@ -73,10 +70,7 @@ const CoursePage = () => {
           강의목록
         </h2>
       </div>
-      <section
-        id="body"
-        className="flex justify-center w-full mx-auto h-max p-10"
-      >
+      <section className="flex justify-center w-full mx-auto h-max p-10">
         <Suspense fallback={<div>Loading courses...</div>}>
           <CoursePageContent />
         </Suspense>

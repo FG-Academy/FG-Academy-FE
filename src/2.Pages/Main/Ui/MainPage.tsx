@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AnnouncementBanner } from "@/5.entities/announcement";
 import { CourseList } from "@/5.entities/course";
 import MainBanner from "../../../../public/images/main-banner.jpeg";
+import { Skeleton, Spinner } from "@/6.shared/ui";
 
 const MainPage = () => {
   return (
@@ -17,10 +18,16 @@ const MainPage = () => {
       </section>
       <div className="flex flex-col w-full items-center justify-center gap-8 p-8">
         <div className="flex flex-col w-full max-w-[1500px] gap-8">
-          <Suspense fallback={<div>Loading announcements...</div>}>
+          <Suspense fallback={<Skeleton className="w-full h-12" />}>
             <AnnouncementBanner />
           </Suspense>
-          <Suspense fallback={<div>Loading courses...</div>}>
+          <Suspense
+            fallback={
+              <div className="flex w-full items-center justify-center">
+                <Spinner />
+              </div>
+            }
+          >
             <CourseList />
           </Suspense>
         </div>

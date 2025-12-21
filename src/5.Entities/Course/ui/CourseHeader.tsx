@@ -1,6 +1,6 @@
 import { Typography } from "@/6.shared/ui";
 import Image from "next/image";
-import { CourseWithCategory } from "../model";
+import type { CourseWithCategory } from "../model/course.type";
 
 interface Props {
   course: CourseWithCategory;

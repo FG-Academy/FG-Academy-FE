@@ -1,7 +1,7 @@
-import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { API_URL } from "../config";
-import { RequestOptions } from "./apiClient.type";
-import { auth } from "@/auth";
+import type { RequestOptions } from "./apiClient.type";
+import { auth } from "../../auth";
 
 export class ApiClient {
   private baseUrl: string;
@@ -11,10 +11,9 @@ export class ApiClient {
   }
 
   private async getAuthToken(): Promise<string | null> {
-    // 서버 환경에서는 auth() 함수를 통해 session 정보를 가져옴
     if (typeof window === "undefined") {
+      const session = await auth();
       try {
-        const session = await auth();
         return session?.user?.accessToken || null;
       } catch (error) {
         console.error("Failed to get server session:", error);
@@ -22,8 +21,9 @@ export class ApiClient {
       }
     }
 
-    // 클라이언트 환경에서는 useSession 사용
-    return useSession().data?.user?.accessToken || null;
+    const session = await getSession();
+
+    return session?.user?.accessToken || null;
   }
 
   async handleResponse<TResult>(response: Response): Promise<TResult> {
@@ -73,6 +73,8 @@ export class ApiClient {
     body?: TData,
     options?: RequestOptions
   ): Promise<TResult> {
+    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+
     const token = await this.getAuthToken();
     const headers = {
       "Content-Type": "application/json",
@@ -80,7 +82,7 @@ export class ApiClient {
       ...(options?.headers && { ...options.headers }),
     } as HeadersInit;
 
-    const response = await fetch(`${this.baseUrl}/api/v1${endpoint}`, {
+    const response = await fetch(url.toString(), {
       method: "POST",
       headers,
       credentials: "include",
@@ -95,6 +97,8 @@ export class ApiClient {
     body: TData,
     options?: RequestOptions
   ): Promise<TResult> {
+    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+
     const token = await this.getAuthToken();
     const headers = {
       "Content-Type": "application/json",
@@ -102,7 +106,7 @@ export class ApiClient {
       ...(options?.headers && { ...options.headers }),
     } as HeadersInit;
 
-    const response = await fetch(`${this.baseUrl}/api/v1${endpoint}`, {
+    const response = await fetch(url.toString(), {
       method: "PUT",
       headers,
       credentials: "include",
@@ -112,10 +116,13 @@ export class ApiClient {
     return this.handleResponse<TResult>(response);
   }
 
-  public async delete<TResult = unknown>(
+  public async patch<TResult = unknown, TData = Record<string, unknown>>(
     endpoint: string,
+    body: TData,
     options?: RequestOptions
   ): Promise<TResult> {
+    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+
     const token = await this.getAuthToken();
     const headers = {
       "Content-Type": "application/json",
@@ -123,10 +130,35 @@ export class ApiClient {
       ...(options?.headers && { ...options.headers }),
     } as HeadersInit;
 
-    const response = await fetch(`${this.baseUrl}/api/v1${endpoint}`, {
+    const response = await fetch(url.toString(), {
+      method: "PATCH",
+      headers,
+      credentials: "include",
+      body: JSON.stringify(body),
+    });
+
+    return this.handleResponse<TResult>(response);
+  }
+
+  public async delete<TResult = unknown, TData = Record<string, unknown>>(
+    endpoint: string,
+    body: TData,
+    options?: RequestOptions
+  ): Promise<TResult> {
+    const url = new URL(`/api/v1${endpoint}`, this.baseUrl);
+
+    const token = await this.getAuthToken();
+    const headers = {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options?.headers && { ...options.headers }),
+    } as HeadersInit;
+
+    const response = await fetch(url.toString(), {
       method: "DELETE",
       headers,
       credentials: "include",
+      body: JSON.stringify(body),
     });
 
     return this.handleResponse<TResult>(response);
