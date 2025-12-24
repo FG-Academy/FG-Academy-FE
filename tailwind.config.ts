@@ -85,6 +85,20 @@ const config = {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(-100%)" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "25%": { transform: "translateY(-30px) rotate(90deg)" },
+          "50%": { transform: "translateY(-15px) rotate(180deg)" },
+          "75%": { transform: "translateY(-40px) rotate(270deg)" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.5" },
+          "50%": { transform: "scale(1.1)", opacity: "0.3" },
+        },
+        bloom: {
+          "0%, 100%": { transform: "scale(1) rotate(0deg)" },
+          "50%": { transform: "scale(1.1) rotate(10deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -92,6 +106,9 @@ const config = {
         "slide-in": "slide-in 1s ease-out forwards",
         "slide-out": "slide-out 1s ease-out forwards",
         marquee: "marquee 5s linear infinite",
+        float: "float 15s ease-in-out infinite",
+        "pulse-slow": "pulse-slow 8s ease-in-out infinite",
+        bloom: "bloom 3s ease-in-out infinite",
       },
     },
   },

@@ -1,20 +1,22 @@
 import { getSession } from "next-auth/react";
-import { API_URL, SERVER_API_URL } from "../config";
+import { SERVER_API_URL } from "../config";
 import type { RequestOptions } from "./apiClient.type";
-import { auth } from "../../auth";
+import { auth } from "@auth";
 
 export class ApiClient {
-  private clientUrl: string;
   private serverUrl: string;
 
-  constructor(clientUrl: string, serverUrl: string) {
-    this.clientUrl = clientUrl;
+  constructor(serverUrl: string) {
     this.serverUrl = serverUrl;
   }
 
   private getBaseUrl(): string {
-    // 서버 사이드에서는 SERVER_API_URL 사용, 클라이언트에서는 API_URL 사용
-    return typeof window === "undefined" ? this.serverUrl : this.clientUrl;
+    // 서버 사이드에서는 SERVER_API_URL 사용
+    // 클라이언트에서는 현재 브라우저 도메인 사용 (window.location.origin)
+    if (typeof window === "undefined") {
+      return this.serverUrl;
+    }
+    return window.location.origin;
   }
 
   private async getAuthToken(): Promise<string | null> {
@@ -196,4 +198,4 @@ export class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(API_URL, SERVER_API_URL);
+export const apiClient = new ApiClient(SERVER_API_URL);

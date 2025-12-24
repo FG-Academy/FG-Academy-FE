@@ -11,7 +11,7 @@ const LoginPage = () => {
         <Logo />
         <LoginForm />
         <div className="flex justify-between space-x-12 text-gray-600 underline">
-          <Link className="cursor-pointer" href="/findPassword">
+          <Link className="cursor-pointer" href="/forgot-password">
             비밀번호 재설정
           </Link>
           <Link className="cursor-pointer" href="/signup">

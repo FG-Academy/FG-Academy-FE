@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import { AuthProvider, ReactQueryProviders } from "@/1.app/providers";
 import "./globals.css";
 import { Toaster } from "@/6.shared/ui";
-import { auth } from "./auth";
+import { auth } from "@auth";
 
 const pretendard = localFont({
   src: [

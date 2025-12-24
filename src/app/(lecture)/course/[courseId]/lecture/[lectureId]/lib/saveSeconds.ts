@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@auth";
 
 // 데이터 저장 함수
 export const saveSeconds = async (

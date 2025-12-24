@@ -30,6 +30,19 @@ const nextConfig = {
     ],
   },
   reactStrictMode: false,
+  async rewrites() {
+    // 개발 환경에서만 백엔드(8080)로 프록시
+    // 프로덕션에서는 Nginx가 /api/* 요청을 백엔드로 라우팅
+    if (process.env.NODE_ENV === "development") {
+      return [
+        {
+          source: "/api/v1/:path*",
+          destination: "http://localhost:8080/api/v1/:path*",
+        },
+      ];
+    }
+    return [];
+  },
 };
 
 export default nextConfig;

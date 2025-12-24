@@ -4,7 +4,7 @@ import { ReactNode, useCallback } from "react";
 import { IoMenu } from "react-icons/io5";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Session } from "next-auth";
 import {
   Collapsible,
@@ -113,13 +113,11 @@ function GuestLinks({ variant }: { variant: Variant }) {
 }
 
 function MobileMenu({ session }: { session: Session | null }) {
-  const router = useRouter();
   const pathname = usePathname();
 
-  const handleLogout = () => {
-    router.refresh();
-    router.push("/");
-    signOut({ redirect: false });
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    window.location.href = "/";
   };
 
   return (
@@ -150,13 +148,10 @@ function MobileMenu({ session }: { session: Session | null }) {
 }
 
 function DesktopNav({ session }: { session: Session | null }) {
-  const router = useRouter();
-
-  const handleLogout = useCallback(() => {
-    router.refresh();
-    router.push("/");
-    signOut({ redirect: false });
-  }, [router]);
+  const handleLogout = useCallback(async () => {
+    await signOut({ redirect: false });
+    window.location.href = "/";
+  }, []);
 
   return (
     <nav className="flex-wrap items-center justify-center hidden text-base md:flex md:ml-auto">

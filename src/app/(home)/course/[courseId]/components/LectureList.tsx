@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import {
   Accordion,
   AccordionContent,

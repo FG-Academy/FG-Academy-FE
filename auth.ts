@@ -3,6 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 type NullableSession = Session | DefaultSession | null;
 
+// 서버 사이드 API URL (auth.ts는 항상 서버에서 실행됨)
+const SERVER_API_URL =
+  process.env.SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL || "";
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -34,6 +38,7 @@ export const {
           token.department = session.department;
         }
       }
+
       if (user) {
         // Initial Login에만 user가 존재
         console.log("initial login", user, Date.now());
@@ -44,13 +49,13 @@ export const {
           refreshToken: user.refreshToken,
         };
       } else if (Date.now() < (token.expiresAt as number) * 1000) {
-        // console.log(Date.now(), (token.expiresAt as number) * 1000);
         // 첫 로그인 이후 토큰 access
         return token;
       } else {
+        // 토큰 만료 - refresh 시도
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_DOCKER_HOST}/auth/refresh-token`,
+            `${SERVER_API_URL}/api/v1/auth/refresh-token`,
             {
               method: "GET",
               headers: {
@@ -68,7 +73,6 @@ export const {
             ...token,
             accessToken: newTokens.accessToken,
             expiresAt: Math.floor(Date.now() / 1000 + newTokens.expiresIn),
-            // refreshToken: newTokens.refresh_token ?? token.refresh_token,
           };
         } catch (error) {
           console.error("Error refreshing access token", error);
@@ -78,9 +82,7 @@ export const {
     },
     // Session 관련 action 시 호출되는 callback
     session({ session, token }) {
-      // console.log(token);
       session.user = token as any;
-      // console.log(session);
       return session;
     },
   },
@@ -90,7 +92,7 @@ export const {
       async authorize(credentials) {
         // signIn 호출 시 동작
         const authResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_DOCKER_HOST}/auth/sign-in`,
+          `${SERVER_API_URL}/api/v1/auth/sign-in`,
           {
             method: "POST",
             headers: {
@@ -103,10 +105,9 @@ export const {
             credentials: "include",
           }
         );
-        // console.log(authResponse);
 
         if (!authResponse.ok) {
-          console.log("return null");
+          console.log("Login failed:", authResponse.status);
           return null;
         }
 
