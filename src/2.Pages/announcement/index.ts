@@ -1,4 +1,1 @@
-export {
-  AnnouncementPage,
-  AnnouncementPageContent,
-} from "./ui/AnnouncementPage";
+export { AnnouncementPageContent } from "./ui/AnnouncementPage";

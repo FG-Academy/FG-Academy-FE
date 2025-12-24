@@ -7,27 +7,47 @@ import { Skeleton, Spinner } from "@/6.shared/ui";
 
 /**
  * 메인 페이지 컨텐츠 컴포넌트
- * SSR에서 HydrationBoundary로 감싸서 사용
  */
 const MainPageContent = () => {
   return (
     <main className="flex flex-col">
-      <section className="w-full h-full">
+      {/* 히어로 배너 섹션 */}
+      <section className="relative w-full h-[50vh] min-h-[360px] max-h-[540px] overflow-hidden">
         <Image
-          className="object-cover w-full h-auto"
+          className="object-cover"
           src={MainBanner}
           alt="메인 배너 이미지"
+          fill
           priority
         />
+        {/* 그라디언트 오버레이 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
+        {/* 환영 텍스트 */}
+        <div className="absolute bottom-10 left-0 right-0 px-6 md:px-8">
+          <div className="max-w-[1500px] mx-auto">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 tracking-tight">
+              꽃동산 아카데미
+            </h1>
+            <p className="text-base md:text-lg text-white/85 font-medium">
+              믿음으로 성장하는 배움의 여정
+            </p>
+          </div>
+        </div>
       </section>
-      <div className="flex flex-col w-full items-center justify-center gap-8 p-8">
-        <div className="flex flex-col w-full max-w-[1500px] gap-8">
-          <Suspense fallback={<Skeleton className="w-full h-12" />}>
+
+      {/* 메인 콘텐츠 영역 */}
+      <div className="flex flex-col w-full items-center">
+        <div className="w-full max-w-[1500px] px-6 md:px-8 py-10 md:py-14 space-y-10 md:space-y-14">
+          {/* 공지사항 배너 */}
+          <Suspense fallback={<Skeleton className="w-full h-14 rounded-xl" />}>
             <AnnouncementBanner />
           </Suspense>
+
+          {/* 강의 목록 */}
           <Suspense
             fallback={
-              <div className="flex w-full items-center justify-center">
+              <div className="flex w-full items-center justify-center py-20">
                 <Spinner />
               </div>
             }
@@ -40,7 +60,4 @@ const MainPageContent = () => {
   );
 };
 
-/** @deprecated Use MainPageContent instead */
-const MainPage = MainPageContent;
-
-export { MainPageContent, MainPage };
+export { MainPageContent };

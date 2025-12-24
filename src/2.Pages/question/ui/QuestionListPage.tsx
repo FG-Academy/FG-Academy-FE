@@ -37,6 +37,3 @@ export function QuestionListPageContent({ page }: Props) {
     </div>
   );
 }
-
-/** @deprecated Use QuestionListPageContent instead */
-export const QuestionListPage = QuestionListPageContent;

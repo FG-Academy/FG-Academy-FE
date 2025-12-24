@@ -42,11 +42,19 @@ export const STATUS = {
 export const QUIZ_TYPE = {
   객관식: "multiple",
   주관식: "descriptive",
-};
+} as const;
+
+export const FILTER_TYPE = {
+  전체: "all",
+  정답: "correct",
+  오답: "incorrect",
+  피드백: "feedback",
+} as const;
 
 // 타입 추출
 export type Status = (typeof STATUS)[keyof typeof STATUS];
 export type QuizType = (typeof QUIZ_TYPE)[keyof typeof QUIZ_TYPE];
+export type FilterType = (typeof FILTER_TYPE)[keyof typeof FILTER_TYPE];
 
 // 강의 정보 타입
 export interface Lecture {

@@ -25,6 +25,3 @@ export function MyProfilePageContent() {
     </div>
   );
 }
-
-/** @deprecated Use MyProfilePageContent instead */
-export const MyProfilePage = MyProfilePageContent;

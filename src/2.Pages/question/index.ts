@@ -1,4 +1,1 @@
-export {
-  QuestionListPage,
-  QuestionListPageContent,
-} from "./ui/QuestionListPage";
+export { QuestionListPageContent } from "./ui/QuestionListPage";

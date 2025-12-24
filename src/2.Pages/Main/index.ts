@@ -1,2 +1,2 @@
-export { MainPageContent, MainPage } from "./ui/MainPage";
+export { MainPageContent } from "./ui/MainPage";
 export { MainLayout } from "./ui/MainLayout";

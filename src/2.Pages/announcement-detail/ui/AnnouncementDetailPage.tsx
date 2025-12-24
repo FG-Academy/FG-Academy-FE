@@ -3,11 +3,10 @@
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { ArrowLeftIcon, PencilIcon } from "lucide-react";
+import { ArrowLeft, Pencil, Calendar, User } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { announcementQueries } from "@/5.entities/announcement/api/announcement.queries";
 import dayjs from "dayjs";
-import { Typography } from "@/6.shared/ui";
 import { DeleteAnnouncementCta } from "@/4.features/delete-announcement/ui/DeleteAnnouncementCta";
 
 type Props = {
@@ -23,54 +22,87 @@ const AnnouncementDetailPage = ({ announcementId }: Props) => {
     announcementQueries.detail(announcementId)
   );
 
+  const isAdmin =
+    session?.user.level === "admin" || session?.user.level === "manager";
+
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-10">
-      <div className="flex flex-col w-full max-w-[800px] gap-6">
-        <Typography name="h3">공지 사항</Typography>
-        <div>
-          <Button
-            className="flex gap-2 items-center"
-            variant="outline"
-            onClick={() => router.push("/announcement")}
-          >
-            <ArrowLeftIcon size={18} />
-            목록으로
-          </Button>
-        </div>
-        <div className="flex flex-col w-full gap-2">
-          <div className="flex flex-col gap-2 justify-between w-full p-2 px-6 bg-gray-100 border-gray-300 border-y">
-            <Typography name="large">{announcement.title}</Typography>
-            <div className="flex gap-3 items-center">
-              <Typography name="muted">관리자</Typography>
-              <Typography name="muted">|</Typography>
-              <Typography name="muted">
-                {dayjs(announcement.createdAt).format("YYYY-MM-DD")}
-              </Typography>
+    <div className="flex flex-col items-center w-full min-h-screen bg-gray-50/50">
+      <div className="w-full max-w-[860px] px-5 md:px-8 py-8 md:py-12">
+        {/* 상단 네비게이션 */}
+        <button
+          onClick={() => router.push("/announcement")}
+          className="inline-flex items-center gap-2 text-sm text-gray-500 
+                     hover:text-primary-blue transition-colors mb-6 group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+          목록으로 돌아가기
+        </button>
+
+        {/* 메인 카드 */}
+        <article className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          {/* 헤더 영역 */}
+          <header className="px-6 md:px-8 pt-8 pb-6 border-b border-gray-100">
+            {/* 카테고리 뱃지 */}
+            <div className="flex items-center gap-2 mb-4">
+              <span
+                className="inline-flex items-center px-3 py-1 rounded-full 
+                              text-xs font-medium bg-primary-blue/10 text-primary-blue"
+              >
+                공지사항
+              </span>
             </div>
-          </div>
-        </div>
-        <div
-          className="flex items-start w-full p-4 pb-24 border-b border-gray-300"
-          dangerouslySetInnerHTML={{
-            __html: announcement.content.replace(/\n/g, "<br />"),
-          }}
-        ></div>
-        {(session?.user.level === "admin" ||
-          session?.user.level === "manager") && (
-          <div className="flex flex-row justify-between w-full p-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                router.push(`/announcement/${announcementId}/edit`);
+
+            {/* 제목 */}
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-snug mb-5">
+              {announcement.title}
+            </h1>
+
+            {/* 메타 정보 */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center gap-1.5">
+                <User className="w-4 h-4" />
+                <span>관리자</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4" />
+                <time dateTime={announcement.createdAt}>
+                  {dayjs(announcement.createdAt).format("YYYY년 M월 D일")}
+                </time>
+              </div>
+            </div>
+          </header>
+
+          {/* 본문 영역 */}
+          <div className="px-6 md:px-8 py-8 md:py-10">
+            <div
+              className="prose prose-gray max-w-none text-gray-700 leading-relaxed
+                         [&>p]:mb-4 [&>br]:mb-2"
+              dangerouslySetInnerHTML={{
+                __html: announcement.content.replace(/\n/g, "<br />"),
               }}
-              className="flex justify-center items-center gap-2"
-            >
-              <PencilIcon size={18} />
-              수정
-            </Button>
-            <DeleteAnnouncementCta announcementId={announcementId} />
+            />
           </div>
-        )}
+
+          {/* 관리자 액션 영역 */}
+          {isAdmin && (
+            <footer className="px-6 md:px-8 py-5 bg-gray-50/80 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    router.push(`/announcement/${announcementId}/edit`)
+                  }
+                  className="gap-2 text-gray-600 hover:text-primary-blue hover:border-primary-blue"
+                >
+                  <Pencil className="w-4 h-4" />
+                  수정하기
+                </Button>
+                <DeleteAnnouncementCta announcementId={announcementId} />
+              </div>
+            </footer>
+          )}
+        </article>
       </div>
     </div>
   );

@@ -9,13 +9,11 @@ export interface LoginResult {
 
 export const loginUser = async (data: LoginFormData): Promise<LoginResult> => {
   try {
-    console.log("Logging in user with data:", data);
     const response = await signIn("credentials", {
       nameBirthId: data.nameBirthId,
       password: data.password,
       redirect: false,
     });
-    console.log("Sign-in response:", response);
 
     if (response?.error) {
       toast({

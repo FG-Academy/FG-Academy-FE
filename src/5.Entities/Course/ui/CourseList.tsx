@@ -2,12 +2,7 @@
 
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  AspectRatio,
-  ImageWithFallback,
-  Separator,
-  Typography,
-} from "@/6.shared/ui";
+import { AspectRatio, ImageWithFallback } from "@/6.shared/ui";
 import Link from "next/link";
 import { courseQueries } from "../api/course.queries";
 
@@ -32,42 +27,52 @@ export const CourseList = ({ selectedCategory }: CourseListProps) => {
 
   // 기본 카테고리별 분리 표시 (Main 페이지용)
   return (
-    <div className="flex flex-col justify-center w-full">
-      {filteredCourses.map((category, idx) => (
-        <React.Fragment key={category.name}>
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="text-2xl font-bold">{category.name}</h2>
-            <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-3 md:grid-cols-4">
-              {category.courses.map((course) => (
-                <Link
-                  href={`/course/${course.courseId}`}
-                  key={course.courseId}
-                  className="flex flex-col gap-2"
-                >
+    <div className="flex flex-col justify-center w-full gap-12 md:gap-16">
+      {filteredCourses.map((category) => (
+        <section key={category.name} className="flex flex-col">
+          {/* 섹션 타이틀 */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-6 bg-primary-blue rounded-full" />
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
+              {category.name}
+            </h2>
+          </div>
+
+          {/* 강의 그리드 */}
+          <div className="grid w-full grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {category.courses.map((course) => (
+              <Link
+                href={`/course/${course.courseId}`}
+                key={course.courseId}
+                className="group flex flex-col gap-3"
+              >
+                {/* 썸네일 */}
+                <div className="relative overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
                   <AspectRatio ratio={16 / 9}>
                     <ImageWithFallback
-                      className="object-cover h-full border rounded-2xl"
+                      className="object-cover w-full h-full 
+                                 group-hover:scale-105 transition-transform duration-300 ease-out"
                       width={500}
-                      height={100}
+                      height={281}
                       src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
                       alt={course.title || "강의 썸네일"}
                       priority
                     />
                   </AspectRatio>
-                  <Typography
-                    name="small"
-                    className="overflow-hidden text-sm line-clamp-2 md:text-base"
-                  >
-                    {course.title.replace(/\(\d+\)\s*/, "")}
-                  </Typography>
-                </Link>
-              ))}
-            </div>
+                </div>
+
+                {/* 강의 제목 */}
+                <h3
+                  className="text-sm md:text-base font-medium text-gray-800 
+                             line-clamp-2 leading-snug
+                             group-hover:text-primary-blue transition-colors duration-200"
+                >
+                  {course.title.replace(/\(\d+\)\s*/, "")}
+                </h3>
+              </Link>
+            ))}
           </div>
-          {filteredCourses.length !== idx + 1 && (
-            <Separator className="my-8" color="black" />
-          )}
-        </React.Fragment>
+        </section>
       ))}
     </div>
   );

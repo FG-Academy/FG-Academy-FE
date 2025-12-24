@@ -189,6 +189,3 @@ export function QuestionDetailPageContent({ questionId }: Props) {
     </div>
   );
 }
-
-/** @deprecated Use QuestionDetailPageContent instead */
-export const QuestionDetailPage = QuestionDetailPageContent;
