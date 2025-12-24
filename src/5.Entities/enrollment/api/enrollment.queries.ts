@@ -17,18 +17,16 @@ export const enrollmentQueries = {
     }),
 
   /** 수강 중인 코스의 강의, 퀴즈, 제출현황 조회 (강의 수강 화면용) */
-  myCourseLectures: (courseId: number, accessToken: string) =>
+  myCourseLectures: (courseId: number) =>
     queryOptions<MyCourseDetail>({
-      queryKey: ["myCourse", courseId, accessToken],
-      queryFn: () => getMyCourseLectures(courseId, accessToken),
-      enabled: !!accessToken,
+      queryKey: ["myCourse", courseId],
+      queryFn: () => getMyCourseLectures(courseId),
     }),
 
   /** 강의 진도 현황 조회 */
-  lectureProgress: (courseId: number, accessToken: string) =>
+  lectureProgress: (courseId: number) =>
     queryOptions<LectureProgressResult>({
-      queryKey: ["progress", courseId, accessToken],
-      queryFn: () => getLectureProgress(courseId, accessToken),
-      enabled: !!accessToken,
+      queryKey: ["progress", courseId],
+      queryFn: () => getLectureProgress(courseId),
     }),
 };

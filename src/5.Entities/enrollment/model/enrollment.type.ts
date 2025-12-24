@@ -41,6 +41,7 @@ export interface MyCourseLecture {
   lectureId: number;
   lectureNumber: number;
   lectureTitle: string;
+  videoLink?: string;
   quizzes: MyCourseLectureQuiz[];
 }
 

@@ -33,6 +33,12 @@ export interface QuizSubmit {
   answer: string;
 }
 
+/** 퀴즈 상세 정보 (답변, 제출 정보 포함) */
+export interface QuizWithDetails extends Quiz {
+  quizAnswers: QuizAnswer[];
+  quizSubmits: QuizSubmit[];
+}
+
 export const STATUS = {
   미채점: 0,
   정답: 1,

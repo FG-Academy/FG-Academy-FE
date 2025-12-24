@@ -1,22 +1,11 @@
+import { apiClient } from "@/6.shared/api";
+import type { LectureProgressResult } from "../model/enrollment.type";
+
 /** 강의 진도 현황 조회 */
 export async function getLectureProgress(
-  courseId: number,
-  accessToken: string
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/lectures/progress`,
-    {
-      next: {
-        tags: ["progress"],
-      },
-      headers: { authorization: `Bearer ${accessToken}` },
-      credentials: "include",
-    }
+  courseId: number
+): Promise<LectureProgressResult> {
+  return apiClient.get<LectureProgressResult>(
+    `/courses/${courseId}/lectures/progress`
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to get lecture progress");
-  }
-
-  return response.json();
 }

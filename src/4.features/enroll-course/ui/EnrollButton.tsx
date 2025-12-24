@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Button, Spinner } from "@/6.shared/ui";
 import { CourseEnrollment } from "@/5.entities/enrollment";
 import { useEnrollmentMutation } from "../api/use-enrollment-mutation";
@@ -12,7 +12,8 @@ type Props = {
 };
 
 export function EnrollButton({ enrollment, firstLectureId }: Props) {
-  const courseId = Number(useSearchParams().get("courseId"));
+  const params = useParams();
+  const courseId = Number(params.courseId);
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -28,6 +29,9 @@ export function EnrollButton({ enrollment, firstLectureId }: Props) {
         disabled={enrollment.lastStudyLecture === null}
         onContinue={() => {
           if (enrollment.lastStudyLecture !== null) {
+            console.log(
+              `/course/${courseId}/lecture/${enrollment.lastStudyLecture}`
+            );
             router.push(
               `/course/${courseId}/lecture/${enrollment.lastStudyLecture}`
             );
