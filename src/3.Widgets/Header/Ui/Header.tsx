@@ -68,7 +68,7 @@ function AdminOnlyLink({
 
   if (!isPrivileged(session)) return null;
   return (
-    <NavItem href="/admin/videos" variant={variant}>
+    <NavItem href="/admin/courses" variant={variant}>
       관리자 페이지
     </NavItem>
   );

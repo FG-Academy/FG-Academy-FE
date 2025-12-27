@@ -196,6 +196,76 @@ export class ApiClient {
 
     return this.handleResponse<TResult>(response);
   }
+
+  /**
+   * POST request with FormData (for file uploads)
+   * Note: Content-Type is not set to let the browser set it with boundary
+   */
+  public async postFormData<TResult = unknown>(
+    endpoint: string,
+    formData: FormData,
+    options?: RequestOptions
+  ): Promise<TResult> {
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
+
+    const { params } = options || {};
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value.toString());
+      });
+    }
+
+    const token = await this.getAuthToken();
+    const headers = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options?.headers && { ...options.headers }),
+    } as HeadersInit;
+
+    const response = await fetch(url.toString(), {
+      method: "POST",
+      headers,
+      credentials: "include",
+      body: formData,
+    });
+
+    return this.handleResponse<TResult>(response);
+  }
+
+  /**
+   * PATCH request with FormData (for file uploads)
+   * Note: Content-Type is not set to let the browser set it with boundary
+   */
+  public async patchFormData<TResult = unknown>(
+    endpoint: string,
+    formData: FormData,
+    options?: RequestOptions
+  ): Promise<TResult> {
+    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
+
+    const { params } = options || {};
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value.toString());
+      });
+    }
+
+    const token = await this.getAuthToken();
+    const headers = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options?.headers && { ...options.headers }),
+    } as HeadersInit;
+
+    const response = await fetch(url.toString(), {
+      method: "PATCH",
+      headers,
+      credentials: "include",
+      body: formData,
+    });
+
+    return this.handleResponse<TResult>(response);
+  }
 }
 
 export const apiClient = new ApiClient(SERVER_API_URL);
