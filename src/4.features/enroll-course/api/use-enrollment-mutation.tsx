@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "../../../components/ui/use-toast";
+import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { useSession } from "next-auth/react";
 import { addEnrollment } from "./add-enrollment";
 
@@ -48,7 +48,7 @@ export function useEnrollmentMutation(
         ),
       });
     },
-    onError: (error: any) => {
+    onError: (error: { message?: string }) => {
       toast({
         title: error?.message ?? "에러가 발생했습니다.",
         variant: "destructive",

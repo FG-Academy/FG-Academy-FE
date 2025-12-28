@@ -1,18 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/6.shared/ui/shadcn/ui/label";
+import { Textarea } from "@/6.shared/ui/shadcn/ui/textarea";
+import { Input } from "@/6.shared/ui/shadcn/ui/input";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
+import { Checkbox } from "@/6.shared/ui/shadcn/ui/checkbox";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/6.shared/ui/shadcn/ui/select";
 import { Check, Minus, Plus } from "lucide-react";
 import type { AdminLectureQuiz, QuizChoiceItem } from "@/5.entities/admin/quiz";
 import {

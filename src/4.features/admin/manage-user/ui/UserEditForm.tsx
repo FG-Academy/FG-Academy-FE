@@ -3,8 +3,8 @@
 import {
   ProfileFormSchema,
   ProfileUpdateFormSchema,
-} from "@/app/(home)/userInfo/lib/profileFormSchema";
-import { departments, positions, userLevelOptions } from "@/app/types/type";
+} from "@/5.entities/user";
+import { departments, positions, userLevelOptions } from "@/5.entities/user";
 import {
   Form,
   FormControl,
@@ -12,9 +12,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@/6.shared/ui/shadcn/ui/form";
+import { Input } from "@/6.shared/ui/shadcn/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/6.shared/ui/shadcn/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -22,16 +22,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { dateFormat } from "@/lib/dateFormat";
+} from "@/6.shared/ui/shadcn/ui/select";
+import { dateFormat } from "@/6.shared/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUpdateUserMutation } from "../api/use-update-user-mutation";
-import { IUser } from "@/model/user";
+import type { User } from "@/5.entities/user";
 
 interface UserEditFormProps {
-  userProfile: Partial<IUser>;
+  userProfile: Partial<User>;
   userId: number;
 }
 

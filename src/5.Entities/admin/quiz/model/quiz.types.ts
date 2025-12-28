@@ -1,19 +1,19 @@
-import { ICourse } from "@/model/course";
-import { ILecture, ILectureTimeRecord } from "@/model/lecture";
-import { IQuiz, IQuizAnswer, IQuizSubmit } from "@/model/quiz";
-import { IUser } from "@/model/user";
+import { Course } from "@/5.entities/course";
+import { Lecture, LectureTimeRecord } from "@/5.entities/lecture";
+import { Quiz, QuizAnswer, QuizSubmit } from "@/5.entities/quiz";
+import { User } from "@/5.entities/user";
 
 // ============ Quiz Submission Types (for grading) ============
 
 /** Quiz with lecture info */
-export interface AdminQuizWithLecture extends IQuiz {
-  quizAnswers: IQuizAnswer[];
+export interface AdminQuizWithLecture extends Quiz {
+  quizAnswers: QuizAnswer[];
   lecture: AdminLectureWithCourse;
 }
 
 /** Lecture with course info */
-export interface AdminLectureWithCourse extends ILecture {
-  course: ICourse;
+export interface AdminLectureWithCourse extends Lecture {
+  course: Course;
 }
 
 /** Quiz filter for admin submission list */
@@ -41,7 +41,7 @@ export interface AdminQuizSubmission {
   courseTitle: string;
   answerType: string;
   status: number;
-  user: IUser;
+  user: User;
   quiz: AdminQuizWithLecture;
 }
 
@@ -71,32 +71,32 @@ export interface AdminDescriptiveQuizDetail {
   status: number;
   createdAt: string;
   updatedAt: string;
-  user: IUser;
+  user: User;
   quiz: AdminQuizWithLecture;
 }
 
 // ============ Lecture Quiz Types (for registration) ============
 
 /** Quiz with answers and submissions for a lecture */
-export interface AdminLectureQuiz extends IQuiz {
-  quizAnswers: IQuizAnswer[];
-  quizSubmits: IQuizSubmit[];
+export interface AdminLectureQuiz extends Quiz {
+  quizAnswers: QuizAnswer[];
+  quizSubmits: QuizSubmit[];
 }
 
 /** Quiz in lecture with full quiz info */
-interface AdminQuizInLecture extends IQuiz {
-  quizAnswers: IQuizAnswer[];
-  quizSubmits: IQuizSubmit[];
+interface AdminQuizInLecture extends Quiz {
+  quizAnswers: QuizAnswer[];
+  quizSubmits: QuizSubmit[];
 }
 
 /** Lecture with quizzes for user courses */
-interface AdminLectureWithQuizzes extends ILecture {
+interface AdminLectureWithQuizzes extends Lecture {
   quizzes: AdminQuizInLecture[];
-  LectureTimeRecords: ILectureTimeRecord[];
+  LectureTimeRecords: LectureTimeRecord[];
 }
 
 /** Course with lectures for quiz management */
-export interface AdminCourseWithLectures extends ICourse {
+export interface AdminCourseWithLectures extends Course {
   lectures: AdminLectureWithQuizzes[];
 }
 
@@ -126,7 +126,7 @@ export interface AdminQuizFormRequest {
 // ============ Lecture for Quiz Registration ============
 
 /** Lecture with quiz counts for quiz registration table */
-export interface AdminLectureForQuiz extends ILecture {
+export interface AdminLectureForQuiz extends Lecture {
   multipleChoiceCount: number;
   descriptiveCount: number;
 }

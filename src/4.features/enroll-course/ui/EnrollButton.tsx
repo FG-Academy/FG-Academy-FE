@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button, Spinner } from "@/6.shared/ui";
 import { CourseEnrollment } from "@/5.entities/enrollment";
 import { useEnrollmentMutation } from "../api/use-enrollment-mutation";

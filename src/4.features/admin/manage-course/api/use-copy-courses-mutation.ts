@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import { copyCourses } from "./copy-courses";
 
 export function useCopyCoursesMutation() {

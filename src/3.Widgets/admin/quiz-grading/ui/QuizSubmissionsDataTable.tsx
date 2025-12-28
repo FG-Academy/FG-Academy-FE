@@ -15,8 +15,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+} from "@/6.shared/ui/shadcn/ui/table";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -25,7 +25,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/6.shared/ui/shadcn/ui/dialog";
 import { DataTablePagination } from "@/6.shared/ui/admin";
 import type { AdminQuizSubmission } from "@/5.entities/admin/quiz";
 import {
@@ -77,74 +77,92 @@ export function QuizSubmissionsDataTable({
 
   return (
     <>
-      <div className="flex flex-col overflow-y-auto">
-        <Table className="container relative justify-start py-2 mx-auto overflow-y-auto">
-          <TableHeader className="sticky top-0 bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  key={headerGroup.id}
+                  className="bg-gray-50 hover:bg-gray-50"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell className="cursor-pointer" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className="h-11 px-4 border-b border-gray-200"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  검색 결과가 없습니다.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <DataTablePagination table={table} pagination={pagination} />
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="px-4 py-3">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-32 text-center text-gray-500"
+                  >
+                    검색 결과가 없습니다.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="border-t border-gray-200">
+          <DataTablePagination table={table} pagination={pagination} />
+        </div>
       </div>
 
       {/* Quiz Grading Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}
-          className="w-[600px] h-[646px] overflow-y-scroll"
+          className="max-w-xl max-h-[85vh] overflow-y-auto"
         >
           <DialogHeader>
-            <DialogTitle>사용자 주관식 퀴즈 상세정보</DialogTitle>
+            <DialogTitle>퀴즈 상세 정보</DialogTitle>
             <DialogDescription>
-              사용자가 제출한 퀴즈 상세정보를 확인합니다.
+              사용자가 제출한 퀴즈 정보를 확인하고 채점할 수 있습니다.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center space-x-2">
+          <div className="py-4">
             <QuizGradingDialog />
           </div>
-          <DialogFooter className="sm:justify-end">
+          <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
+              <Button
+                type="button"
+                variant="outline"
+                className="border-gray-200"
+              >
                 닫기
               </Button>
             </DialogClose>

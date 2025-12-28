@@ -33,7 +33,10 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
     (l) => l.lectureId === selectedLecture.lectureId
   );
 
-  const quizzes = (lecture?.quizzes ?? []) as LectureQuiz[];
+  const quizzes = useMemo(
+    () => (lecture?.quizzes ?? []) as LectureQuiz[],
+    [lecture?.quizzes]
+  );
 
   // 필터별 카운트 계산 (가장 최근 제출 기준)
   const counts = useMemo(() => {

@@ -5,15 +5,14 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
+} from "@/6.shared/ui/shadcn/ui/form";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/6.shared/ui/shadcn/ui/input";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash } from "lucide-react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { toast } from "@/6.shared/ui";
 import { useUpdateCategoriesMutation } from "../api/use-update-categories-mutation";
 import {
@@ -112,23 +111,30 @@ export function CategoryEditForm({ categoriesInfo }: CategoryEditFormProps) {
         id="categoryEditForm"
         autoComplete="off"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative w-1/2 border h-full border-gray-300 space-y-4 p-12 rounded-lg"
+        className="w-full max-w-xl bg-white rounded-lg border border-gray-200 overflow-hidden"
       >
-        <div className="flex justify-end">
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+          <div className="text-sm text-gray-500">
+            총 {fields.length}개 카테고리
+          </div>
           <Button
             type="button"
             onClick={onAddCategory}
-            className="mb-4 bg-green-500 text-white rounded-md"
+            className="bg-gray-900 text-white hover:bg-gray-800"
           >
+            <Plus className="w-4 h-4 mr-2" />
             카테고리 추가
           </Button>
         </div>
-        <div className="overflow-y-auto h-4/5">
+
+        {/* Category List */}
+        <div className="p-4 max-h-[500px] overflow-y-auto">
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(droppableProvided) => (
                 <div
-                  className="space-y-2 overflow-y-auto"
+                  className="space-y-3"
                   {...droppableProvided.droppableProps}
                   ref={droppableProvided.innerRef}
                 >
@@ -138,44 +144,64 @@ export function CategoryEditForm({ categoriesInfo }: CategoryEditFormProps) {
                       draggableId={field.id.toString()}
                       index={index}
                     >
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="border-2 bg-white p-4 space-y-2 rounded-xl border-gray-300 border-dashed"
+                          className={`
+                            bg-white border rounded-lg p-4
+                            ${snapshot.isDragging 
+                              ? "border-gray-400 shadow-lg" 
+                              : "border-gray-200 hover:border-gray-300"
+                            }
+                            transition-all duration-200
+                          `}
                         >
-                          <div className="flex justify-between items-center">
-                            <FormLabel className="text-base font-bold">
-                              카테고리 {index + 1}
-                            </FormLabel>
+                          <div className="flex items-center gap-3">
+                            {/* Drag Handle */}
+                            <div
+                              {...provided.dragHandleProps}
+                              className="cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+                            >
+                              <GripVertical className="w-5 h-5" />
+                            </div>
+
+                            {/* Order Badge */}
+                            <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
+                              {index + 1}
+                            </div>
+
+                            {/* Input */}
+                            <FormField
+                              control={form.control}
+                              name={`categories.${index}.name`}
+                              render={({ field }) => (
+                                <FormItem className="flex-1">
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      {...form.register(
+                                        `categories.${index}.name`
+                                      )}
+                                      placeholder="카테고리 이름"
+                                      className="border-gray-200 focus:ring-gray-900 focus:border-transparent"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            {/* Delete Button */}
                             <Button
                               type="button"
                               variant="ghost"
                               onClick={() => onRemoveCategory(index)}
-                              className="border border-red-600 rounded-md text-red-600"
+                              className="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2"
                             >
-                              <Trash size={20} className="mr-1" />
-                              삭제
+                              <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
-                          <FormField
-                            control={form.control}
-                            name={`categories.${index}.name`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    {...form.register(
-                                      `categories.${index}.name`
-                                    )}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
                         </div>
                       )}
                     </Draggable>
@@ -185,10 +211,23 @@ export function CategoryEditForm({ categoriesInfo }: CategoryEditFormProps) {
               )}
             </Droppable>
           </DragDropContext>
+
+          {fields.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              등록된 카테고리가 없습니다.
+            </div>
+          )}
         </div>
-        <Button className="flex w-full mt-10" type="submit">
-          카테고리 저장
-        </Button>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200 bg-gray-50">
+          <Button
+            type="submit"
+            className="w-full bg-gray-900 text-white hover:bg-gray-800"
+          >
+            변경사항 저장
+          </Button>
+        </div>
       </form>
     </Form>
   );

@@ -21,8 +21,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+} from "@/6.shared/ui/shadcn/ui/table";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -31,11 +31,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { DataTablePagination } from "@/6.shared/ui/admin";
+} from "@/6.shared/ui/shadcn/ui/dialog";
+import { DataTablePagination, SearchInput } from "@/6.shared/ui/admin";
 import type { AdminLectureForQuiz } from "@/5.entities/admin/quiz";
 import { useQuizRegisterDialogStore } from "@/4.features/admin/manage-quiz";
 import { QuizListDialog } from "./QuizListDialog";
+import { cn } from "@/6.shared/lib";
 
 declare module "@tanstack/react-table" {
   interface FilterMeta {
@@ -99,57 +100,96 @@ export function LectureQuizDataTable({
 
   return (
     <>
-      <Table className="justify-start relative w-full">
-        <TableHeader className="sticky top-0 bg-white">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        {/* Toolbar */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-4">
+            <SearchInput
+              value={globalFilter}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              placeholder="강의 검색..."
+              className="max-w-xs"
+            />
+            <div className="text-sm text-gray-500">
+              총 {table.getFilteredRowModel().rows.length}개 강의
+            </div>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="bg-gray-50 hover:bg-gray-50">
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className="text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell className="cursor-pointer" key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          "px-4 py-3 text-sm text-gray-700",
+                          "cursor-pointer"
+                        )}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center text-gray-500"
+                  >
+                    검색 결과가 없습니다.
                   </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="text-center">
-                검색 결과가 없습니다.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <DataTablePagination table={table} pagination={pagination} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="border-t border-gray-200 p-4">
+          <DataTablePagination table={table} pagination={pagination} />
+        </div>
+      </div>
 
       {/* Quiz List Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}
-          className="w-[600px] h-[646px] overflow-y-auto"
+          className="w-[600px] max-h-[80vh] overflow-y-auto bg-white"
         >
           <DialogHeader>
-            <DialogTitle>강의 등록 퀴즈 현황</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-xl font-semibold text-gray-900">
+              강의 등록 퀴즈 현황
+            </DialogTitle>
+            <DialogDescription className="text-gray-500">
               강의별 등록된 퀴즈들을 확인합니다.
             </DialogDescription>
           </DialogHeader>
@@ -158,7 +198,10 @@ export function LectureQuizDataTable({
           </div>
           <DialogFooter className="sm:justify-end">
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
+              <Button
+                type="button"
+                className="bg-gray-100 text-gray-700 hover:bg-gray-200 border-0"
+              >
                 닫기
               </Button>
             </DialogClose>

@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Trash } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { Input } from "@/6.shared/ui/shadcn/ui/input";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
+import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -15,9 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/6.shared/ui/shadcn/ui/form";
 
-import type { ILecture } from "@/model/lecture";
+import type { Lecture } from "@/5.entities/lecture";
 import { useUpdateLecturesMutation } from "../api/use-update-lectures-mutation";
 import {
   LectureFormSchema,
@@ -25,7 +25,7 @@ import {
 } from "../model/course-form.schema";
 
 interface LectureEditFormProps {
-  lecturesInfo: ILecture[];
+  lecturesInfo: Lecture[];
   courseId: number;
 }
 

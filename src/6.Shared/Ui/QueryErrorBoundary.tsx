@@ -2,7 +2,7 @@ import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import BasicErrorFallback from "./BasicErrorFallback";
 
-function QueryErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+function QueryErrorFallback({ resetErrorBoundary }: FallbackProps) {
   return <BasicErrorFallback resetErrorBoundary={resetErrorBoundary} />;
 }
 

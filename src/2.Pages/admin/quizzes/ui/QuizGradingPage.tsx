@@ -11,8 +11,8 @@ import {
   QuizSubmissionsDataTable,
   quizSubmissionsColumns,
 } from "@/3.widgets/admin/quiz-grading";
-import { Filter } from "@/6.shared/ui/admin";
-import { departments, positions } from "@/app/types/type";
+import { Filter, PageHeader, SearchInput } from "@/6.shared/ui/admin";
+import { departments, positions } from "@/5.entities/user";
 
 export function QuizGradingPage() {
   const { data: session } = useSession();
@@ -61,86 +61,94 @@ export function QuizGradingPage() {
 
   if (isLoading || !quizSubmits || !courses) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="p-8 w-full flex items-center justify-center h-[600px]">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col p-4 space-y-2">
+    <div className="p-8 w-full">
+      <PageHeader
+        title="퀴즈 채점"
+        description="제출된 퀴즈 답안을 채점할 수 있습니다."
+      />
+
       {/* Filters */}
-      <div className="flex space-x-2 mb-2 items-center flex-wrap gap-2">
-        <input
-          type="text"
-          placeholder="이름 검색"
-          value={nameInputValue}
-          onChange={(e) => setNameInputValue(e.target.value)}
-          className="px-2 py-1 border border-gray-300 rounded"
-        />
-        <Filter
-          label="직분"
-          value={filters.position}
-          options={positions}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, position: value }))
-          }
-        />
-        <Filter
-          label="부서"
-          value={filters.departmentName}
-          options={departments}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, departmentName: value }))
-          }
-        />
-        <Filter
-          label="코스 이름"
-          value={filters.courseTitle}
-          options={courses.map((course) => ({
-            value: course.title,
-            label: course.title,
-          }))}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, courseTitle: value }))
-          }
-        />
-        <Filter
-          label="퀴즈 유형"
-          value={filters.quizType}
-          options={[
-            { value: "객관식", label: "객관식" },
-            { value: "주관식", label: "주관식" },
-          ]}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, quizType: value }))
-          }
-        />
-        <Filter
-          label="정답 현황"
-          value={filters.answerStatus}
-          options={[
-            { value: "정답", label: "정답" },
-            { value: "미채점", label: "미채점" },
-            { value: "오답", label: "오답" },
-          ]}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, answerStatus: value }))
-          }
-        />
-        <Filter
-          label="정렬 기준"
-          value={sortBy}
-          options={[
-            { value: "newest", label: "최신순" },
-            { value: "oldest", label: "오래된순" },
-          ]}
-          onChange={(value) => setSortBy(value)}
-        />
+      <div className="mt-6 bg-white rounded-lg border border-gray-200 p-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <SearchInput
+            value={nameInputValue}
+            onChange={(e) => setNameInputValue(e.target.value)}
+            placeholder="이름 검색..."
+            className="w-48"
+          />
+          <Filter
+            label="직분"
+            value={filters.position}
+            options={positions}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, position: value }))
+            }
+          />
+          <Filter
+            label="부서"
+            value={filters.departmentName}
+            options={departments}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, departmentName: value }))
+            }
+          />
+          <Filter
+            label="코스"
+            value={filters.courseTitle}
+            options={courses.map((course) => ({
+              value: course.title,
+              label: course.title,
+            }))}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, courseTitle: value }))
+            }
+          />
+          <Filter
+            label="퀴즈 유형"
+            value={filters.quizType}
+            options={[
+              { value: "객관식", label: "객관식" },
+              { value: "주관식", label: "주관식" },
+            ]}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, quizType: value }))
+            }
+          />
+          <Filter
+            label="정답 현황"
+            value={filters.answerStatus}
+            options={[
+              { value: "정답", label: "정답" },
+              { value: "미채점", label: "미채점" },
+              { value: "오답", label: "오답" },
+            ]}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, answerStatus: value }))
+            }
+          />
+          <div className="ml-auto">
+            <Filter
+              label="정렬"
+              value={sortBy}
+              options={[
+                { value: "newest", label: "최신순" },
+                { value: "oldest", label: "오래된순" },
+              ]}
+              onChange={(value) => setSortBy(value)}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Data Table */}
-      <div className="flex flex-col p-2 h-[650px]">
+      <div className="mt-4">
         <QuizSubmissionsDataTable
           totalPages={quizSubmits.result.totalPages}
           pagination={pagination}

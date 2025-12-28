@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import { createQuiz } from "./create-quiz";
 import { updateQuiz } from "./update-quiz";
 import { deleteQuiz } from "./delete-quiz";

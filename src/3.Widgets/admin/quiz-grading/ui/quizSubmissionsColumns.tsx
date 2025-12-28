@@ -1,9 +1,38 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
+import { ColumnDef, CellContext } from "@tanstack/react-table";
 import type { AdminQuizSubmission } from "@/5.entities/admin/quiz";
 import { useQuizGradingDialogStore } from "@/4.features/admin/manage-quiz";
+import { StatusBadge, getQuizAnswerStatusVariant } from "@/6.shared/ui/admin";
+import { Eye, PenLine } from "lucide-react";
+
+// 별도 컴포넌트로 분리하여 Hook 사용
+function ActionsCell({ row }: CellContext<AdminQuizSubmission, unknown>) {
+  const { openDialog } = useQuizGradingDialogStore();
+  const quizType = row.getValue("quizType") as string;
+  const userId = row.getValue("userId") as number;
+  const quizId = row.getValue("quizId") as number;
+  const isDescriptive = quizType === "주관식";
+
+  return (
+    <button
+      onClick={() => openDialog(userId, quizId)}
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
+    >
+      {isDescriptive ? (
+        <>
+          <PenLine className="w-3.5 h-3.5" />
+          채점
+        </>
+      ) : (
+        <>
+          <Eye className="w-3.5 h-3.5" />
+          보기
+        </>
+      )}
+    </button>
+  );
+}
 
 export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   {
@@ -18,23 +47,35 @@ export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   },
   {
     accessorKey: "level",
-    header: () => <div className="text-center">레벨</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        레벨
+      </span>
+    ),
     enableHiding: true,
   },
   {
     accessorKey: "name",
     size: 100,
-    header: () => <div className="text-center">이름</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        이름
+      </span>
+    ),
     cell: ({ row }) => (
-      <div className="text-center">{row.getValue("name")}</div>
+      <span className="font-medium text-gray-900">{row.getValue("name")}</span>
     ),
     enableHiding: false,
   },
   {
     accessorKey: "positionLabel",
-    header: () => <div className="text-center">직분</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        직분
+      </span>
+    ),
     cell: ({ row }) => (
-      <div className="text-center">{row.getValue("positionLabel")}</div>
+      <span className="text-gray-600">{row.getValue("positionLabel")}</span>
     ),
     enableHiding: false,
     meta: {
@@ -43,9 +84,15 @@ export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   },
   {
     accessorKey: "departmentLabel",
-    header: () => <div className="text-center">부서</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        부서
+      </span>
+    ),
     cell: ({ row }) => (
-      <div className="text-center">{row.getValue("departmentLabel")}</div>
+      <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium">
+        {row.getValue("departmentLabel")}
+      </span>
     ),
     enableHiding: false,
     meta: {
@@ -54,9 +101,15 @@ export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   },
   {
     accessorKey: "courseTitle",
-    header: () => <div className="text-center">코스이름</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        코스
+      </span>
+    ),
     cell: ({ row }) => (
-      <div className="text-center">{row.getValue("courseTitle")}</div>
+      <span className="text-gray-600 max-w-[150px] truncate block">
+        {row.getValue("courseTitle")}
+      </span>
     ),
     enableHiding: false,
     meta: {
@@ -67,10 +120,24 @@ export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   },
   {
     accessorKey: "quizType",
-    header: () => <div className="text-center">퀴즈 유형</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        유형
+      </span>
+    ),
     cell: ({ row }) => {
       const quizType = row.getValue("quizType") as string;
-      return <div className="text-center">{quizType}</div>;
+      return (
+        <span
+          className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
+            quizType === "주관식"
+              ? "bg-purple-50 text-purple-700"
+              : "bg-blue-50 text-blue-700"
+          }`}
+        >
+          {quizType}
+        </span>
+      );
     },
     meta: {
       filterVariant: "select",
@@ -79,26 +146,17 @@ export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   },
   {
     accessorKey: "answerType",
-    header: () => <div className="text-center">채점 현황</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        채점
+      </span>
+    ),
     cell: ({ row }) => {
       const answerType = row.getValue("answerType") as string;
-      const getColorClass = (type: string) => {
-        switch (type) {
-          case "정답":
-            return "text-green-500";
-          case "오답":
-            return "text-red-500";
-          case "미채점":
-            return "text-orange-500";
-          default:
-            return "";
-        }
-      };
-
       return (
-        <div className={`text-center font-medium ${getColorClass(answerType)}`}>
+        <StatusBadge variant={getQuizAnswerStatusVariant(answerType)}>
           {answerType}
-        </div>
+        </StatusBadge>
       );
     },
     meta: {
@@ -108,22 +166,12 @@ export const quizSubmissionsColumns: ColumnDef<AdminQuizSubmission>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const { openDialog } = useQuizGradingDialogStore();
-      const quizType = row.getValue("quizType") as string;
-      const userId = row.getValue("userId") as number;
-      const quizId = row.getValue("quizId") as number;
-
-      return (
-        <Button
-          variant="secondary"
-          className="px-4 space-x-2 border border-gray-300 hover:bg-gray-400"
-          onClick={() => openDialog(userId, quizId)}
-        >
-          {quizType === "주관식" ? "채점하기" : "상세보기"}
-        </Button>
-      );
-    },
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        관리
+      </span>
+    ),
+    cell: (props) => <ActionsCell {...props} />,
     enableHiding: false,
   },
 ];

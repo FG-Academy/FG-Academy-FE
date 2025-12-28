@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { PaginationState } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { userQueries, type UserFilter } from "@/5.entities/admin/user";
 import { UserDataTable, userColumns } from "@/3.widgets/admin/user-table";
-import { Filter } from "@/6.shared/ui/admin";
-import { departments, positions, userLevelOptions } from "@/app/types/type";
+import { Filter, PageHeader, SearchInput } from "@/6.shared/ui/admin";
+import { departments, positions, userLevelOptions } from "@/5.entities/user";
 
 const sortOptions = [
   { label: "이름순", value: "name" },
@@ -51,62 +52,73 @@ export function UsersPage() {
 
   if (isLoading || !allUsers) {
     return (
-      <div className="w-full p-4 px-10 flex items-center justify-center h-[600px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+      <div className="p-8 w-full flex items-center justify-center h-[600px]">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
       </div>
     );
   }
 
   return (
-    <div className="w-full p-4 px-10">
-      <div className="flex space-x-2 mb-2 items-center">
-        <input
-          type="text"
-          placeholder="이름 검색"
-          value={nameInputValue}
-          onChange={(e) => setNameInputValue(e.target.value)}
-          className="px-2 py-1 border border-gray-300 rounded"
-        />
-        <Filter
-          label="레벨"
-          value={filters.level}
-          options={userLevelOptions}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, level: value }))
-          }
-        />
-        <Filter
-          label="직위"
-          value={filters.position}
-          options={positions}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, position: value }))
-          }
-        />
-        <Filter
-          label="부서"
-          value={filters.department}
-          options={departments}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, department: value }))
-          }
-        />
-        <Filter
-          label="교회"
-          value={filters.church}
-          options={churchOptions}
-          onChange={(value) =>
-            setFilters((prev) => ({ ...prev, church: value }))
-          }
-        />
-        <Filter
-          label="정렬 기준"
-          value={sortBy}
-          options={sortOptions}
-          onChange={(value) => setSortBy(value)}
-        />
+    <div className="p-8 w-full">
+      <PageHeader
+        title="사용자 관리"
+        description="사용자 정보를 조회하고 관리할 수 있습니다."
+      />
+
+      {/* Filters */}
+      <div className="mt-6 bg-white rounded-lg border border-gray-200 p-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <SearchInput
+            value={nameInputValue}
+            onChange={(e) => setNameInputValue(e.target.value)}
+            placeholder="이름 검색..."
+            className="w-48"
+          />
+          <Filter
+            label="레벨"
+            value={filters.level}
+            options={userLevelOptions}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, level: value }))
+            }
+          />
+          <Filter
+            label="직위"
+            value={filters.position}
+            options={positions}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, position: value }))
+            }
+          />
+          <Filter
+            label="부서"
+            value={filters.department}
+            options={departments}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, department: value }))
+            }
+          />
+          <Filter
+            label="교회"
+            value={filters.church}
+            options={churchOptions}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, church: value }))
+            }
+          />
+          <div className="ml-auto">
+            <Filter
+              label="정렬"
+              value={sortBy}
+              options={sortOptions}
+              onChange={(value) => setSortBy(value)}
+            />
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col p-2 h-[646px]">
+
+      {/* Data Table */}
+      <div className="mt-4">
         <UserDataTable
           totalPages={allUsers.result.totalPages}
           pagination={pagination}

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
+import { Textarea } from "@/6.shared/ui/shadcn/ui/textarea";
+import { Checkbox } from "@/6.shared/ui/shadcn/ui/checkbox";
+import { Label } from "@/6.shared/ui/shadcn/ui/label";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/6.shared/ui/shadcn/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 import { adminQuizQueries } from "@/5.entities/admin/quiz";
 import { useQuizFeedbackMutation } from "../api/quiz-feedback.mutation";

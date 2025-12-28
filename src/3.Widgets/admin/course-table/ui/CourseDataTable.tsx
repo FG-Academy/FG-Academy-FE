@@ -14,7 +14,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import {
   Table,
@@ -23,9 +23,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "@/6.shared/ui/shadcn/ui/table";
+import { SearchInput } from "@/6.shared/ui/admin";
 import { CourseTablePagination } from "./CourseTablePagination";
 
 interface CourseDataTableProps<TData, TValue> {
@@ -86,36 +85,37 @@ export function CourseDataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col justify-between flex-1 overflow-y-auto">
-      <div className="flex flex-col justify-start overflow-y-auto">
-        <div className="relative flex items-center justify-between flex-1 w-full h-full mb-6 mr-auto md:grow-0">
-          <div className="relative">
-            <Search className="absolute z-10 w-6 h-6 top-1 left-2 text-muted-foreground" />
-            <Input
-              value={globalFilter ?? ""}
-              onChange={(e) => setGlobalFilter(e.target.value)}
-              type="search"
-              placeholder="검색..."
-              className="w-full py-1 rounded-lg bg-background pl-10 md:w-[200px] lg:w-[336px] shadow border border-block"
-            />
-          </div>
-          <Button
-            className="bg-blue-700"
-            onClick={() => {
-              router.push("/admin/courses/register");
-            }}
-          >
-            새 강의 추가
-            <Plus className="w-4 h-4 ml-2 text-white" />
-          </Button>
-        </div>
-        <Table className="relative container justify-start mx-auto py-2 overflow-y-auto">
-          <TableHeader className="sticky top-0 bg-gray-100">
+    <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200 overflow-hidden">
+      {/* Toolbar */}
+      <div className="flex items-center justify-between gap-4 p-4 border-b border-gray-100">
+        <SearchInput
+          value={globalFilter ?? ""}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          placeholder="강의 검색..."
+          className="w-64"
+        />
+        <button
+          onClick={() => router.push("/admin/courses/register")}
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          새 강의
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className="flex-1 overflow-auto">
+        <Table>
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="bg-gray-50 hover:bg-gray-50">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="h-11 px-4 border-b border-gray-200"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -134,10 +134,11 @@ export function CourseDataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-gray-50 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="px-4 py-3">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -151,7 +152,7 @@ export function CourseDataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-32 text-center text-gray-500"
                 >
                   검색 결과가 없습니다.
                 </TableCell>
@@ -160,6 +161,8 @@ export function CourseDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
       <CourseTablePagination table={table} />
     </div>
   );

@@ -1,6 +1,6 @@
-import { IUser } from "@/model/user";
-import { IQuizAnswer } from "@/model/quiz";
-import { IEnrollment } from "@/model/enrollment";
+import { User as BaseUser } from "@/5.entities/user";
+import { QuizAnswer } from "@/5.entities/quiz";
+import { Enrollment } from "@/5.entities/enrollment";
 
 export interface UserFilter {
   name: string;
@@ -10,7 +10,7 @@ export interface UserFilter {
   church: string;
 }
 
-export interface User extends IUser {
+export interface AdminUser extends BaseUser {
   departmentLabel: string;
   positionLabel: string;
 }
@@ -20,7 +20,7 @@ export interface UserListResult {
   totalPages: number;
   totalElements: number;
   size: number;
-  content: User[];
+  content: AdminUser[];
 }
 
 export interface UserListResponse {
@@ -29,7 +29,7 @@ export interface UserListResponse {
 
 interface Quiz {
   quizId: number;
-  quizAnswers: IQuizAnswer[];
+  quizAnswers: QuizAnswer[];
   quizType: string;
   question: string;
   answer: number[] | string;
@@ -59,11 +59,12 @@ interface UserEnrollment {
   lectures: UserLecture[];
 }
 
-export interface UserProfileResponse extends IUser {
+export interface UserProfileResponse extends BaseUser {
   enrollments: UserEnrollment[];
 }
 
-export interface UserEnrollmentResponse extends IEnrollment {
+export interface UserEnrollmentResponse extends Enrollment {
+  completedNumber: number;
   course: {
     courseId: number;
     title: string;

@@ -1,5 +1,5 @@
-import type { IEnrollment } from "@/model/enrollment";
-import type { ILecture } from "@/model/lecture";
+import type { Enrollment } from "@/5.entities/enrollment";
+import type { Lecture } from "@/5.entities/lecture";
 
 export interface Category {
   categoryId?: number;
@@ -19,7 +19,7 @@ export interface AdminCourse {
   createdAt: string;
   updatedAt: string;
   category: Category;
-  enrollments: IEnrollment[];
+  enrollments: Enrollment[];
   enrollmentCount: number;
   multipleCount: number;
   descriptiveCount: number;
@@ -37,7 +37,7 @@ export interface AdminCourseDetail {
   createdAt: string;
   updatedAt: string;
   category: Category;
-  lectures: ILecture[];
+  lectures: Lecture[];
 }
 
 export interface LectureInput {

@@ -7,9 +7,9 @@ import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/6.shared/ui/shadcn/ui/input";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
+import { Textarea } from "@/6.shared/ui/shadcn/ui/textarea";
 import {
   Form,
   FormControl,
@@ -17,7 +17,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/6.shared/ui/shadcn/ui/form";
 import {
   Select,
   SelectContent,
@@ -25,9 +25,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/6.shared/ui/shadcn/ui/select";
 
-import { userLevelSettingOptions } from "@/app/types/type";
+import { userLevelSettingOptions } from "@/5.entities/user";
 import { categoryQueries } from "@/5.entities/admin/category";
 import { useCreateCourseMutation } from "../api/use-create-course-mutation";
 import {

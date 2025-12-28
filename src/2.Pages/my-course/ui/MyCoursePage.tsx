@@ -1,6 +1,6 @@
 "use client";
 
-import { AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { AvatarFallback, Avatar } from "@/6.shared/ui/shadcn/ui/avatar";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";

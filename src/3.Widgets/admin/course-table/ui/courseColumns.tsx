@@ -1,13 +1,13 @@
 "use client";
 
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/6.shared/lib";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/6.shared/ui/shadcn/ui/checkbox";
 import type { AdminCourse } from "@/5.entities/admin/course";
+import { StatusBadge, getCourseStatusVariant } from "@/6.shared/ui/admin";
 
 export const courseColumns: ColumnDef<AdminCourse>[] = [
   {
@@ -20,6 +20,7 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        className="border-gray-300"
       />
     ),
     cell: ({ row }) => (
@@ -27,6 +28,7 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        className="border-gray-300"
       />
     ),
     enableSorting: false,
@@ -39,59 +41,82 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
   },
   {
     accessorKey: "thumbnailImagePath",
-    header: () => <div className="text-center">이미지</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        이미지
+      </span>
+    ),
     cell: ({ row }) => {
       return (
-        <Image
-          className="rounded-md"
-          width={100}
-          height={100}
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.getValue(
-            "thumbnailImagePath"
-          )}`}
-          style={{ width: "100%", height: "auto" }}
-          alt="강의 썸네일"
-          priority
-        />
+        <div className="w-20 h-12 relative overflow-hidden rounded-md bg-gray-100">
+          <Image
+            fill
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.getValue(
+              "thumbnailImagePath"
+            )}`}
+            style={{ objectFit: "cover" }}
+            alt="강의 썸네일"
+            sizes="80px"
+          />
+        </div>
       );
     },
   },
   {
     accessorKey: "title",
-    header: () => <div className="text-center">강의명</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        강의명
+      </span>
+    ),
     cell: ({ row }) => {
       return (
-        <div className="text-center w-full whitespace-normal break-words">
+        <div className="max-w-[200px] font-medium text-gray-900 truncate">
           {row.getValue("title")}
         </div>
       );
     },
-    size: 50,
-    maxSize: 50,
   },
   {
     accessorKey: "enrollmentCount",
-    header: () => <div className="text-center">총 수강생</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        수강생
+      </span>
+    ),
     cell: ({ row }) => {
       return (
-        <div className="text-center">{row.getValue("enrollmentCount")}</div>
+        <div className="text-gray-600 tabular-nums">
+          {row.getValue("enrollmentCount")}명
+        </div>
       );
     },
   },
   {
     accessorKey: "category.name",
     accessorFn: (row) => row.category.name,
-    header: () => <div className="text-center">카테고리</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        카테고리
+      </span>
+    ),
     cell: (info) => {
-      return <div className="text-center">{info.getValue() as string}</div>;
+      return (
+        <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium">
+          {info.getValue() as string}
+        </span>
+      );
     },
   },
   {
     accessorKey: "status",
-    header: () => <div className="text-center">상태</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        상태
+      </span>
+    ),
     cell: ({ row }) => {
-      const statusValue = row.getValue("status");
-
+      const statusValue = row.getValue("status") as string;
       let statusLabel;
       switch (statusValue) {
         case "active":
@@ -106,15 +131,23 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
         default:
           statusLabel = "알 수 없음";
       }
-      return <div className="text-center">{statusLabel}</div>;
+      return (
+        <StatusBadge variant={getCourseStatusVariant(statusValue)}>
+          {statusLabel}
+        </StatusBadge>
+      );
     },
   },
   {
     accessorKey: "finishDate",
-    header: () => <div className="text-center">마감 기한</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        마감일
+      </span>
+    ),
     cell: ({ row }) => {
       return (
-        <div className="text-center">
+        <div className="text-gray-600 text-sm">
           {formatDate(new Date(row.getValue("finishDate")))}
         </div>
       );
@@ -122,25 +155,38 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
   },
   {
     id: "quizCount",
-    accessorFn: (row) => `객${row.multipleCount}/주${row.descriptiveCount}`,
-    header: () => <div className="text-center">퀴즈갯수</div>,
-    cell: (info) => {
-      return <div className="text-center">{info.getValue() as string}</div>;
+    accessorFn: (row) => ({ multiple: row.multipleCount, descriptive: row.descriptiveCount }),
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        퀴즈
+      </span>
+    ),
+    cell: ({ row }) => {
+      const quiz = row.getValue("quizCount") as { multiple: number; descriptive: number };
+      return (
+        <div className="text-gray-600 text-sm">
+          <span className="text-gray-400">객</span> {quiz.multiple}{" "}
+          <span className="text-gray-300 mx-1">/</span>
+          <span className="text-gray-400">주</span> {quiz.descriptive}
+        </div>
+      );
     },
   },
   {
     accessorKey: "courseId",
-    header: () => <div className="text-center">관리</div>,
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        관리
+      </span>
+    ),
     cell: ({ row }) => {
       return (
-        <Link href={`/admin/courses/edit?cid=${row.getValue("courseId")}`}>
-          <Button
-            variant="ghost"
-            className="px-4 space-x-2 border border-gray-300 hover:bg-gray-400"
-          >
-            <Pencil className="w-4 h-4" color="blue" />
-            <div>수정하기</div>
-          </Button>
+        <Link
+          href={`/admin/courses/edit?cid=${row.getValue("courseId")}`}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+          수정
         </Link>
       );
     },

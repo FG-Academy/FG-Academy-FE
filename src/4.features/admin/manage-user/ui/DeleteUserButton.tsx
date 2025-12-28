@@ -10,8 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+} from "@/6.shared/ui/shadcn/ui/alert-dialog";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { useDeleteUserMutation } from "../api/use-delete-user-mutation";
 
 interface DeleteUserButtonProps {

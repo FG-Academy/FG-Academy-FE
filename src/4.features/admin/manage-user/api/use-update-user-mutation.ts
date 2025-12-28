@@ -37,7 +37,7 @@ export function useUpdateUserMutation() {
         description: "회원정보 변경에 성공했습니다.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: { status?: number; message?: string }) => {
       if (error.status === 409) {
         toast({
           variant: "destructive",

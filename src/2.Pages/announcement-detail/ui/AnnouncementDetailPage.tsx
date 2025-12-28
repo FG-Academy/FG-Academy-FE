@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Pencil, Calendar, User } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";

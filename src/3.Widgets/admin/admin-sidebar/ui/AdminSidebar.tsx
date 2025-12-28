@@ -1,119 +1,213 @@
 "use client";
 
-import { Users, Video, MessageCircleQuestion } from "lucide-react";
+import {
+  Users,
+  Video,
+  MessageCircleQuestion,
+  LayoutGrid,
+  ChevronDown,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { cn } from "@/6.shared/lib";
+
+interface NavItemProps {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  isActive: boolean;
+  children?: React.ReactNode;
+  hasSubmenu?: boolean;
+  isExpanded?: boolean;
+  onToggle?: () => void;
+}
+
+function NavItem({
+  href,
+  icon,
+  label,
+  isActive,
+  children,
+  hasSubmenu,
+  isExpanded,
+  onToggle,
+}: NavItemProps) {
+  if (hasSubmenu) {
+    return (
+      <div>
+        <button
+          onClick={onToggle}
+          className={cn(
+            "w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-colors",
+            isActive
+              ? "bg-gray-100 text-gray-900"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+          )}
+        >
+          <div className="flex items-center gap-3">
+            {icon}
+            <span>{label}</span>
+          </div>
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 transition-transform duration-200",
+              isExpanded && "rotate-180"
+            )}
+          />
+        </button>
+        {isExpanded && <div className="mt-1 ml-4 space-y-1">{children}</div>}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors",
+        isActive
+          ? "bg-gray-100 text-gray-900"
+          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+      )}
+    >
+      {icon}
+      <span>{label}</span>
+    </Link>
+  );
+}
+
+interface SubNavItemProps {
+  href: string;
+  label: string;
+  isActive: boolean;
+}
+
+function SubNavItem({ href, label, isActive }: SubNavItemProps) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-3 px-4 py-2 text-sm rounded-lg transition-colors",
+        isActive
+          ? "bg-gray-100 text-gray-900 font-medium"
+          : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+      )}
+    >
+      <span className="w-1.5 h-1.5 rounded-full bg-current" />
+      <span>{label}</span>
+    </Link>
+  );
+}
 
 export function AdminSidebar() {
   const { data: session } = useSession();
   const userLevel = session?.user.level;
-
   const pathname = usePathname();
-  const linkClassName = (linkType: string) => {
-    const isActivePage = pathname.includes(linkType);
-    return `flex flex-row w-full p-4 py-6 space-x-2 ${
-      isActivePage
-        ? "bg-white text-blue-700"
-        : "hover:bg-white hover:text-blue-700"
-    }`;
-  };
+  const [quizExpanded, setQuizExpanded] = useState(pathname.includes("quizzes"));
 
-  const sublinkClassName = (linkType: string) => {
-    const isActivePage = pathname.includes(linkType);
-    return `flex flex-row w-full px-4 p-2 ${
-      isActivePage
-        ? "bg-white text-blue-700"
-        : "hover:bg-white hover:text-blue-700"
-    }`;
-  };
+  const isActive = (path: string) => pathname.includes(path);
 
   return (
-    <div className="w-auto">
-      <div className="w-[300px] h-full bg-blue-700 text-white flex flex-col items-center">
-        <Link
-          href="/"
-          className="h-[100px] items-center bg-blue-50 justify-center flex border-b-2 border-gray-300 mb-4 w-full"
-        >
+    <aside className="w-60 h-full bg-white border-r border-gray-200 flex flex-col sticky top-0">
+      {/* Logo */}
+      <div className="h-16 flex items-center px-6 border-b border-gray-200">
+        <Link href="/" className="flex items-center">
           <Image
             alt="logo"
             src="/images/logo_black.png"
-            width={180}
-            height={180}
+            width={140}
+            height={40}
             style={{
-              width: "80%",
-              height: "auto",
+              width: "auto",
+              height: "32px",
             }}
             priority={true}
           />
         </Link>
-        <nav className="flex flex-col items-start justify-center w-full">
-          {userLevel === "tutor" ? (
-            <Link
-              href="/admin/quizzes"
-              className={`flex flex-col ${linkClassName("quizzes")}`}
-            >
-              <div className="flex flex-row space-x-2">
-                <MessageCircleQuestion />
-                <div>퀴즈 관리</div>
-              </div>
-            </Link>
-          ) : (
-            <>
-              {userLevel === "admin" && (
-                <Link href="/admin/users" className={linkClassName("users")}>
-                  <Users />
-                  <div>유저 관리</div>
-                </Link>
-              )}
-              <Link href="/admin/courses" className={linkClassName("courses")}>
-                <Video />
-                <div>강의 관리</div>
-              </Link>
-              <Link
-                href="/admin/category"
-                className={linkClassName("category")}
-              >
-                <Video />
-                <div>카테고리 관리</div>
-              </Link>
-              <Link
-                href="/admin/quizzes"
-                className={`flex flex-col ${linkClassName("quizzes")}`}
-              >
-                <div className="flex flex-row space-x-2">
-                  <MessageCircleQuestion />
-                  <div>퀴즈 관리</div>
-                </div>
-              </Link>
-              <div className="w-full flex flex-col px-4 mt-2">
-                <ul className="list-disc pl-5">
-                  {userLevel === "admin" && (
-                    <li>
-                      <Link
-                        className={`${sublinkClassName("quizzes/descriptive")}`}
-                        href="/admin/quizzes/descriptive"
-                      >
-                        퀴즈 관리
-                      </Link>
-                    </li>
-                  )}
-
-                  <li>
-                    <Link
-                      className={`${sublinkClassName("quizzes/register")}`}
-                      href="/admin/quizzes/register"
-                    >
-                      퀴즈 등록
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </>
-          )}
-        </nav>
       </div>
-    </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+        {userLevel === "tutor" ? (
+          <NavItem
+            href="/admin/quizzes"
+            icon={<MessageCircleQuestion className="h-5 w-5" />}
+            label="퀴즈 관리"
+            isActive={isActive("quizzes")}
+          />
+        ) : (
+          <>
+            {userLevel === "admin" && (
+              <NavItem
+                href="/admin/users"
+                icon={<Users className="h-5 w-5" />}
+                label="유저 관리"
+                isActive={isActive("users")}
+              />
+            )}
+            <NavItem
+              href="/admin/courses"
+              icon={<Video className="h-5 w-5" />}
+              label="강의 관리"
+              isActive={isActive("courses")}
+            />
+            <NavItem
+              href="/admin/category"
+              icon={<LayoutGrid className="h-5 w-5" />}
+              label="카테고리 관리"
+              isActive={isActive("category")}
+            />
+            <NavItem
+              href="/admin/quizzes"
+              icon={<MessageCircleQuestion className="h-5 w-5" />}
+              label="퀴즈 관리"
+              isActive={isActive("quizzes")}
+              hasSubmenu
+              isExpanded={quizExpanded}
+              onToggle={() => setQuizExpanded(!quizExpanded)}
+            >
+              {userLevel === "admin" && (
+                <SubNavItem
+                  href="/admin/quizzes/descriptive"
+                  label="퀴즈 채점"
+                  isActive={isActive("quizzes/descriptive")}
+                />
+              )}
+              <SubNavItem
+                href="/admin/quizzes/register"
+                label="퀴즈 등록"
+                isActive={isActive("quizzes/register")}
+              />
+            </NavItem>
+          </>
+        )}
+      </nav>
+
+      {/* User Info (optional footer) */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-50">
+          <div className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center">
+            <span className="text-xs font-medium text-white">
+              {session?.user?.name?.charAt(0) || "A"}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate">
+              {session?.user?.name || "Admin"}
+            </p>
+            <p className="text-xs text-gray-500 truncate">
+              {userLevel === "admin"
+                ? "관리자"
+                : userLevel === "tutor"
+                ? "튜터"
+                : "매니저"}
+            </p>
+          </div>
+        </div>
+      </div>
+    </aside>
   );
 }

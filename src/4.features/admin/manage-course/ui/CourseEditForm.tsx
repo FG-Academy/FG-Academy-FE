@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "@/components/ui/use-toast";
+import { Input } from "@/6.shared/ui/shadcn/ui/input";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
+import { Textarea } from "@/6.shared/ui/shadcn/ui/textarea";
+import { Separator } from "@/6.shared/ui/shadcn/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/6.shared/ui/shadcn/ui/radio-group";
+import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -21,7 +21,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/6.shared/ui/shadcn/ui/form";
 import {
   Select,
   SelectContent,
@@ -29,12 +29,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/6.shared/ui/shadcn/ui/select";
 
-import { userLevelSettingOptions } from "@/app/types/type";
+import { userLevelSettingOptions } from "@/5.entities/user";
 import { categoryQueries } from "@/5.entities/admin/category";
 import type { AdminCourseDetail } from "@/5.entities/admin/course";
-import { dateFormat } from "@/lib/dateFormat";
+import { dateFormat } from "@/6.shared/lib";
 import { useUpdateCourseMutation } from "../api/use-update-course-mutation";
 import {
   AdminCourseFormSchema,

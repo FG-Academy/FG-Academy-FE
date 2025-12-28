@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@/app/globals.css";
+import "../../globals.css";
 import { AdminSidebar } from "@/3.widgets/admin/admin-sidebar";
 import { Suspense } from "react";
 
@@ -15,9 +15,9 @@ export default async function Layout({
 }>) {
   return (
     <Suspense>
-      <div className="flex flex-row min-h-screen">
+      <div className="flex h-screen overflow-hidden bg-gray-50">
         <AdminSidebar />
-        {children}
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </Suspense>
   );

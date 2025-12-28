@@ -37,7 +37,7 @@ const useTimerStore = create<TimerStoreInterface>((set) => ({
     set((state) => ({
       minutes: state.minutes + 1,
     })),
-  setMinutes: (item) => set((prev) => ({ minutes: item })),
+  setMinutes: (item) => set(() => ({ minutes: item })),
   resetTimer: () => set({ seconds: 0, minutes: 0 }),
   setSeconds: (seconds) => set({ seconds }),
 }));

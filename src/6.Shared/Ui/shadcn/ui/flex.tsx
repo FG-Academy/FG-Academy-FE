@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils"; // cn 함수 import
+import { cn } from "@/6.shared/lib"; // cn 함수 import
 
 interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

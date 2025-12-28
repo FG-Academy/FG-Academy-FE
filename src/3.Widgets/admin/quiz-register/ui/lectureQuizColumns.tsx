@@ -1,10 +1,25 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ColumnDef, CellContext } from "@tanstack/react-table";
+import { ArrowUpDown, Pencil } from "lucide-react";
 import type { AdminLectureForQuiz } from "@/5.entities/admin/quiz";
 import { useQuizRegisterDialogStore } from "@/4.features/admin/manage-quiz";
+
+// 별도 컴포넌트로 분리하여 Hook 사용
+function LectureActionsCell({ row }: CellContext<AdminLectureForQuiz, unknown>) {
+  const { openDialog } = useQuizRegisterDialogStore();
+  const lectureId = row.getValue("lectureId") as number;
+
+  return (
+    <button
+      onClick={() => openDialog(lectureId)}
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
+    >
+      <Pencil className="w-3.5 h-3.5" />
+      수정
+    </button>
+  );
+}
 
 export const lectureQuizColumns: ColumnDef<AdminLectureForQuiz>[] = [
   {
@@ -20,62 +35,71 @@ export const lectureQuizColumns: ColumnDef<AdminLectureForQuiz>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
+      <button
+        className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         강의 제목
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+        <ArrowUpDown className="h-3.5 w-3.5" />
+      </button>
     ),
-    cell: (info) => <div className="text-left">{String(info.getValue())}</div>,
+    cell: (info) => (
+      <span className="font-medium text-gray-900">{String(info.getValue())}</span>
+    ),
     enableHiding: false,
   },
   {
     accessorKey: "lectureNumber",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
+      <button
+        className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        강의 회차
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+        회차
+        <ArrowUpDown className="h-3.5 w-3.5" />
+      </button>
     ),
-    cell: (info) => <div className="text-left">{`${info.getValue()}강`}</div>,
+    cell: (info) => (
+      <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium">
+        {`${info.getValue()}강`}
+      </span>
+    ),
     enableHiding: false,
   },
   {
     id: "quizCount",
-    accessorFn: (row) =>
-      `객${row.multipleChoiceCount}/주${row.descriptiveCount}`,
+    accessorFn: (row) => ({
+      multiple: row.multipleChoiceCount,
+      descriptive: row.descriptiveCount,
+    }),
     header: ({ column }) => (
-      <Button
-        variant="ghost"
+      <button
+        className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-gray-700"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        퀴즈갯수
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+        퀴즈
+        <ArrowUpDown className="h-3.5 w-3.5" />
+      </button>
     ),
-    cell: (info) => <div className="text-left">{info.getValue() as string}</div>,
+    cell: (info) => {
+      const quiz = info.getValue() as { multiple: number; descriptive: number };
+      return (
+        <div className="text-gray-600 text-sm">
+          <span className="text-gray-400">객</span> {quiz.multiple}{" "}
+          <span className="text-gray-300 mx-1">/</span>
+          <span className="text-gray-400">주</span> {quiz.descriptive}
+        </div>
+      );
+    },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const { openDialog } = useQuizRegisterDialogStore();
-      const lectureId = row.getValue("lectureId") as number;
-
-      return (
-        <Button
-          variant="secondary"
-          className="px-4 space-x-2 border border-gray-300 hover:bg-gray-400"
-          onClick={() => openDialog(lectureId)}
-        >
-          수정하기
-        </Button>
-      );
-    },
+    header: () => (
+      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        관리
+      </span>
+    ),
+    cell: (props) => <LectureActionsCell {...props} />,
     enableHiding: false,
   },
 ];

@@ -96,7 +96,7 @@ export function QuestionDetailPageContent({ questionId }: Props) {
       {(session?.user.level === "admin" ||
         session?.user.level === "manager") && (
         <div className="flex flex-row justify-between w-full p-2">
-          {session.user.id === post.user.userId && (
+          {Number(session.user.id) === post.user.userId && (
             <Button
               className="bg-blue-400"
               onClick={() => {

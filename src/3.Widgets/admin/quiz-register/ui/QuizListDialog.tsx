@@ -2,13 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
+import { Badge } from "@/6.shared/ui/shadcn/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/6.shared/ui/shadcn/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,13 +19,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/6.shared/ui/shadcn/ui/alert-dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/6.shared/ui/shadcn/ui/tooltip";
 import { adminQuizQueries } from "@/5.entities/admin/quiz";
 import {
   QuizForm,

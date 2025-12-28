@@ -7,15 +7,15 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
+import { Copy, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/6.shared/ui/shadcn/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,12 +26,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { toast } from "@/components/ui/use-toast";
+} from "@/6.shared/ui/shadcn/ui/alert-dialog";
+import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import {
   useDeleteCoursesMutation,
   useCopyCoursesMutation,
 } from "@/4.features/admin/manage-course";
+import { cn } from "@/6.shared/lib";
 
 interface CourseTablePaginationProps<TData> {
   table: Table<TData>;
@@ -42,6 +43,8 @@ export function CourseTablePagination<TData>({
 }: CourseTablePaginationProps<TData>) {
   const { mutate: deleteMutate } = useDeleteCoursesMutation();
   const { mutate: copyMutate } = useCopyCoursesMutation();
+
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
 
   const deleteSelectedRows = async () => {
     const selectedRowIds = table
@@ -79,23 +82,36 @@ export function CourseTablePagination<TData>({
     }
   };
 
+  const currentPage = table.getState().pagination.pageIndex + 1;
+  const totalPages = table.getPageCount();
+
   return (
-    <div className="flex items-center justify-between p-2">
-      <div className="flex-1 text-sm text-muted-foreground space-x-4">
+    <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-white">
+      {/* Left: Actions */}
+      <div className="flex items-center gap-2">
+        {selectedCount > 0 && (
+          <span className="text-sm text-gray-500 mr-2">
+            {selectedCount}개 선택됨
+          </span>
+        )}
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button
-              disabled={table.getFilteredSelectedRowModel().rows.length <= 0}
-              className="p-2 bg-red-500 text-white"
+            <button
+              disabled={selectedCount <= 0}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors",
+                selectedCount > 0
+                  ? "text-red-600 bg-red-50 hover:bg-red-100"
+                  : "text-gray-400 bg-gray-100 cursor-not-allowed"
+              )}
             >
-              코스 삭제
-            </Button>
+              <Trash2 className="w-4 h-4" />
+              삭제
+            </button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>
-                정말로 코스를 삭제하시겠습니까?
-              </AlertDialogTitle>
+              <AlertDialogTitle>정말로 코스를 삭제하시겠습니까?</AlertDialogTitle>
               <AlertDialogDescription>
                 코스를 삭제하시면 그와 연관된 강의 영상, 퀴즈 등 모든 정보가
                 삭제됩니다.
@@ -103,49 +119,60 @@ export function CourseTablePagination<TData>({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>취소</AlertDialogCancel>
-              <AlertDialogAction onClick={deleteSelectedRows}>
-                확인
+              <AlertDialogAction
+                onClick={deleteSelectedRows}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                삭제
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button
-              disabled={table.getFilteredSelectedRowModel().rows.length <= 0}
-              className="p-2 bg-blue-500 text-white"
+            <button
+              disabled={selectedCount <= 0}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors",
+                selectedCount > 0
+                  ? "text-gray-700 bg-gray-100 hover:bg-gray-200"
+                  : "text-gray-400 bg-gray-100 cursor-not-allowed"
+              )}
             >
-              코스 복사
-            </Button>
+              <Copy className="w-4 h-4" />
+              복사
+            </button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>강의를 복사하시겠습니까?</AlertDialogTitle>
               <AlertDialogDescription>
-                강의를 복사하신 이후에는 <br />
-                강의 제목, 시작/마감일자, 공개여부를 <br />
+                강의를 복사하신 이후에는 강의 제목, 시작/마감일자, 공개여부를
                 반드시 수정해주셔야 합니다.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>취소</AlertDialogCancel>
               <AlertDialogAction onClick={copySelectedRows}>
-                확인
+                복사
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">페이지 당 행 갯수</p>
+
+      {/* Right: Pagination */}
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">페이지 당</span>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger className="h-8 w-16 text-sm">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -157,47 +184,67 @@ export function CourseTablePagination<TData>({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}{" "}
-          페이지
+
+        <div className="text-sm text-gray-700">
+          <span className="font-medium">{currentPage}</span>
+          <span className="text-gray-400 mx-1">/</span>
+          <span>{totalPages}</span>
+          <span className="text-gray-500 ml-1">페이지</span>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
+
+        <div className="flex items-center gap-1">
+          <button
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
+            className={cn(
+              "p-1.5 rounded-md transition-colors",
+              table.getCanPreviousPage()
+                ? "hover:bg-gray-100 text-gray-700"
+                : "text-gray-300 cursor-not-allowed"
+            )}
           >
-            <span className="sr-only">Go to first page</span>
+            <span className="sr-only">첫 페이지</span>
             <DoubleArrowLeftIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
+          </button>
+          <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            className={cn(
+              "p-1.5 rounded-md transition-colors",
+              table.getCanPreviousPage()
+                ? "hover:bg-gray-100 text-gray-700"
+                : "text-gray-300 cursor-not-allowed"
+            )}
           >
-            <span className="sr-only">Go to previous page</span>
+            <span className="sr-only">이전 페이지</span>
             <ChevronLeftIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
+          </button>
+          <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            className={cn(
+              "p-1.5 rounded-md transition-colors",
+              table.getCanNextPage()
+                ? "hover:bg-gray-100 text-gray-700"
+                : "text-gray-300 cursor-not-allowed"
+            )}
           >
-            <span className="sr-only">Go to next page</span>
+            <span className="sr-only">다음 페이지</span>
             <ChevronRightIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
+          </button>
+          <button
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
+            className={cn(
+              "p-1.5 rounded-md transition-colors",
+              table.getCanNextPage()
+                ? "hover:bg-gray-100 text-gray-700"
+                : "text-gray-300 cursor-not-allowed"
+            )}
           >
-            <span className="sr-only">Go to last page</span>
+            <span className="sr-only">마지막 페이지</span>
             <DoubleArrowRightIcon className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
       </div>
     </div>

@@ -2,7 +2,6 @@ import { apiClient } from "@/6.shared/api";
 
 export interface AddEnrollmentResponse {
   message: string;
-  [key: string]: any;
 }
 
 export async function addEnrollment(

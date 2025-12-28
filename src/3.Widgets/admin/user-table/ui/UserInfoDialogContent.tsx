@@ -9,16 +9,16 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/6.shared/ui/shadcn/ui/accordion";
 import { FaCircleCheck, FaCircleMinus } from "react-icons/fa6";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/6.shared/ui/shadcn/ui/checkbox";
 import { Circle, X } from "lucide-react";
-import { IUser } from "@/model/user";
+import type { User } from "@/5.entities/user";
 import { useState } from "react";
 
 interface UserInfoDialogContentProps {
   userId: number;
-  userProfile: Partial<IUser>;
+  userProfile: Partial<User>;
 }
 
 export function UserInfoDialogContent({

@@ -15,10 +15,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/6.shared/ui/shadcn/ui/table";
 import { Dispatch, SetStateAction, useState } from "react";
 import { DataTablePagination } from "@/6.shared/ui/admin";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -27,11 +27,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/6.shared/ui/shadcn/ui/dialog";
 import { UserInfoDialogContent } from "./UserInfoDialogContent";
 import useOpenDialogStore from "@/store/useOpenDialogStore";
-import { IUser } from "@/model/user";
-import { Department, Position } from "@/app/types/type";
+import type { User } from "@/5.entities/user";
+import { Department, Position } from "@/5.entities/user";
 
 interface UserDataTableProps<TData, TValue> {
   totalPages: number;
@@ -49,7 +49,7 @@ export function UserDataTable<TData, TValue>({
   setPagination,
 }: UserDataTableProps<TData, TValue>) {
   const [userId, setUserId] = useState<number>();
-  const [userProfile, setUserProfile] = useState<Partial<IUser>>({
+  const [userProfile, setUserProfile] = useState<Partial<User>>({
     userId: 0,
     birthDate: "",
     name: "",
@@ -89,38 +89,57 @@ export function UserDataTable<TData, TValue>({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex flex-col w-full justify-between flex-1 overflow-y-auto">
-        <div className="flex flex-col justify-start overflow-y-auto">
-          <DialogContent
-            onOpenAutoFocus={(e) => e.preventDefault()}
-            className="h-[646px] overflow-y-auto"
-          >
-            <DialogHeader>
-              <DialogTitle>유저 관리</DialogTitle>
-              <DialogDescription>유저 정보를 수정합니다.</DialogDescription>
-            </DialogHeader>
+      <div className="flex flex-col h-full bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <DialogContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className="max-h-[85vh] overflow-y-auto"
+        >
+          <DialogHeader>
+            <DialogTitle>유저 정보 수정</DialogTitle>
+            <DialogDescription>
+              유저 정보를 확인하고 수정할 수 있습니다.
+            </DialogDescription>
+          </DialogHeader>
 
-            <div className="flex items-center space-x-2">
-              <UserInfoDialogContent userId={userId!} userProfile={userProfile} />
-            </div>
-            <DialogFooter className="sm:justify-between">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  닫기
-                </Button>
-              </DialogClose>
-              <Button type="submit" form="userInfoDialog">
-                수정하기
+          <div className="py-4">
+            <UserInfoDialogContent userId={userId!} userProfile={userProfile} />
+          </div>
+
+          <DialogFooter className="gap-2">
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="outline"
+                className="border-gray-200"
+              >
+                닫기
               </Button>
-            </DialogFooter>
-          </DialogContent>
-          <Table className="container relative py-2 mx-auto overflow-y-auto">
-            <TableHeader className="sticky top-0 bg-gray-100">
+            </DialogClose>
+            <Button
+              type="submit"
+              form="userInfoDialog"
+              className="bg-gray-900 hover:bg-gray-800"
+            >
+              수정하기
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+
+        {/* Table */}
+        <div className="flex-1 overflow-auto">
+          <Table>
+            <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow
+                  key={headerGroup.id}
+                  className="bg-gray-50 hover:bg-gray-50"
+                >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className="h-11 px-4 border-b border-gray-200"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -155,9 +174,10 @@ export function UserDataTable<TData, TValue>({
                       setUserId(row.getValue("userId"));
                       setOpen(true);
                     }}
+                    className="cursor-pointer hover:bg-gray-50 transition-colors"
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell className="cursor-pointer" key={cell.id}>
+                      <TableCell key={cell.id} className="px-4 py-3">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -170,7 +190,7 @@ export function UserDataTable<TData, TValue>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-32 text-center text-gray-500"
                   >
                     검색 결과가 없습니다.
                   </TableCell>
@@ -179,6 +199,8 @@ export function UserDataTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
+
+        {/* Pagination */}
         <DataTablePagination table={table} pagination={pagination} />
       </div>
     </Dialog>

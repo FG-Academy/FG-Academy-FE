@@ -5,7 +5,7 @@ export { getUserEnrollments } from "./api/get-user-enrollments";
 export { getUserLecturesDetail } from "./api/get-user-lectures-detail";
 export type {
   UserFilter,
-  User,
+  AdminUser as User,
   UserListResponse,
   UserProfileResponse,
   UserEnrollmentResponse,
