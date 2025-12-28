@@ -1,10 +1,12 @@
 "use client";
 
+import { ProfileFormSchema, ProfileUpdateFormSchema } from "@/5.entities/user";
 import {
-  ProfileFormSchema,
-  ProfileUpdateFormSchema,
+  ChurchName,
+  departments,
+  positions,
+  userLevelOptions,
 } from "@/5.entities/user";
-import { departments, positions, userLevelOptions } from "@/5.entities/user";
 import {
   Form,
   FormControl,
@@ -14,7 +16,10 @@ import {
   FormMessage,
 } from "@/6.shared/ui/shadcn/ui/form";
 import { Input } from "@/6.shared/ui/shadcn/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/6.shared/ui/shadcn/ui/radio-group";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/6.shared/ui/shadcn/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -70,8 +75,6 @@ export function UserEditForm({ userProfile, userId }: UserEditFormProps) {
 
     if (Object.keys(updatedData).length > 0) {
       mutate({ data: updatedData as UserData, userId });
-    } else {
-      console.log("No fields have been changed.");
     }
   };
 
@@ -199,13 +202,13 @@ export function UserEditForm({ userProfile, userId }: UserEditFormProps) {
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="fg" />
+                      <RadioGroupItem value={ChurchName.FG} />
                     </FormControl>
                     <FormLabel className="text-base">꽃동산 교회</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="others" />
+                      <RadioGroupItem value={ChurchName.OTHERS} />
                     </FormControl>
                     <FormLabel className="text-base">타교회</FormLabel>
                   </FormItem>

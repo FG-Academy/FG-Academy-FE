@@ -106,14 +106,16 @@ export function AdminSidebar() {
   const { data: session } = useSession();
   const userLevel = session?.user.level;
   const pathname = usePathname();
-  const [quizExpanded, setQuizExpanded] = useState(pathname.includes("quizzes"));
+  const [quizExpanded, setQuizExpanded] = useState(
+    pathname.includes("quizzes")
+  );
 
   const isActive = (path: string) => pathname.includes(path);
 
   return (
-    <aside className="w-60 h-full bg-white border-r border-gray-200 flex flex-col sticky top-0">
+    <aside className="w-60 h-full bg-white border-r border-gray-200 flex flex-col">
       {/* Logo */}
-      <div className="h-16 flex items-center px-6 border-b border-gray-200">
+      <div className="h-16 flex justify-center items-center px-6 border-b border-gray-200">
         <Link href="/" className="flex items-center">
           <Image
             alt="logo"

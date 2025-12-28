@@ -29,9 +29,6 @@ export function EnrollButton({ enrollment, firstLectureId }: Props) {
         disabled={enrollment.lastStudyLecture === null}
         onContinue={() => {
           if (enrollment.lastStudyLecture !== null) {
-            console.log(
-              `/course/${courseId}/lecture/${enrollment.lastStudyLecture}`
-            );
             router.push(
               `/course/${courseId}/lecture/${enrollment.lastStudyLecture}`
             );

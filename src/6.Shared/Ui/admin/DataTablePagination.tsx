@@ -4,26 +4,24 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
+import { Loader2 } from "lucide-react";
 import { PaginationState, Table } from "@tanstack/react-table";
-import { useEffect } from "react";
 import { cn } from "@/6.shared/lib";
 
 interface DataTablePaginationProps<TData> {
   pagination: PaginationState;
   table: Table<TData>;
   className?: string;
+  isFetching?: boolean;
 }
 
 export function DataTablePagination<TData>({
   pagination,
   table,
   className,
+  isFetching = false,
 }: DataTablePaginationProps<TData>) {
-  useEffect(() => {
-    table.setPageIndex(pagination.pageIndex);
-  }, [pagination.pageIndex, table]);
-
-  const currentPage = table.getState().pagination.pageIndex + 1;
+  const currentPage = pagination.pageIndex + 1;
   const totalPages = table.getPageCount();
 
   return (
@@ -42,11 +40,14 @@ export function DataTablePagination<TData>({
       </div>
       
       <div className="flex items-center gap-6">
-        <div className="text-sm text-gray-700">
+        <div className="flex items-center gap-2 text-sm text-gray-700">
+          {isFetching && (
+            <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+          )}
           <span className="font-medium">{currentPage}</span>
-          <span className="text-gray-400 mx-1">/</span>
+          <span className="text-gray-400">/</span>
           <span>{totalPages}</span>
-          <span className="text-gray-500 ml-1">페이지</span>
+          <span className="text-gray-500">페이지</span>
         </div>
         
         <div className="flex items-center gap-1">

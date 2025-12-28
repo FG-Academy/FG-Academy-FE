@@ -32,9 +32,14 @@ export const Position = {
   ETC: "etc",
 } as const;
 
+export const ChurchName = {
+  FG: "fg",
+  OTHERS: "others",
+} as const;
+
 export type TDepartment = (typeof Department)[keyof typeof Department];
 export type TPosition = (typeof Position)[keyof typeof Position];
-export type TChurchName = "fg" | "others";
+export type TChurchName = (typeof ChurchName)[keyof typeof ChurchName];
 
 export const departments = [
   { value: Department.FETAL, label: "태아부" },
@@ -67,6 +72,11 @@ export const positions = [
   { value: Position.ELDER, label: "장로" },
   { value: Position.TEACHER, label: "교사" },
   { value: Position.ETC, label: "기타" },
+];
+
+export const churchNames = [
+  { value: ChurchName.FG, label: "꽃동산교회" },
+  { value: ChurchName.OTHERS, label: "타교회" },
 ];
 
 export const userLevelOptions = [

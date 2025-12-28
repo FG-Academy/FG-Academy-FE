@@ -10,6 +10,12 @@ export interface UserFilter {
   church: string;
 }
 
+export const userSortOptions = [
+  { label: "이름순", value: "name" },
+  { label: "최근등록순", value: "createdAt" },
+  { label: "근속년수순", value: "yearsOfService" },
+];
+
 export interface AdminUser extends BaseUser {
   departmentLabel: string;
   positionLabel: string;

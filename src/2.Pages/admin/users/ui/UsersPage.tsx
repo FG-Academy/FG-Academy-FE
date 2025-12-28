@@ -4,21 +4,19 @@ import { useEffect, useState } from "react";
 import { PaginationState } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { userQueries, type UserFilter } from "@/5.entities/admin/user";
-import { UserDataTable, userColumns } from "@/3.widgets/admin/user-table";
+import {
+  userQueries,
+  userSortOptions,
+  type UserFilter,
+} from "@/5.entities/admin/user";
+import { UserDataTable } from "@/3.widgets/admin/user-table";
 import { Filter, PageHeader, SearchInput } from "@/6.shared/ui/admin";
-import { departments, positions, userLevelOptions } from "@/5.entities/user";
-
-const sortOptions = [
-  { label: "이름순", value: "name" },
-  { label: "최근등록순", value: "createdAt" },
-  { label: "근속년수순", value: "yearsOfService" },
-];
-
-const churchOptions = [
-  { value: "fg", label: "꽃동산교회" },
-  { value: "others", label: "타교회" },
-];
+import {
+  churchNames,
+  departments,
+  positions,
+  userLevelOptions,
+} from "@/5.entities/user";
 
 export function UsersPage() {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -35,9 +33,11 @@ export function UsersPage() {
   const [sortBy, setSortBy] = useState("name");
   const [nameInputValue, setNameInputValue] = useState("");
 
-  const { data: allUsers, isLoading } = useQuery(
-    userQueries.all(pagination, filters, sortBy)
-  );
+  const {
+    data: allUsers,
+    isLoading,
+    isFetching,
+  } = useQuery(userQueries.all(pagination, filters, sortBy));
 
   // Debounce name input
   useEffect(() => {
@@ -101,7 +101,7 @@ export function UsersPage() {
           <Filter
             label="교회"
             value={filters.church}
-            options={churchOptions}
+            options={churchNames}
             onChange={(value) =>
               setFilters((prev) => ({ ...prev, church: value }))
             }
@@ -110,7 +110,7 @@ export function UsersPage() {
             <Filter
               label="정렬"
               value={sortBy}
-              options={sortOptions}
+              options={userSortOptions}
               onChange={(value) => setSortBy(value)}
             />
           </div>
@@ -122,9 +122,9 @@ export function UsersPage() {
         <UserDataTable
           totalPages={allUsers.result.totalPages}
           pagination={pagination}
-          setPagination={setPagination}
-          columns={userColumns}
+          onPaginationChange={setPagination}
           data={allUsers.result.content}
+          isFetching={isFetching}
         />
       </div>
     </div>

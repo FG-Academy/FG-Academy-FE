@@ -36,7 +36,7 @@ import {
   SelectValue,
   toast,
 } from "@/6.shared/ui";
-import { User, departments, positions } from "@/5.entities/user";
+import { ChurchName, User, departments, positions } from "@/5.entities/user";
 import {
   ProfileUpdateFormSchema,
   ProfileUpdateFormValues,
@@ -273,7 +273,7 @@ export function ProfileForm({ userInfo }: Props) {
                       <FormItem className="flex items-center space-x-2 space-y-0">
                         <FormControl>
                           <RadioGroupItem
-                            value="fg"
+                            value={ChurchName.FG}
                             className="border-gray-300 text-primary-blue"
                           />
                         </FormControl>
@@ -284,7 +284,7 @@ export function ProfileForm({ userInfo }: Props) {
                       <FormItem className="flex items-center space-x-2 space-y-0">
                         <FormControl>
                           <RadioGroupItem
-                            value="others"
+                            value={ChurchName.OTHERS}
                             className="border-gray-300 text-primary-blue"
                           />
                         </FormControl>

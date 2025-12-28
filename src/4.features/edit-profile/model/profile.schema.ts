@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Department, Position } from "@/5.entities/user";
+import { ChurchName, Department, Position } from "@/5.entities/user";
 
 function getValues<T extends Record<string, unknown>>(obj: T) {
   return Object.values(obj) as [(typeof obj)[keyof T]];
@@ -24,7 +24,7 @@ export const ProfileUpdateFormSchema = z.object({
     .string()
     .min(10, { message: "핸드폰 번호 11자리를 입력해주세요." })
     .optional(),
-  churchName: z.enum(["fg", "others"]).optional(),
+  churchName: z.enum(getValues(ChurchName)).optional(),
   departmentName: z
     .enum(getValues(Department), {
       errorMap: () => ({ message: "부서명을 선택해주세요." }),

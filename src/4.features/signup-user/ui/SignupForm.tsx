@@ -25,6 +25,7 @@ import {
 import {
   SignupFormSchema,
   SignupFormValues,
+  ChurchName,
   departments,
   positions,
 } from "@/5.entities/user";
@@ -46,7 +47,7 @@ export function SignupForm() {
       password: "",
       passwordVerify: "",
       phoneNumber: "",
-      churchName: "fg",
+      churchName: ChurchName.FG,
       yearsOfService: 0,
       isEmailValid: false,
     },
@@ -194,18 +195,18 @@ export function SignupForm() {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue="fg"
+                  defaultValue={ChurchName.FG}
                   className="flex flex-col space-y-1"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="fg" />
+                      <RadioGroupItem value={ChurchName.FG} />
                     </FormControl>
                     <FormLabel className="text-base">꽃동산 교회</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="others" />
+                      <RadioGroupItem value={ChurchName.OTHERS} />
                     </FormControl>
                     <FormLabel className="text-base">타교회</FormLabel>
                   </FormItem>

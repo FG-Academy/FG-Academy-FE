@@ -1,3 +1,4 @@
+export { AdminDataTable } from "./AdminDataTable";
 export { DataTablePagination } from "./DataTablePagination";
 export { Filter } from "./Filter";
 export { PageHeader } from "./PageHeader";

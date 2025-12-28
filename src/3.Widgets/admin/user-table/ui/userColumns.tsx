@@ -3,6 +3,7 @@
 import { formatDate } from "@/6.shared/lib";
 import { ColumnDef } from "@tanstack/react-table";
 import type { User } from "@/5.entities/admin/user";
+import { ChurchName } from "@/5.entities/user";
 import { StatusBadge } from "@/6.shared/ui/admin";
 
 export const userColumns: ColumnDef<User>[] = [
@@ -120,9 +121,9 @@ export const userColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const churchValue = row.getValue("churchName");
       const churchLabel =
-        churchValue === "fg"
+        churchValue === ChurchName.FG
           ? "꽃동산교회"
-          : churchValue === "others"
+          : churchValue === ChurchName.OTHERS
           ? "타교회"
           : "정보 없음";
       return <span className="text-gray-600">{churchLabel}</span>;

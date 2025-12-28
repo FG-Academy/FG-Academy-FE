@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { queryOptions, keepPreviousData } from "@tanstack/react-query";
 import { getAdminQuizSubmissions } from "./get-quiz-submissions";
 import { getAdminDescriptiveQuiz } from "./get-descriptive-quiz";
 import { getAdminLectureQuizzes } from "./get-lecture-quizzes";
@@ -34,6 +34,7 @@ export const adminQuizQueries = {
           userDepartment,
           userLevel
         ),
+      placeholderData: keepPreviousData,
     }),
 
   /** Descriptive quiz detail (for grading dialog) */

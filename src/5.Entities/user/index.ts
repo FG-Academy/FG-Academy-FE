@@ -7,8 +7,10 @@ export type {
 export {
   Department,
   Position,
+  ChurchName,
   departments,
   positions,
+  churchNames,
   userLevelOptions,
   userLevelSettingOptions,
   courseCurriculumOptions,

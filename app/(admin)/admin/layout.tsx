@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "../../globals.css";
 import { AdminSidebar } from "@/3.widgets/admin/admin-sidebar";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "꽃동산 아카데미",
@@ -14,11 +13,9 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <Suspense>
-      <div className="flex h-screen overflow-hidden bg-gray-50">
-        <AdminSidebar />
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </div>
-    </Suspense>
+    <div className="fixed inset-0 flex overflow-hidden bg-gray-50">
+      <AdminSidebar />
+      <main className="flex-1 overflow-y-auto">{children}</main>
+    </div>
   );
 }

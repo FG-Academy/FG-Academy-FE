@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Department, Position } from "./user.type";
+import { ChurchName, Department, Position } from "./user.type";
 
 function getValues<T extends Record<string, unknown>>(obj: T) {
   return Object.values(obj) as [(typeof obj)[keyof T]];
@@ -23,7 +23,7 @@ export const SignupFormSchema = z
     phoneNumber: z.string().min(10, {
       message: "핸드폰 번호 11자리를 입력해주세요.",
     }),
-    churchName: z.enum(["fg", "others"]),
+    churchName: z.enum(getValues(ChurchName)),
     departmentName: z.enum(getValues(Department), {
       errorMap: () => ({
         message: "부서명을 선택해주세요.",

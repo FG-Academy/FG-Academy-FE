@@ -7,10 +7,7 @@ import { PaginationState } from "@tanstack/react-table";
 import { Loader2 } from "lucide-react";
 import { adminQuizQueries, type AdminQuizFilter } from "@/5.entities/admin/quiz";
 import { adminCourseQueries } from "@/5.entities/admin/course";
-import {
-  QuizSubmissionsDataTable,
-  quizSubmissionsColumns,
-} from "@/3.widgets/admin/quiz-grading";
+import { QuizSubmissionsDataTable } from "@/3.widgets/admin/quiz-grading";
 import { Filter, PageHeader, SearchInput } from "@/6.shared/ui/admin";
 import { departments, positions } from "@/5.entities/user";
 
@@ -36,7 +33,7 @@ export function QuizGradingPage() {
 
   const { data: courses } = useQuery(adminCourseQueries.all());
 
-  const { data: quizSubmits, isLoading } = useQuery(
+  const { data: quizSubmits, isLoading, isFetching } = useQuery(
     adminQuizQueries.submissions(
       pagination,
       filters,
@@ -46,18 +43,15 @@ export function QuizGradingPage() {
     )
   );
 
-  // Debounced name search
   useEffect(() => {
     const handler = setTimeout(() => {
       setFilters((prev) => ({ ...prev, name: nameInputValue }));
     }, 500);
-    return () => clearTimeout(handler);
-  }, [nameInputValue]);
 
-  // Reset pagination when filters change
-  useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [filters]);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [nameInputValue]);
 
   if (isLoading || !quizSubmits || !courses) {
     return (
@@ -150,11 +144,11 @@ export function QuizGradingPage() {
       {/* Data Table */}
       <div className="mt-4">
         <QuizSubmissionsDataTable
+          data={quizSubmits.result.content}
           totalPages={quizSubmits.result.totalPages}
           pagination={pagination}
-          setPagination={setPagination}
-          columns={quizSubmissionsColumns}
-          data={quizSubmits.result.content}
+          onPaginationChange={setPagination}
+          isFetching={isFetching}
         />
       </div>
     </div>
