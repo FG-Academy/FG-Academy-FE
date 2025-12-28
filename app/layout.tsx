@@ -72,9 +72,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.variable} font-sans`}>
-        <ReactQueryProviders>
-          <AuthProvider session={session}>{children}</AuthProvider>
-        </ReactQueryProviders>
+        <AuthProvider session={session}>
+          <ReactQueryProviders>{children}</ReactQueryProviders>
+        </AuthProvider>
         <Toaster />
       </body>
     </html>

@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import LogoBlack from "@public/images/logo_black.png";
 
 export function Logo() {
   return (
     <div className="flex items-center font-medium">
-      <a href="/">
+      <Link href="/">
         <Image
           alt="logo"
           src={LogoBlack}
@@ -13,7 +14,7 @@ export function Logo() {
           height={180}
           priority={true}
         />
-      </a>
+      </Link>
     </div>
   );
 }

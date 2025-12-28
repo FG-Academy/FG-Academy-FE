@@ -44,7 +44,9 @@ const CourseInfoTabs = ({ description }: Props) => {
         <TabsContent value="info" className="p-6 mt-0">
           <div
             className="prose prose-gray max-w-none text-gray-700 leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: description }}
+            dangerouslySetInnerHTML={{
+              __html: description.replace(/\n/g, "<br />"),
+            }}
           />
         </TabsContent>
 

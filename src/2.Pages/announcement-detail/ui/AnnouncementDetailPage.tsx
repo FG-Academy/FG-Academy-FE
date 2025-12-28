@@ -32,7 +32,7 @@ const AnnouncementDetailPage = ({ announcementId }: Props) => {
         <button
           onClick={() => router.push("/announcement")}
           className="inline-flex items-center gap-2 text-sm text-gray-500 
-                     hover:text-primary-blue transition-colors mb-6 group"
+                    hover:text-primary-blue transition-colors mb-6 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
           목록으로 돌아가기
@@ -76,7 +76,7 @@ const AnnouncementDetailPage = ({ announcementId }: Props) => {
           <div className="px-6 md:px-8 py-8 md:py-10">
             <div
               className="prose prose-gray max-w-none text-gray-700 leading-relaxed
-                         [&>p]:mb-4 [&>br]:mb-2"
+                        [&>p]:mb-4 [&>br]:mb-2"
               dangerouslySetInnerHTML={{
                 __html: announcement.content.replace(/\n/g, "<br />"),
               }}

@@ -57,7 +57,7 @@ export function EmailForm() {
         });
         form.setValue("email", "");
       }
-    } catch (error) {
+    } catch {
       toast({
         variant: "destructive",
         title: "네트워크 오류가 발생했습니다.",
@@ -73,7 +73,7 @@ export function EmailForm() {
       const result = await sendVerificationCode(email);
       setVerificationCode(result.code.toString());
       setUiState("enterCode");
-    } catch (error) {
+    } catch {
       toast({
         variant: "destructive",
         title: "이메일 전송에 실패했습니다.",

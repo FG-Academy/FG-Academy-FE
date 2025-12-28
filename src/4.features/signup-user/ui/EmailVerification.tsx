@@ -66,7 +66,7 @@ export function EmailVerification({ email }: Props) {
       const result = await resendVerificationEmail(email);
       setVerificationCode(result.result.toString());
       setFetch(true);
-    } catch (error) {
+    } catch {
       toast({
         title: "이메일 전송에 실패했습니다.",
         variant: "destructive",

@@ -8,11 +8,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/6.shared/lib";
+import { Logo } from "@/6.shared/ui";
 
 interface NavItemProps {
   href: string;
@@ -116,19 +116,7 @@ export function AdminSidebar() {
     <aside className="w-60 h-full bg-white border-r border-gray-200 flex flex-col">
       {/* Logo */}
       <div className="h-16 flex justify-center items-center px-6 border-b border-gray-200">
-        <Link href="/" className="flex items-center">
-          <Image
-            alt="logo"
-            src="/images/logo_black.png"
-            width={140}
-            height={40}
-            style={{
-              width: "auto",
-              height: "32px",
-            }}
-            priority={true}
-          />
-        </Link>
+        <Logo />
       </div>
 
       {/* Navigation */}

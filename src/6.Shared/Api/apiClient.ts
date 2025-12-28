@@ -40,10 +40,28 @@ export class ApiClient {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
+    // Handle empty responses (204 No Content or empty body)
+    const contentLength = response.headers.get("content-length");
+    const contentType = response.headers.get("content-type");
+
+    if (
+      response.status === 204 ||
+      contentLength === "0" ||
+      !contentType?.includes("application/json")
+    ) {
+      return undefined as TResult;
+    }
+
     try {
-      return await response.json();
+      const text = await response.text();
+      if (!text || text.trim() === "") {
+        return undefined as TResult;
+      }
+      return JSON.parse(text) as TResult;
     } catch (error) {
-      throw new Error("Error parsing JSON response");
+      throw new Error("Error parsing JSON response", {
+        cause: error,
+      } as ErrorOptions);
     }
   }
 

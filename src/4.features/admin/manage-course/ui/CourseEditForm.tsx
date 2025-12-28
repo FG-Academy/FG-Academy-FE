@@ -3,15 +3,21 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import {
+  Upload,
+  Calendar,
+  BookOpen,
+  GraduationCap,
+  Eye,
+  EyeOff,
+  ImageIcon,
+} from "lucide-react";
 
 import { Input } from "@/6.shared/ui/shadcn/ui/input";
 import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { Textarea } from "@/6.shared/ui/shadcn/ui/textarea";
-import { Separator } from "@/6.shared/ui/shadcn/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/6.shared/ui/shadcn/ui/radio-group";
 import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import {
@@ -47,7 +53,6 @@ interface CourseEditFormProps {
 }
 
 export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
-  const router = useRouter();
   const [enabled, setEnabled] = useState(false);
   const [imageFile, setImageFile] = useState<File>();
   const [preview, setPreview] = useState<{ dataUrl: string }>({
@@ -115,7 +120,7 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
     Object.keys(data).forEach((key) => {
       if (key === "thumbnailImage" && imageFile) {
         formData.append("thumbnailImage", imageFile);
-      } else if (updatedData.hasOwnProperty(key)) {
+      } else if (Object.hasOwn(updatedData, key)) {
         const value = updatedData[key as keyof AdminCourseFormValues];
         if (value !== undefined) {
           formData.append(key, String(value));
@@ -138,129 +143,165 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-full p-6">
-      <X
-        onClick={() => router.back()}
-        className="absolute z-10 w-8 h-8 cursor-pointer rounded-full right-10 top-10 hover:bg-black hover:bg-opacity-20"
-      />
-      <h2 className="mb-4 text-2xl">코스 편집</h2>
-      <div className="flex flex-row w-full p-2 space-x-2 h-full">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      {/* Course Info Form */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+          <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-primary-blue" />
+            코스 정보
+          </h2>
+          <p className="text-sm text-gray-500 mt-0.5">
+            코스의 기본 정보를 수정합니다
+          </p>
+        </div>
+
         <Form {...form}>
           <form
             autoComplete="off"
             autoFocus={false}
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col w-1/2 p-10 rounded-lg space-y-4 overflow-y-auto border"
+            className="p-6 space-y-6 max-h-[calc(100vh-220px)] overflow-y-auto"
           >
-            <div className="flex flex-col justify-between p-2 space-y-2 overflow-y-auto w-full">
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel className="text-base font-bold">
-                      공개여부 <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={courseInfo.status}
-                        className="flex flex-row space-x-2"
+            {/* Status Toggle */}
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    공개 상태
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={courseInfo.status}
+                      className="flex gap-3 mt-2"
+                    >
+                      <label
+                        className={`
+                          flex items-center gap-2 px-4 py-2.5 rounded-lg border cursor-pointer transition-all
+                          ${
+                            field.value === "active"
+                              ? "border-primary-blue bg-primary-blue/5 text-primary-blue"
+                              : "border-gray-200 hover:border-gray-300 text-gray-600"
+                          }
+                        `}
                       >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="active" />
-                          </FormControl>
-                          <FormLabel className="text-base">공개</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="inactive" />
-                          </FormControl>
-                          <FormLabel className="text-base">비공개</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Separator />
-              <Image
-                className="mx-auto"
-                src={preview.dataUrl}
-                alt="썸네일 이미지"
-                width={200}
-                height={200}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                }}
-                priority={true}
-              />
-              <FormField
-                control={form.control}
-                name="thumbnailImage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-bold">
-                      썸네일 이미지 <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
+                        <RadioGroupItem value="active" className="sr-only" />
+                        <Eye className="w-4 h-4" />
+                        <span className="text-sm font-medium">공개</span>
+                      </label>
+                      <label
+                        className={`
+                          flex items-center gap-2 px-4 py-2.5 rounded-lg border cursor-pointer transition-all
+                          ${
+                            field.value === "inactive"
+                              ? "border-gray-600 bg-gray-50 text-gray-700"
+                              : "border-gray-200 hover:border-gray-300 text-gray-600"
+                          }
+                        `}
+                      >
+                        <RadioGroupItem value="inactive" className="sr-only" />
+                        <EyeOff className="w-4 h-4" />
+                        <span className="text-sm font-medium">비공개</span>
+                      </label>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Thumbnail Image */}
+            <div className="space-y-3">
+              <FormLabel className="text-sm font-medium text-gray-700">
+                썸네일 이미지
+              </FormLabel>
+              <div className="relative group">
+                <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                  {preview.dataUrl ? (
+                    <Image
+                      src={preview.dataUrl}
+                      alt="썸네일 이미지"
+                      fill
+                      className="object-cover"
+                      priority={true}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ImageIcon className="w-12 h-12 text-gray-300" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <label className="cursor-pointer">
+                      <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                        <Upload className="w-4 h-4" />
+                        이미지 변경
+                      </div>
+                      <input
                         type="file"
-                        {...field}
+                        accept="image/*"
+                        className="hidden"
                         onChange={handleFileChange}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-bold">
-                      코스 이름 <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        autoComplete="off"
-                        placeholder="코스 이름을 입력해주세요."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-bold">
-                      코스 설명 <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="코스 설명을 입력해주세요."
-                        className="resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Title */}
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    코스 이름 <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      autoComplete="off"
+                      placeholder="코스 이름을 입력해주세요"
+                      className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    코스 설명 <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="코스에 대한 설명을 입력해주세요"
+                      className="min-h-[100px] rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20 resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Category & Level */}
+            <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="curriculum"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-bold">
+                    <FormLabel className="text-sm font-medium text-gray-700">
                       코스 과정 <span className="text-red-500">*</span>
                     </FormLabel>
                     <Select
@@ -268,12 +309,8 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                       onValueChange={field.onChange}
                       defaultValue={courseInfo.category.name}
                     >
-                      <SelectTrigger>
-                        <SelectValue
-                          onBlur={field.onBlur}
-                          ref={field.ref}
-                          placeholder="코스 과정 선택"
-                        />
+                      <SelectTrigger className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20">
+                        <SelectValue placeholder="과정 선택" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
@@ -289,83 +326,104 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="openDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-bold">
-                      시작일자 <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="finishDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-base font-bold">
-                      마감일자 <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="level"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-bold">
-                      최소 수강 레벨 <span className="text-red-500">*</span>
+                    <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                      <GraduationCap className="w-3.5 h-3.5" />
+                      최소 레벨 <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      name={field.name}
+                      onValueChange={field.onChange}
+                      defaultValue={courseInfo.level}
+                    >
+                      <SelectTrigger className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20">
+                        <SelectValue placeholder="레벨 선택" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {userLevelSettingOptions.map((option, index) => (
+                            <SelectItem key={index} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Date Range */}
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="openDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      시작일 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Select
-                        name={field.name}
-                        onValueChange={field.onChange}
-                        defaultValue={courseInfo.level}
-                      >
-                        <SelectTrigger>
-                          <SelectValue
-                            onBlur={field.onBlur}
-                            ref={field.ref}
-                            placeholder="최소 수강 레벨 선택"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {userLevelSettingOptions.map((option, index) => (
-                              <SelectItem key={index} value={option.value}>
-                                {option.value}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        type="date"
+                        className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="finishDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      종료일 <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <Button className="w-full mt-10" type="submit" disabled={isPending}>
-              {isPending ? "수정 중..." : "코스 정보 수정"}
-            </Button>
+
+            {/* Submit Button */}
+            <div className="pt-4 border-t border-gray-100">
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="w-full h-11 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors"
+              >
+                {isPending ? "저장 중..." : "코스 정보 저장"}
+              </Button>
+            </div>
           </form>
         </Form>
-        <LectureEditForm
-          lecturesInfo={courseInfo.lectures}
-          courseId={courseInfo.courseId}
-        />
       </div>
+
+      {/* Lecture Edit Form */}
+      <LectureEditForm
+        lecturesInfo={courseInfo.lectures}
+        courseId={courseInfo.courseId}
+      />
     </div>
   );
 }

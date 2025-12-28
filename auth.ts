@@ -1,7 +1,5 @@
-import NextAuth, { DefaultSession, Session } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-type NullableSession = Session | DefaultSession | null;
 
 // 서버 사이드 API URL (auth.ts는 항상 서버에서 실행됨)
 const SERVER_API_URL =
@@ -82,7 +80,17 @@ export const {
     },
     // Session 관련 action 시 호출되는 callback
     session({ session, token }) {
-      session.user = token as any;
+      session.user = {
+        ...session.user,
+        id: token.sub ?? "",
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+        expiresAt: token.expiresAt,
+        level: token.level,
+        department: token.department,
+        enrollmentIds: token.enrollmentIds,
+        error: token.error,
+      };
       return session;
     },
   },
