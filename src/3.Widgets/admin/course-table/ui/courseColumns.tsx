@@ -2,10 +2,10 @@
 
 import { formatDate, getImageUrl } from "@/6.shared/lib";
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 import { Checkbox } from "@/6.shared/ui/shadcn/ui/checkbox";
+import { ImageWithFallback } from "@/6.shared/ui";
 import type { AdminCourse } from "@/5.entities/admin/course";
 import { StatusBadge, getCourseStatusVariant } from "@/6.shared/ui/admin";
 
@@ -49,7 +49,7 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
     cell: ({ row }) => {
       return (
         <div className="w-20 h-12 relative overflow-hidden rounded-md bg-gray-100">
-          <Image
+          <ImageWithFallback
             fill
             src={getImageUrl(row.getValue("thumbnailImagePath"))}
             style={{ objectFit: "cover" }}

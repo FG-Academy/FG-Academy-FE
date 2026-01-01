@@ -1,25 +1,46 @@
 "use client";
 
-import Image from "next/image";
-import React from "react";
-import FallbackImage from "@public/images/fallbackImage.png";
+import Image, { StaticImageData } from "next/image";
+import React, { useState, useEffect } from "react";
+import { ImageIcon } from "lucide-react";
 
-export type ImageWithFallbackProps = React.ComponentProps<typeof Image>;
+export type ImageWithFallbackProps = React.ComponentProps<typeof Image> & {
+  fallbackSrc?: string | StaticImageData;
+};
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   src,
   alt,
+  fallbackSrc,
+  className,
   ...rest
 }) => {
-  const initialSrc = (typeof src === "string" && src) || FallbackImage;
-  const [imgSrc, setImgSrc] = React.useState(initialSrc);
+  const [hasError, setHasError] = useState(!src);
+
+  useEffect(() => {
+    setHasError(!src);
+  }, [src]);
+
+  if (hasError) {
+    if (fallbackSrc) {
+      return (
+        <Image {...rest} src={fallbackSrc} alt={alt} className={className} />
+      );
+    }
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+        <ImageIcon className="w-12 h-12 text-gray-300" />
+      </div>
+    );
+  }
 
   return (
     <Image
       {...rest}
-      src={imgSrc}
+      src={src}
       alt={alt}
-      onError={() => setImgSrc(FallbackImage)}
+      className={className}
+      onError={() => setHasError(true)}
     />
   );
 };

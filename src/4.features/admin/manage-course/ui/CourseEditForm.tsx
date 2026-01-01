@@ -18,7 +18,10 @@ import {
 import { Input } from "@/6.shared/ui/shadcn/ui/input";
 import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { Textarea } from "@/6.shared/ui/shadcn/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/6.shared/ui/shadcn/ui/radio-group";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/6.shared/ui/shadcn/ui/radio-group";
 import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
 import {
   Form,
@@ -111,12 +114,14 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
 
   const onSubmit = async (data: AdminCourseFormValues) => {
     const updatedData: UpdateCourseDto = {};
-    
+
     Object.keys(dirtyFields).forEach((key) => {
       const fieldKey = key as keyof AdminCourseFormValues;
       if (fieldKey === "thumbnailImage") return;
       if (dirtyFields[fieldKey] && data[fieldKey] !== undefined) {
-        (updatedData as Record<string, string>)[fieldKey] = data[fieldKey] as string;
+        (updatedData as Record<string, string>)[fieldKey] = data[
+          fieldKey
+        ] as string;
       }
     });
 
@@ -154,11 +159,11 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
       {/* Course Info Form */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-xl">
         <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-          <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+          <h2 className="flex items-center gap-2 font-semibold text-gray-900">
             <BookOpen className="w-4 h-4 text-primary-blue" />
             코스 정보
           </h2>
@@ -230,23 +235,23 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                 썸네일 이미지
               </FormLabel>
               <div className="relative group">
-                <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                <div className="relative w-full overflow-hidden bg-gray-100 border border-gray-200 aspect-video rounded-xl">
                   {preview.dataUrl ? (
                     <Image
                       src={preview.dataUrl}
                       alt="썸네일 이미지"
                       fill
                       className="object-cover"
-                      priority={true}
+                      priority
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
+                    <div className="flex items-center justify-center w-full h-full">
                       <ImageIcon className="w-12 h-12 text-gray-300" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center justify-center transition-opacity opacity-0 bg-black/40 group-hover:opacity-100">
                     <label className="cursor-pointer">
-                      <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-white rounded-lg hover:bg-gray-50">
                         <Upload className="w-4 h-4" />
                         이미지 변경
                       </div>
@@ -275,7 +280,7 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                     <Input
                       autoComplete="off"
                       placeholder="코스 이름을 입력해주세요"
-                      className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20"
+                      className="border-gray-200 rounded-lg h-11 focus:border-primary-blue focus:ring-primary-blue/20"
                       {...field}
                     />
                   </FormControl>
@@ -320,7 +325,7 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                       onValueChange={field.onChange}
                       defaultValue={courseInfo.category.name}
                     >
-                      <SelectTrigger className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20">
+                      <SelectTrigger className="border-gray-200 rounded-lg h-11 focus:border-primary-blue focus:ring-primary-blue/20">
                         <SelectValue placeholder="과정 선택" />
                       </SelectTrigger>
                       <SelectContent>
@@ -343,7 +348,7 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                 name="level"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                    <FormLabel className="flex items-center gap-1 text-sm font-medium text-gray-700">
                       <GraduationCap className="w-3.5 h-3.5" />
                       최소 레벨 <span className="text-red-500">*</span>
                     </FormLabel>
@@ -352,7 +357,7 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                       onValueChange={field.onChange}
                       defaultValue={courseInfo.level}
                     >
-                      <SelectTrigger className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20">
+                      <SelectTrigger className="border-gray-200 rounded-lg h-11 focus:border-primary-blue focus:ring-primary-blue/20">
                         <SelectValue placeholder="레벨 선택" />
                       </SelectTrigger>
                       <SelectContent>
@@ -378,14 +383,14 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                 name="openDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                    <FormLabel className="flex items-center gap-1 text-sm font-medium text-gray-700">
                       <Calendar className="w-3.5 h-3.5" />
                       시작일 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="date"
-                        className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20"
+                        className="border-gray-200 rounded-lg h-11 focus:border-primary-blue focus:ring-primary-blue/20"
                         {...field}
                       />
                     </FormControl>
@@ -399,14 +404,14 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
                 name="finishDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                    <FormLabel className="flex items-center gap-1 text-sm font-medium text-gray-700">
                       <Calendar className="w-3.5 h-3.5" />
                       종료일 <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="date"
-                        className="h-11 rounded-lg border-gray-200 focus:border-primary-blue focus:ring-primary-blue/20"
+                        className="border-gray-200 rounded-lg h-11 focus:border-primary-blue focus:ring-primary-blue/20"
                         {...field}
                       />
                     </FormControl>
@@ -421,9 +426,13 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-11 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors"
+                className="w-full font-medium text-white transition-colors bg-gray-900 rounded-lg h-11 hover:bg-gray-800"
               >
-                {isUploading ? "이미지 업로드 중..." : isPending ? "저장 중..." : "코스 정보 저장"}
+                {isUploading
+                  ? "이미지 업로드 중..."
+                  : isPending
+                  ? "저장 중..."
+                  : "코스 정보 저장"}
               </Button>
             </div>
           </form>

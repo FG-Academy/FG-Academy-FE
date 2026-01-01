@@ -12,7 +12,7 @@ export function Logo() {
           className="-mr-1"
           width={180}
           height={180}
-          priority={true}
+          priority
         />
       </Link>
     </div>

@@ -12,12 +12,12 @@ export function useCreateCourseMutation() {
   return useMutation({
     mutationKey: ["admin", "courses", "create"],
     mutationFn: (data: CreateCourseDto) => createCourse(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "코스 등록 성공",
         description: "코스 등록에 성공하였습니다.",
       });
-      queryClient.invalidateQueries({ queryKey: ["admin", "courses"] });
+      await queryClient.invalidateQueries({ queryKey: ["admin", "courses"] });
       router.push("/admin/courses");
     },
     onError: (error: Error) => {

@@ -133,7 +133,6 @@ const CourseCard = ({ course }: CourseCardProps) => {
             src={getImageUrl(course.thumbnailPath)}
             width={500}
             height={281}
-            priority
           />
         </AspectRatio>
 

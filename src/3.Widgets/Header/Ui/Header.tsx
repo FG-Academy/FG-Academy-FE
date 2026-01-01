@@ -13,7 +13,6 @@ import {
 } from "@/6.shared/ui";
 import { ADMIN_LEVELS } from "@/6.shared/config";
 import { Logo } from "@/6.shared/ui";
-import { useRefreshTokenGuard } from "@/6.shared/lib";
 
 type Variant = "mobile" | "desktop";
 
@@ -168,7 +167,7 @@ function DesktopNav({ session }: { session: Session | null }) {
 
 export const Header = () => {
   const { data: session, status } = useSession();
-  useRefreshTokenGuard(session);
+  // useRefreshTokenGuard(session);
 
   return (
     <header className="sticky inset-x-0 top-0 left-0 z-50 text-gray-700 bg-white border-b border-gray-200 font-Pretendard">

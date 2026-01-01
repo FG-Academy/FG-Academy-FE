@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Folder } from "lucide-react";
 import { getImageUrl } from "@/6.shared/lib";
 import type { CourseWithCategory } from "../model/course.type";
+import { ImageWithFallback } from "@/6.shared/ui";
 
 interface Props {
   course: CourseWithCategory;
@@ -9,7 +9,7 @@ interface Props {
 
 const CourseHeader = ({ course }: Props) => {
   return (
-    <header className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+    <header className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       {/* 배경 패턴 */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -21,9 +21,9 @@ const CourseHeader = ({ course }: Props) => {
       </div>
 
       <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12">
-        <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
+        <div className="flex flex-col items-start gap-6 md:flex-row md:gap-10">
           {/* 텍스트 정보 */}
-          <div className="flex-1 flex flex-col gap-4 order-2 md:order-1">
+          <div className="flex flex-col flex-1 order-2 gap-4 md:order-1">
             {/* 카테고리 뱃지 */}
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-sm text-white/90">
@@ -33,12 +33,12 @@ const CourseHeader = ({ course }: Props) => {
             </div>
 
             {/* 강의 제목 */}
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+            <h1 className="text-2xl font-bold leading-tight text-white md:text-3xl lg:text-4xl">
               {course.title.replace(/\(\d+\)\s*/, "")}
             </h1>
 
             {/* 강의 요약 정보 */}
-            <div className="flex flex-wrap items-center gap-3 text-sm text-white/60 mt-2">
+            <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-white/60">
               <span className="flex items-center gap-1">
                 {course.description}
               </span>
@@ -47,8 +47,8 @@ const CourseHeader = ({ course }: Props) => {
 
           {/* 썸네일 이미지 */}
           <div className="relative w-full md:w-[340px] lg:w-[400px] shrink-0 order-1 md:order-2">
-            <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10">
-              <Image
+            <div className="relative overflow-hidden shadow-2xl aspect-video rounded-xl ring-1 ring-white/10">
+              <ImageWithFallback
                 src={getImageUrl(course.thumbnailImagePath)}
                 alt={`${course.title} 썸네일 이미지`}
                 fill

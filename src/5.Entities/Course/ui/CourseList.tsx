@@ -57,7 +57,6 @@ export const CourseList = ({ selectedCategory }: CourseListProps) => {
                       height={281}
                       src={getImageUrl(course.thumbnailImagePath)}
                       alt={course.title || "강의 썸네일"}
-                      priority
                     />
                   </AspectRatio>
                 </div>

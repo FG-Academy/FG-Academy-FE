@@ -12,15 +12,17 @@ export function useUpdateCourseMutation(courseId: number) {
   return useMutation({
     mutationKey: ["admin", "courses", "update", courseId],
     mutationFn: (data: UpdateCourseDto) => updateCourse(courseId, data),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "강의 수정 성공",
         description: "강의 수정에 성공하였습니다.",
       });
-      queryClient.invalidateQueries({ queryKey: ["admin", "courses"] });
-      queryClient.invalidateQueries({ queryKey: ["courses"] });
-      queryClient.invalidateQueries({ queryKey: ["lectures"] });
-      queryClient.invalidateQueries({ queryKey: ["enrollment"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["admin", "courses"] }),
+        queryClient.invalidateQueries({ queryKey: ["courses"] }),
+        queryClient.invalidateQueries({ queryKey: ["lectures"] }),
+        queryClient.invalidateQueries({ queryKey: ["enrollment"] }),
+      ]);
       router.push("/admin/courses");
     },
     onError: (error: Error) => {
