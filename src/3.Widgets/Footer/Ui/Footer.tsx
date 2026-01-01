@@ -28,7 +28,14 @@ export const Footer = () => {
             </span>
           </address>
 
-          {/* Optional space for a small logo or quick links in the future */}
+          <nav className="flex gap-4 text-sm">
+            <a
+              href="/privacy"
+              className="font-medium text-gray-700 underline-offset-2 hover:text-gray-900 hover:underline"
+            >
+              개인정보처리방침
+            </a>
+          </nav>
         </div>
 
         <div className="flex flex-col items-center gap-1 mt-6 sm:flex-row sm:justify-between">
