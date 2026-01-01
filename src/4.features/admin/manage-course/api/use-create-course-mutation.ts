@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "@/6.shared/ui/shadcn/ui/use-toast";
-import { createCourse } from "./create-course";
+import { createCourse, CreateCourseDto } from "./create-course";
 
 export function useCreateCourseMutation() {
   const queryClient = useQueryClient();
@@ -11,7 +11,7 @@ export function useCreateCourseMutation() {
 
   return useMutation({
     mutationKey: ["admin", "courses", "create"],
-    mutationFn: (formData: FormData) => createCourse(formData),
+    mutationFn: (data: CreateCourseDto) => createCourse(data),
     onSuccess: () => {
       toast({
         title: "코스 등록 성공",

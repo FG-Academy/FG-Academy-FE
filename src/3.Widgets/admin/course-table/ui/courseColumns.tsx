@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate } from "@/6.shared/lib";
+import { formatDate, getImageUrl } from "@/6.shared/lib";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { Pencil } from "lucide-react";
@@ -51,9 +51,7 @@ export const courseColumns: ColumnDef<AdminCourse>[] = [
         <div className="w-20 h-12 relative overflow-hidden rounded-md bg-gray-100">
           <Image
             fill
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.getValue(
-              "thumbnailImagePath"
-            )}`}
+            src={getImageUrl(row.getValue("thumbnailImagePath"))}
             style={{ objectFit: "cover" }}
             alt="강의 썸네일"
             sizes="80px"

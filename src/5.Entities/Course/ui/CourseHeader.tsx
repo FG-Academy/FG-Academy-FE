@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Folder } from "lucide-react";
+import { getImageUrl } from "@/6.shared/lib";
 import type { CourseWithCategory } from "../model/course.type";
 
 interface Props {
@@ -48,7 +49,7 @@ const CourseHeader = ({ course }: Props) => {
           <div className="relative w-full md:w-[340px] lg:w-[400px] shrink-0 order-1 md:order-2">
             <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10">
               <Image
-                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
+                src={getImageUrl(course.thumbnailImagePath)}
                 alt={`${course.title} 썸네일 이미지`}
                 fill
                 sizes="(max-width: 768px) 100vw, 400px"

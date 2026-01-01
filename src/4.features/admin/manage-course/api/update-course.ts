@@ -1,8 +1,19 @@
 import { apiClient } from "@/6.shared/api";
 
+export interface UpdateCourseDto {
+  title?: string;
+  description?: string;
+  curriculum?: string;
+  openDate?: string;
+  finishDate?: string;
+  level?: string;
+  status?: string;
+  thumbnailImagePath?: string;
+}
+
 export async function updateCourse(
   courseId: number,
-  formData: FormData
+  data: UpdateCourseDto
 ): Promise<void> {
-  return apiClient.patchFormData(`/admin/courses/${courseId}`, formData);
+  return apiClient.patch(`/admin/courses/${courseId}`, data);
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { defaultTo } from "es-toolkit/compat";
-import { cn } from "@/6.shared/lib";
+import { cn, getImageUrl } from "@/6.shared/lib";
 import { AspectRatio, ImageWithFallback, Progress } from "@/6.shared/ui";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -130,7 +130,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
             className="object-cover w-full h-full 
                       group-hover:scale-105 transition-transform duration-300"
             alt={`${course.title} 썸네일`}
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailPath}`}
+            src={getImageUrl(course.thumbnailPath)}
             width={500}
             height={281}
             priority

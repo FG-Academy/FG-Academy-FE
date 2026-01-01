@@ -63,3 +63,9 @@ export function transformDate(cleanInput: string) {
   return formattedInput;
   // field.onChange(formattedInput); // 업데이트된 값을 form 필드에 설정
 }
+
+export function getImageUrl(imagePath: string | null | undefined): string {
+  if (!imagePath) return "";
+  if (imagePath.startsWith("http")) return imagePath;
+  return `${process.env.NEXT_PUBLIC_IMAGE_URL}${imagePath}`;
+}

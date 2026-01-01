@@ -4,6 +4,7 @@ import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { AspectRatio, ImageWithFallback } from "@/6.shared/ui";
 import Link from "next/link";
+import { getImageUrl } from "@/6.shared/lib";
 import { courseQueries } from "../api/course.queries";
 
 interface CourseListProps {
@@ -54,7 +55,7 @@ export const CourseList = ({ selectedCategory }: CourseListProps) => {
                                  group-hover:scale-105 transition-transform duration-300 ease-out"
                       width={500}
                       height={281}
-                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${course.thumbnailImagePath}`}
+                      src={getImageUrl(course.thumbnailImagePath)}
                       alt={course.title || "강의 썸네일"}
                       priority
                     />

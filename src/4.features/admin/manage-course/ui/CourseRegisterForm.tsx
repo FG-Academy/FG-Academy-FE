@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/6.shared/ui/shadcn/ui/select";
 
+import { uploadFileToS3 } from "@/6.shared/api";
 import { userLevelSettingOptions } from "@/5.entities/user";
 import { categoryQueries } from "@/5.entities/admin/category";
 import { useCreateCourseMutation } from "../api/use-create-course-mutation";
@@ -38,6 +39,7 @@ import {
 export function CourseRegisterForm() {
   const router = useRouter();
   const [imageFile, setImageFile] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
 
   const { data: categories } = useQuery(categoryQueries.all());
   const { mutate, isPending } = useCreateCourseMutation();
@@ -70,20 +72,32 @@ export function CourseRegisterForm() {
   };
 
   const onSubmit = async (data: CourseFormValues) => {
-    const formData = new FormData();
+    let thumbnailImagePath: string | undefined;
 
-    Object.keys(data).forEach((key) => {
-      if (key === "thumbnailImage") {
-        if (imageFile) {
-          formData.append("thumbnailImage", imageFile);
-        }
-      } else {
-        formData.append(key, data[key as keyof CourseFormValues] as string);
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        thumbnailImagePath = await uploadFileToS3(imageFile);
+      } catch (error) {
+        console.error("Failed to upload image:", error);
+        setIsUploading(false);
+        return;
       }
-    });
+      setIsUploading(false);
+    }
 
-    mutate(formData);
+    mutate({
+      title: data.title,
+      description: data.description,
+      curriculum: data.curriculum,
+      openDate: data.openDate,
+      finishDate: data.finishDate,
+      level: data.level,
+      thumbnailImagePath,
+    });
   };
+
+  const isSubmitting = isPending || isUploading;
 
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-screen p-2 py-8">
@@ -244,8 +258,8 @@ export function CourseRegisterForm() {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit" disabled={isPending}>
-            {isPending ? "등록 중..." : "코스 등록"}
+          <Button className="w-full" type="submit" disabled={isSubmitting}>
+            {isUploading ? "이미지 업로드 중..." : isPending ? "등록 중..." : "코스 등록"}
           </Button>
         </form>
       </Form>

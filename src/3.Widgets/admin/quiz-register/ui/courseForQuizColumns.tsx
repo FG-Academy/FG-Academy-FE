@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ColumnDef, CellContext } from "@tanstack/react-table";
 import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import { Eye } from "lucide-react";
-import { formatDate } from "@/6.shared/lib";
+import { formatDate, getImageUrl } from "@/6.shared/lib";
 import type { AdminCourse } from "@/5.entities/admin/course";
 import { useSelectedCourseStore } from "@/4.features/admin/manage-quiz";
 import { StatusBadge, getCourseStatusVariant } from "@/6.shared/ui/admin";
@@ -41,9 +41,7 @@ export const courseForQuizColumns: ColumnDef<AdminCourse>[] = [
       <div className="w-20 h-12 relative overflow-hidden rounded-md bg-gray-100">
         <Image
           fill
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.getValue(
-            "thumbnailImagePath"
-          )}`}
+          src={getImageUrl(row.getValue("thumbnailImagePath"))}
           style={{ objectFit: "cover" }}
           alt="강의 썸네일"
           sizes="80px"

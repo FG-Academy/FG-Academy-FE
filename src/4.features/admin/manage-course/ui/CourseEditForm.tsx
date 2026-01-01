@@ -37,11 +37,13 @@ import {
   SelectValue,
 } from "@/6.shared/ui/shadcn/ui/select";
 
+import { uploadFileToS3 } from "@/6.shared/api";
 import { userLevelSettingOptions } from "@/5.entities/user";
 import { categoryQueries } from "@/5.entities/admin/category";
 import type { AdminCourseDetail } from "@/5.entities/admin/course";
-import { dateFormat } from "@/6.shared/lib";
+import { dateFormat, getImageUrl } from "@/6.shared/lib";
 import { useUpdateCourseMutation } from "../api/use-update-course-mutation";
+import type { UpdateCourseDto } from "../api/update-course";
 import {
   AdminCourseFormSchema,
   type AdminCourseFormValues,
@@ -55,8 +57,9 @@ interface CourseEditFormProps {
 export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
   const [enabled, setEnabled] = useState(false);
   const [imageFile, setImageFile] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<{ dataUrl: string }>({
-    dataUrl: `${process.env.NEXT_PUBLIC_IMAGE_URL}${courseInfo.thumbnailImagePath}`,
+    dataUrl: getImageUrl(courseInfo.thumbnailImagePath),
   });
 
   const { data: categories } = useQuery(categoryQueries.all());
@@ -107,29 +110,35 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
   };
 
   const onSubmit = async (data: AdminCourseFormValues) => {
-    const formData = new FormData();
-
-    const updatedData: Partial<AdminCourseFormValues> = {};
+    const updatedData: UpdateCourseDto = {};
+    
     Object.keys(dirtyFields).forEach((key) => {
       const fieldKey = key as keyof AdminCourseFormValues;
+      if (fieldKey === "thumbnailImage") return;
       if (dirtyFields[fieldKey] && data[fieldKey] !== undefined) {
-        updatedData[fieldKey] = data[fieldKey];
+        (updatedData as Record<string, string>)[fieldKey] = data[fieldKey] as string;
       }
     });
 
-    Object.keys(data).forEach((key) => {
-      if (key === "thumbnailImage" && imageFile) {
-        formData.append("thumbnailImage", imageFile);
-      } else if (Object.hasOwn(updatedData, key)) {
-        const value = updatedData[key as keyof AdminCourseFormValues];
-        if (value !== undefined) {
-          formData.append(key, String(value));
-        }
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        updatedData.thumbnailImagePath = await uploadFileToS3(imageFile);
+      } catch (error) {
+        console.error("Failed to upload image:", error);
+        toast({
+          variant: "destructive",
+          title: "이미지 업로드 실패",
+          description: "다시 시도해주세요.",
+        });
+        setIsUploading(false);
+        return;
       }
-    });
+      setIsUploading(false);
+    }
 
-    if (Object.keys(updatedData).length > 0 || imageFile) {
-      mutate(formData);
+    if (Object.keys(updatedData).length > 0) {
+      mutate(updatedData);
     } else {
       toast({
         title: "수정한 정보가 없습니다.",
@@ -137,6 +146,8 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
       });
     }
   };
+
+  const isSubmitting = isPending || isUploading;
 
   if (!enabled) {
     return null;
@@ -409,10 +420,10 @@ export function CourseEditForm({ courseInfo }: CourseEditFormProps) {
             <div className="pt-4 border-t border-gray-100">
               <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isSubmitting}
                 className="w-full h-11 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors"
               >
-                {isPending ? "저장 중..." : "코스 정보 저장"}
+                {isUploading ? "이미지 업로드 중..." : isPending ? "저장 중..." : "코스 정보 저장"}
               </Button>
             </div>
           </form>
