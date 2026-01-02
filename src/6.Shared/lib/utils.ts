@@ -67,5 +67,9 @@ export function transformDate(cleanInput: string) {
 export function getImageUrl(imagePath: string | null | undefined): string {
   if (!imagePath) return "";
   if (imagePath.startsWith("http")) return imagePath;
-  return `${process.env.NEXT_PUBLIC_IMAGE_URL}${imagePath}`;
+
+  // 서버: SERVER_API_URL 환경변수, 클라이언트: 자기 자신의 도메인 (빈 문자열)
+  const baseUrl =
+    typeof window === "undefined" ? process.env.SERVER_API_URL || "" : "";
+  return `${baseUrl}${imagePath}`;
 }
