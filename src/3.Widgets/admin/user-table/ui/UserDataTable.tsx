@@ -88,7 +88,7 @@ export function UserDataTable({
 
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="max-h-[85vh] overflow-y-auto"
+        className="max-w-2xl max-h-[90vh] flex flex-col"
       >
         <DialogHeader>
           <DialogTitle>유저 정보 수정</DialogTitle>
@@ -97,11 +97,11 @@ export function UserDataTable({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="py-4">
+        <div className="flex-1 overflow-y-auto py-4 -mx-6 px-6">
           <UserInfoDialogContent userId={userId!} userProfile={userProfile} />
         </div>
 
-        <DialogFooter className="gap-2">
+        <DialogFooter className="gap-2 shrink-0 pt-4 border-t">
           <DialogClose asChild>
             <Button
               type="button"

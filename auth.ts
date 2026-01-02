@@ -1,9 +1,6 @@
+import { SERVER_API_URL } from "@/6.shared/config";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-// 서버 사이드 API URL (auth.ts는 항상 서버에서 실행됨)
-const SERVER_API_URL =
-  process.env.SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL || "";
 
 export const {
   handlers: { GET, POST },

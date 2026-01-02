@@ -1,22 +1,27 @@
 import { getSession } from "next-auth/react";
 import { SERVER_API_URL } from "../config";
-import type { RequestOptions } from "./apiClient.type";
+import type { ApiVersion, RequestOptions } from "./apiClient.type";
 import { auth } from "@auth";
 
 export class ApiClient {
   private serverUrl: string;
+  private defaultApiVersion: ApiVersion = "v1";
 
   constructor(serverUrl: string) {
     this.serverUrl = serverUrl;
   }
 
-  private getBaseUrl(): string {
-    // 서버 사이드에서는 SERVER_API_URL 사용
-    // 클라이언트에서는 현재 브라우저 도메인 사용 (window.location.origin)
-    if (typeof window === "undefined") {
-      return this.serverUrl;
-    }
-    return window.location.origin;
+  private getBaseUrl(apiVersion: ApiVersion = this.defaultApiVersion): string {
+    const origin =
+      typeof window === "undefined" ? this.serverUrl : window.location.origin;
+    return `${origin}/api/${apiVersion}/`;
+  }
+
+  private buildUrl(endpoint: string, apiVersion?: ApiVersion): URL {
+    const normalizedEndpoint = endpoint.startsWith("/")
+      ? endpoint.slice(1)
+      : endpoint;
+    return new URL(normalizedEndpoint, this.getBaseUrl(apiVersion));
   }
 
   private async getAuthToken(): Promise<string | null> {
@@ -69,9 +74,8 @@ export class ApiClient {
     endpoint: string,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
-
-    const { params } = options || {};
+    const { params, apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -100,9 +104,8 @@ export class ApiClient {
     body?: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
-
-    const { params } = options || {};
+    const { params, apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -132,7 +135,8 @@ export class ApiClient {
     body: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
+    const { apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     const token = await this.getAuthToken();
     const headers = {
@@ -156,9 +160,8 @@ export class ApiClient {
     body: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
-
-    const { params } = options || {};
+    const { params, apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -188,9 +191,8 @@ export class ApiClient {
     body?: TData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
-
-    const { params } = options || {};
+    const { params, apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -224,9 +226,8 @@ export class ApiClient {
     formData: FormData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
-
-    const { params } = options || {};
+    const { params, apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -259,9 +260,8 @@ export class ApiClient {
     formData: FormData,
     options?: RequestOptions
   ): Promise<TResult> {
-    const url = new URL(`/api/v1${endpoint}`, this.getBaseUrl());
-
-    const { params } = options || {};
+    const { params, apiVersion } = options || {};
+    const url = this.buildUrl(endpoint, apiVersion);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

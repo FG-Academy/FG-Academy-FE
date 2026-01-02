@@ -1,7 +1,9 @@
+export type ApiVersion = "v1" | "v2";
+
 export interface RequestOptions {
   headers?: Record<string, string>;
   params?: Record<string, string | number>;
-  // credentials?: RequestCredentials;
+  apiVersion?: ApiVersion;
   next?: RequestInit;
 }
 

@@ -1,11 +1,8 @@
 import { PaginationState } from "@tanstack/react-table";
-import { Button } from "@/6.shared/ui/shadcn/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/6.shared/ui/shadcn/ui/dialog";
@@ -65,17 +62,6 @@ export function QuizSubmissionsDataTable({
           <div className="py-4">
             <QuizGradingDialog />
           </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                type="button"
-                variant="outline"
-                className="border-gray-200"
-              >
-                닫기
-              </Button>
-            </DialogClose>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
