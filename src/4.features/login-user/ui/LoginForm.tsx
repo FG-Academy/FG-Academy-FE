@@ -75,6 +75,7 @@ export const LoginForm = () => {
                   <Input
                     placeholder="비밀번호를 입력해주세요."
                     type="password"
+                    autoComplete="current-password"
                     {...field}
                   />
                 </FormControl>

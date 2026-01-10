@@ -188,10 +188,9 @@ function LectureAccordionItem({
         className="border-b-0"
       >
         <AccordionTrigger className="px-3 py-3 transition-colors rounded-md hover:no-underline hover:bg-muted/50">
-          <div className="flex flex-row items-center justify-between w-full pr-2">
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div
-                className={`
+          <div className="flex flex-row items-center w-full gap-2 pr-2">
+            <div
+              className={`
                 flex items-center justify-center w-6 h-6 rounded-full shrink-0
                 ${
                   isCompleted
@@ -199,41 +198,38 @@ function LectureAccordionItem({
                     : "bg-gray-100 text-gray-400"
                 }
               `}
-              >
-                {isCompleted ? (
-                  <CheckCircle2 size={14} />
-                ) : (
-                  <span className="text-xs font-bold">{index + 1}</span>
-                )}
-              </div>
-              <div className="flex flex-col overflow-hidden text-left">
-                <span
-                  className={`text-sm font-medium truncate ${
-                    isCompleted ? "text-foreground" : "text-muted-foreground"
-                  }`}
-                >
-                  {lecture.lectureTitle}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 shrink-0">
-              {lecture.quizTotalCount > 0 && (
-                <div className="flex items-center gap-1.5 bg-background border px-2 py-0.5 rounded-full shadow-sm">
-                  <Trophy
-                    size={12}
-                    className={
-                      lecture.correctQuizCount === lecture.quizTotalCount
-                        ? "text-yellow-500"
-                        : "text-muted-foreground"
-                    }
-                  />
-                  <span className="text-xs font-medium">
-                    {lecture.correctQuizCount}/{lecture.quizTotalCount}
-                  </span>
-                </div>
+            >
+              {isCompleted ? (
+                <CheckCircle2 size={14} />
+              ) : (
+                <span className="text-xs font-bold">{index + 1}</span>
               )}
             </div>
+            <div className="flex-1 min-w-0 text-left">
+              <span
+                className={`text-sm font-medium line-clamp-2 ${
+                  isCompleted ? "text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                {lecture.lectureTitle}
+              </span>
+            </div>
+
+            {lecture.quizTotalCount > 0 && (
+              <div className="flex items-center gap-1.5 bg-background border px-2 py-0.5 rounded-full shadow-sm shrink-0">
+                <Trophy
+                  size={12}
+                  className={
+                    lecture.correctQuizCount === lecture.quizTotalCount
+                      ? "text-yellow-500"
+                      : "text-muted-foreground"
+                  }
+                />
+                <span className="text-xs font-medium whitespace-nowrap">
+                  {lecture.correctQuizCount}/{lecture.quizTotalCount}
+                </span>
+              </div>
+            )}
           </div>
         </AccordionTrigger>
         <AccordionContent className="px-3 pb-3">
@@ -305,31 +301,59 @@ function LectureAccordionItem({
                                 quiz.answer.includes(
                                   answer.itemIndex as number
                                 );
+                              const isCorrect = answer.isAnswer;
+                              const isWrongSelection = isSelected && !isCorrect;
+                              const isMissedCorrect = !isSelected && isCorrect;
+
                               return (
                                 <div
                                   key={answer.id}
                                   className={`
-                                    flex items-center gap-3 p-2.5 rounded-md border text-sm transition-colors
-                                    ${
-                                      isSelected
-                                        ? "bg-primary/5 border-primary/30 text-primary font-medium"
-                                        : "bg-transparent border-transparent hover:bg-muted/50 text-muted-foreground"
-                                    }
-                                  `}
+                                            flex items-center gap-3 p-2.5 rounded-md border text-sm transition-colors
+                                            ${
+                                              isSelected && isCorrect
+                                                ? "bg-green-50 border-green-300 text-green-700 font-medium"
+                                                : isWrongSelection
+                                                ? "bg-red-50 border-red-300 text-red-700 font-medium"
+                                                : isMissedCorrect
+                                                ? "bg-yellow-50 border-yellow-300 text-yellow-700"
+                                                : "bg-transparent border-transparent hover:bg-muted/50 text-muted-foreground"
+                                            }
+                                          `}
                                 >
                                   <div
                                     className={`
-                                    flex items-center justify-center w-5 h-5 rounded border text-[10px]
-                                    ${
-                                      isSelected
-                                        ? "bg-primary border-primary text-primary-foreground"
-                                        : "bg-background border-input"
-                                    }
-                                  `}
+                                              flex items-center justify-center w-5 h-5 rounded border text-[10px]
+                                              ${
+                                                isSelected && isCorrect
+                                                  ? "bg-green-600 border-green-600 text-white"
+                                                  : isWrongSelection
+                                                  ? "bg-red-600 border-red-600 text-white"
+                                                  : isMissedCorrect
+                                                  ? "bg-yellow-500 border-yellow-500 text-white"
+                                                  : "bg-background border-input"
+                                              }
+                                            `}
                                   >
-                                    {isSelected && <CheckCircle2 size={12} />}
+                                    {isSelected && isCorrect && (
+                                      <CheckCircle2 size={12} />
+                                    )}
+                                    {isWrongSelection && <XCircle size={12} />}
+                                    {isMissedCorrect && (
+                                      <CheckCircle2 size={12} />
+                                    )}
                                   </div>
-                                  <span>{answer.item}</span>
+                                  <span className="flex-1">{answer.item}</span>
+                                  {isCorrect && (
+                                    <span className="text-xs text-green-600 font-medium shrink-0">
+                                      정답
+                                    </span>
+                                  )}
+                                  {isWrongSelection && (
+                                    <span className="text-xs text-red-600 font-medium shrink-0">
+                                      오답 선택
+                                    </span>
+                                  )}
                                 </div>
                               );
                             })}

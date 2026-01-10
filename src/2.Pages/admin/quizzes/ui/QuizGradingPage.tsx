@@ -5,7 +5,10 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { PaginationState } from "@tanstack/react-table";
 import { Loader2 } from "lucide-react";
-import { adminQuizQueries, type AdminQuizFilter } from "@/5.entities/admin/quiz";
+import {
+  adminQuizQueries,
+  type AdminQuizFilter,
+} from "@/5.entities/admin/quiz";
 import { adminCourseQueries } from "@/5.entities/admin/course";
 import { QuizSubmissionsDataTable } from "@/3.widgets/admin/quiz-grading";
 import { Filter, PageHeader, SearchInput } from "@/6.shared/ui/admin";
@@ -33,7 +36,11 @@ export function QuizGradingPage() {
 
   const { data: courses } = useQuery(adminCourseQueries.all());
 
-  const { data: quizSubmits, isLoading, isFetching } = useQuery(
+  const {
+    data: quizSubmits,
+    isLoading,
+    isFetching,
+  } = useQuery(
     adminQuizQueries.submissions(
       pagination,
       filters,
@@ -141,7 +148,6 @@ export function QuizGradingPage() {
         </div>
       </div>
 
-      {/* Data Table */}
       <div className="mt-4">
         <QuizSubmissionsDataTable
           data={quizSubmits.result.content}

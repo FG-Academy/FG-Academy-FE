@@ -11,7 +11,7 @@ export function CategoryPage() {
 
   if (isLoading || !categories) {
     return (
-      <div className="p-8 w-full flex items-center justify-center h-[600px]">
+      <div className="p-8 w-full flex items-center justify-center h-[100vh]">
         <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
       </div>
     );

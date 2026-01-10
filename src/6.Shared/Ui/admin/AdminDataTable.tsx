@@ -3,6 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   PaginationState,
+  Row,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -13,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/6.shared/ui/shadcn/ui/table";
+import { Skeleton } from "@/6.shared/ui/shadcn/ui/skeleton";
 import { DataTablePagination } from "./DataTablePagination";
 
 interface AdminDataTableProps<TData> {
@@ -25,6 +27,73 @@ interface AdminDataTableProps<TData> {
   columnVisibility?: Record<string, boolean>;
   onRowClick?: (row: TData) => void;
   emptyMessage?: string;
+}
+
+function SkeletonRows({
+  pageSize,
+  columnsCount,
+}: {
+  pageSize: number;
+  columnsCount: number;
+}) {
+  return Array.from({ length: pageSize }).map((_, rowIndex) => (
+    <TableRow key={`skeleton-row-${rowIndex}`}>
+      {Array.from({ length: columnsCount }).map((_, colIndex) => (
+        <TableCell
+          key={`skeleton-cell-${rowIndex}-${colIndex}`}
+          className="px-4 py-3"
+        >
+          <Skeleton className="h-5 w-full" />
+        </TableCell>
+      ))}
+    </TableRow>
+  ));
+}
+
+function DataRows<TData>({
+  rows,
+  onRowClick,
+}: {
+  rows: Row<TData>[];
+  onRowClick?: (row: TData) => void;
+}) {
+  return rows.map((row) => (
+    <TableRow
+      key={row.id}
+      data-state={row.getIsSelected() && "selected"}
+      onClick={() => onRowClick?.(row.original)}
+      className={
+        onRowClick
+          ? "cursor-pointer hover:bg-gray-50 transition-colors"
+          : "hover:bg-gray-50 transition-colors"
+      }
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id} className="px-4 py-3">
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  ));
+}
+
+function EmptyRow({
+  columnsCount,
+  message,
+}: {
+  columnsCount: number;
+  message: string;
+}) {
+  return (
+    <TableRow>
+      <TableCell
+        colSpan={columnsCount}
+        className="h-32 text-center text-gray-500"
+      >
+        {message}
+      </TableCell>
+    </TableRow>
+  );
 }
 
 export function AdminDataTable<TData>({
@@ -86,37 +155,18 @@ export function AdminDataTable<TData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => onRowClick?.(row.original)}
-                  className={
-                    onRowClick
-                      ? "cursor-pointer hover:bg-gray-50 transition-colors"
-                      : "hover:bg-gray-50 transition-colors"
-                  }
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4 py-3">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+            {isFetching ? (
+              <SkeletonRows
+                pageSize={pagination.pageSize}
+                columnsCount={columns.length}
+              />
+            ) : table.getRowModel().rows?.length ? (
+              <DataRows
+                rows={table.getRowModel().rows}
+                onRowClick={onRowClick}
+              />
             ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-32 text-center text-gray-500"
-                >
-                  {emptyMessage}
-                </TableCell>
-              </TableRow>
+              <EmptyRow columnsCount={columns.length} message={emptyMessage} />
             )}
           </TableBody>
         </Table>

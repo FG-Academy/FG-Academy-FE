@@ -104,7 +104,7 @@ export function QuizGradingDialog() {
   return (
     <AlertDialog>
       <div className="flex flex-col w-full h-full max-h-[85vh] bg-background">
-        <div className="flex-none p-6 space-y-4">
+        <div className="flex flex-col p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <span className="font-medium text-primary">
@@ -112,8 +112,8 @@ export function QuizGradingDialog() {
               </span>
               <span>/</span>
               <span>{descriptiveQuiz.quiz.lecture.title}</span>
+              {getStatusBadge(descriptiveQuiz.status)}
             </div>
-            {getStatusBadge(descriptiveQuiz.status)}
           </div>
 
           <div className="space-y-2">
@@ -147,11 +147,11 @@ export function QuizGradingDialog() {
                 {descriptiveQuiz.quiz.quizAnswers.map((answer) => {
                   const userSelectedAnswers = JSON.parse(
                     descriptiveQuiz.answer
-                  );
+                  ) as number[];
                   const isUserSelected = userSelectedAnswers.includes(
                     answer.itemIndex
                   );
-                  const isCorrectAnswer = answer.isAnswer === 1;
+                  const isCorrectAnswer = answer.isAnswer;
                   const isCorrectSelection = isUserSelected && isCorrectAnswer;
                   const isWrongSelection = isUserSelected && !isCorrectAnswer;
                   const isMissedAnswer = !isUserSelected && isCorrectAnswer;

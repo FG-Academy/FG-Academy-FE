@@ -44,7 +44,12 @@ declare module "@tanstack/react-table" {
   }
 }
 
-const fuzzyFilter: FilterFn<AdminLectureForQuiz> = (row, columnId, value, addMeta) => {
+const fuzzyFilter: FilterFn<AdminLectureForQuiz> = (
+  row,
+  columnId,
+  value,
+  addMeta
+) => {
   const itemRank = rankItem(row.getValue(columnId), value);
   addMeta({ itemRank });
   return itemRank.passed;
@@ -121,7 +126,10 @@ export function LectureQuizDataTable({
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="bg-gray-50 hover:bg-gray-50">
+                <TableRow
+                  key={headerGroup.id}
+                  className="bg-gray-50 hover:bg-gray-50"
+                >
                   {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
@@ -154,7 +162,10 @@ export function LectureQuizDataTable({
                           "cursor-pointer"
                         )}
                       >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -183,7 +194,7 @@ export function LectureQuizDataTable({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           onOpenAutoFocus={(e) => e.preventDefault()}
-          className="w-[600px] max-h-[80vh] overflow-y-auto bg-white"
+          className="w-[600px] max-h-[85vh] overflow-y-auto bg-white"
         >
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold text-gray-900">
@@ -196,7 +207,7 @@ export function LectureQuizDataTable({
           <div className="flex items-center space-x-2">
             <QuizListDialog />
           </div>
-          <DialogFooter className="sm:justify-end">
+          <DialogFooter>
             <DialogClose asChild>
               <Button
                 type="button"
