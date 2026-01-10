@@ -12,22 +12,18 @@ const DEFAULT_PAGE = 1;
 const AnnouncementBanner = () => {
   const { data } = useSuspenseQuery(announcementQueries.list(DEFAULT_PAGE));
 
-  if (data.posts.length === 0) return null;
+  if (data?.posts.length === 0) return null;
 
   const { posts: announcements } = data;
 
   return (
-    <div
-      className="flex w-full items-center gap-4 px-4 md:px-5 py-3 rounded-xl 
-                    bg-white border border-gray-100 shadow-sm
-                    hover:shadow-md hover:border-gray-200 transition-all duration-200"
-    >
+    <div className="flex items-center w-full gap-4 px-4 py-3 transition-all duration-200 bg-white border border-gray-100 shadow-sm md:px-5 rounded-xl hover:shadow-md hover:border-gray-200">
       {/* 좌측 액센트 바 + 라벨 */}
       <div className="flex items-center gap-3 shrink-0">
-        <div className="w-1 h-7 bg-primary-blue rounded-full" />
+        <div className="w-1 rounded-full h-7 bg-primary-blue" />
         <div className="flex items-center gap-1.5">
           <Bell className="w-4 h-4 text-primary-blue" />
-          <span className="font-semibold text-sm text-primary-blue hidden sm:inline">
+          <span className="hidden text-sm font-semibold text-primary-blue sm:inline">
             공지
           </span>
         </div>
@@ -53,11 +49,10 @@ const AnnouncementBanner = () => {
           {announcements.map((announcement) => (
             <CarouselItem
               key={announcement.announcementId}
-              className="h-10 pt-0 flex items-center"
+              className="flex items-center h-10 pt-0"
             >
               <Link
-                className="text-sm md:text-base text-gray-700 hover:text-primary-blue 
-                           transition-colors truncate"
+                className="text-sm text-gray-700 truncate transition-colors md:text-base hover:text-primary-blue"
                 href={`/announcement/${announcement.announcementId}`}
               >
                 {announcement.title}
@@ -70,7 +65,7 @@ const AnnouncementBanner = () => {
       {/* 우측 화살표 */}
       <Link
         href="/announcement?page=1"
-        className="shrink-0 p-1 rounded-full hover:bg-gray-100 transition-colors"
+        className="p-1 transition-colors rounded-full shrink-0 hover:bg-gray-100"
       >
         <ChevronRight className="w-5 h-5 text-gray-400" />
       </Link>

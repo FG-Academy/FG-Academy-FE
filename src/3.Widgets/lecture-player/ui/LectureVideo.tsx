@@ -158,17 +158,19 @@ export function LectureVideo({ courseId, lectureId }: LectureVideoProps) {
   };
 
   return (
-    <>
-      <CompleteModal open={completed} nextUrl={nextUrl} />
-      <YouTube
-        className="h-screen"
-        videoId={actualLecture?.videoLink}
-        opts={opts}
-        onReady={onPlayerReady}
-        onPlay={startTimer}
-        onPause={stopTimer}
-        onEnd={onPlayerEnd}
-      />
-    </>
+      <div className="relative w-full h-full flex flex-col items-center justify-center bg-zinc-950">
+        <CompleteModal open={completed} nextUrl={nextUrl} />
+        <div className="w-full h-full max-w-[1920px] aspect-video">
+          <YouTube
+            className="w-full h-full"
+            videoId={actualLecture?.videoLink}
+            opts={opts}
+            onReady={onPlayerReady}
+            onPlay={startTimer}
+            onPause={stopTimer}
+            onEnd={onPlayerEnd}
+          />
+        </div>
+      </div>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import BasicErrorFallback from "./BasicErrorFallback";

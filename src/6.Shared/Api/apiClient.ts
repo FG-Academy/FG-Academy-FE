@@ -12,8 +12,14 @@ export class ApiClient {
   }
 
   private getBaseUrl(apiVersion: ApiVersion = this.defaultApiVersion): string {
-    const origin =
-      typeof window === "undefined" ? this.serverUrl : window.location.origin;
+    let origin: string;
+    if (typeof window === "undefined") {
+      origin = this.serverUrl;
+    } else if (process.env.NODE_ENV === "development") {
+      origin = "http://localhost:8080";
+    } else {
+      origin = window.location.origin;
+    }
     return `${origin}/api/${apiVersion}/`;
   }
 

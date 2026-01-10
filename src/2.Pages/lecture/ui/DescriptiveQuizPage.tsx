@@ -22,20 +22,28 @@ export function DescriptiveQuizPage() {
   }
 
   return (
-    <div className="w-full h-full space-y-2 justify-center items-center p-10 overflow-y-auto">
-      <h1 className="text-xl text-center">[실행과제]</h1>
-      <h2 className="text-lg text-center">
-        강의 내용에 대한 문제를 정확한 용어와 표현을 사용하여 설명해보세요.
-      </h2>
-      {quiz.quizSubmits.length > 0 ? (
-        <SubmittedDescriptiveQuiz
-          quizId={quiz.quizId}
-          question={quiz.question}
-          submittedQuiz={quiz.quizSubmits[0]}
-        />
-      ) : (
-        <DescriptiveQuizForm quizId={quiz.quizId} question={quiz.question} />
-      )}
+    <div className="w-full h-full bg-zinc-50 overflow-y-auto">
+      <div className="max-w-3xl mx-auto my-12 p-8 bg-white rounded-xl shadow-sm border border-zinc-200">
+        <div className="space-y-6 mb-8 text-center">
+          <span className="inline-block px-3 py-1 text-sm font-semibold text-blue-600 bg-blue-50 rounded-full">
+            주관식 퀴즈
+          </span>
+          <h1 className="text-2xl font-bold text-zinc-900 leading-relaxed">
+            강의 내용에 대한 문제를<br /> 
+            정확한 용어와 표현을 사용하여 설명해보세요.
+          </h1>
+        </div>
+        
+        {quiz.quizSubmits.length > 0 ? (
+          <SubmittedDescriptiveQuiz
+            quizId={quiz.quizId}
+            question={quiz.question}
+            submittedQuiz={quiz.quizSubmits[0]}
+          />
+        ) : (
+          <DescriptiveQuizForm quizId={quiz.quizId} question={quiz.question} />
+        )}
+      </div>
     </div>
   );
 }

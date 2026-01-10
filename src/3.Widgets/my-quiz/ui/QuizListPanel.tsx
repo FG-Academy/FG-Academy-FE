@@ -65,7 +65,7 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
   const filteredQuizzes = useMemo(() => {
     return quizzes.filter((quiz) => {
       const latestSubmit = getLatestSubmit(quiz.quizSubmits);
-      if (!latestSubmit) return filterType === FILTER_TYPE.전체;
+      if (!latestSubmit) return false;
 
       if (filterType === FILTER_TYPE.전체) return true;
       if (filterType === FILTER_TYPE.정답)
@@ -83,7 +83,7 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-gray-400">
         <FileText className="w-12 h-12 mb-3 opacity-50" />
-        <p>퀴즈 데이터를 찾을 수 없습니다</p>
+        <p>제출한 퀴즈가 없습니다</p>
       </div>
     );
   }
@@ -100,11 +100,11 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
   return (
     <div className="flex flex-col">
       {/* 강의 헤더 */}
-      <div className="sticky top-0 bg-white border-b border-gray-100 z-10">
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
         <div className="px-6 py-4">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-1">
+              <h3 className="mb-1 text-lg font-bold text-gray-900">
                 {selectedLecture.lectureTitle}
               </h3>
               <div className="flex items-center gap-3 text-sm text-gray-500">
@@ -125,8 +125,8 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
                 correctRate >= 80
                   ? "bg-green-100 text-green-600"
                   : correctRate >= 50
-                    ? "bg-yellow-100 text-yellow-600"
-                    : "bg-red-100 text-red-600"
+                  ? "bg-yellow-100 text-yellow-600"
+                  : "bg-red-100 text-red-600"
               )}
             >
               {correctRate}%
@@ -134,7 +134,7 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
           </div>
 
           {/* 필터 탭 */}
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="flex gap-2 pb-1 overflow-x-auto">
             {Object.values(FILTER_TYPE).map((type) => (
               <FilterTab
                 key={type}
@@ -170,4 +170,3 @@ const QuizListPanel = ({ selectedLecture }: QuizListPanelProps) => {
 };
 
 export { QuizListPanel };
-export type { QuizListPanelProps };

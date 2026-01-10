@@ -159,7 +159,7 @@ const CourseItem = ({
                         : "bg-gray-100 text-gray-500"
                   )}
                 >
-                  {lecture.correctQuizCount}/{lecture.submittedQuizCount}
+                  {lecture.submittedQuizCount}/{lecture.totalQuizCount}
                 </span>
               </button>
             );

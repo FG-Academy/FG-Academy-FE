@@ -98,6 +98,7 @@ export interface LectureForQuiz {
   submittedQuizCount: number;
   correctQuizCount: number;
   correctRatio: number;
+  totalQuizCount: number;
 }
 
 export interface CourseForQuiz {

@@ -16,9 +16,9 @@ const MultipleChoiceAnswer = ({ quiz }: MultipleChoiceAnswerProps) => {
 
   return (
     <div className="space-y-2">
-      {quiz.quizAnswers.map((answer, index) => {
-        const isUserAnswer = userAnswerIndex === index;
-        const isCorrectAnswer = correctAnswerIndex === index;
+      {quiz.quizAnswers.map((answer) => {
+        const isUserAnswer = userAnswerIndex === answer.itemIndex;
+        const isCorrectAnswer = correctAnswerIndex === answer.itemIndex;
 
         return (
           <div
@@ -28,8 +28,8 @@ const MultipleChoiceAnswer = ({ quiz }: MultipleChoiceAnswerProps) => {
               isCorrectAnswer
                 ? "border-green-400 bg-green-50"
                 : isUserAnswer && !isCorrectAnswer
-                  ? "border-red-400 bg-red-50"
-                  : "border-gray-100 bg-gray-50"
+                ? "border-red-400 bg-red-50"
+                : "border-gray-100 bg-gray-50"
             )}
           >
             {/* 번호 원 */}
@@ -39,11 +39,11 @@ const MultipleChoiceAnswer = ({ quiz }: MultipleChoiceAnswerProps) => {
                 isCorrectAnswer
                   ? "bg-green-500 text-white"
                   : isUserAnswer
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-200 text-gray-500"
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-200 text-gray-500"
               )}
             >
-              {index + 1}
+              {answer.itemIndex}
             </div>
 
             {/* 답안 텍스트 */}
@@ -53,8 +53,8 @@ const MultipleChoiceAnswer = ({ quiz }: MultipleChoiceAnswerProps) => {
                 isCorrectAnswer
                   ? "text-green-700 font-medium"
                   : isUserAnswer
-                    ? "text-red-700"
-                    : "text-gray-600"
+                  ? "text-red-700"
+                  : "text-gray-600"
               )}
             >
               {answer.item}

@@ -55,7 +55,7 @@ const MyQuizWidget = () => {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-gray-400">
         <ClipboardList className="w-16 h-16 mb-4 opacity-40" />
-        <p className="text-lg font-medium mb-1">제출한 퀴즈가 없습니다</p>
+        <p className="mb-1 text-lg font-medium">제출한 퀴즈가 없습니다</p>
         <p className="text-sm">강의를 수강하고 퀴즈를 풀어보세요</p>
       </div>
     );
@@ -66,19 +66,19 @@ const MyQuizWidget = () => {
       {/* 헤더 */}
       <header className="px-6 pt-2 pb-6">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-1 h-6 bg-primary-blue rounded-full" />
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+          <div className="w-1 h-6 rounded-full bg-primary-blue" />
+          <h2 className="text-xl font-bold text-gray-900 md:text-2xl">
             퀴즈 피드백
           </h2>
         </div>
-        <p className="text-sm text-gray-500 ml-4">
+        <p className="ml-4 text-sm text-gray-500">
           내가 제출한 퀴즈와 채점 현황을 확인해보세요
         </p>
       </header>
 
       {/* 전체 통계 카드 */}
       <div className="px-6 pb-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <QuizStatCard
             icon={<ClipboardList className="w-5 h-5" />}
             label="총 제출"
@@ -100,14 +100,18 @@ const MyQuizWidget = () => {
           <QuizStatCard
             icon={<TrendingUp className="w-5 h-5" />}
             label="정답률"
-            value={`${totalStats.total > 0 ? Math.round((totalStats.correct / totalStats.total) * 100) : 0}%`}
+            value={`${
+              totalStats.total > 0
+                ? Math.round((totalStats.correct / totalStats.total) * 100)
+                : 0
+            }%`}
             color="purple"
           />
         </div>
       </div>
 
       {/* 메인 콘텐츠 영역 */}
-      <div className="flex flex-col md:flex-row w-full border-t border-gray-100">
+      <div className="flex flex-col w-full border-t border-gray-100 md:flex-row">
         {/* 사이드바 - 강의 목록 */}
         <QuizSidebar
           courses={courses}

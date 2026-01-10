@@ -36,7 +36,7 @@ export function DescriptiveQuizForm({
     },
   });
 
-  const { mutate } = useSubmitDescriptiveMutation({ quizId });
+  const { mutate, isPending } = useSubmitDescriptiveMutation({ quizId });
 
   const onSubmit = async (data: DescriptiveAnswerFormValues) => {
     mutate(data);
@@ -50,34 +50,43 @@ export function DescriptiveQuizForm({
     <Form {...form}>
       <form
         autoComplete="off"
-        autoFocus={false}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex border shadow-sm flex-col w-full p-10 overflow-y-auto"
+        className="flex flex-col w-full"
       >
-        <div className="flex flex-col justify-between p-2 space-y-2 overflow-y-auto w-full">
+        <div className="space-y-6">
           <FormField
             control={form.control}
             name="descriptiveAnswer"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base font-bold whitespace-pre-line">
-                  {question} <span className="text-red-500">*</span>
-                </FormLabel>
+              <FormItem className="space-y-4">
+                <div className="bg-zinc-50 p-6 rounded-lg border border-zinc-100">
+                  <FormLabel className="text-lg font-bold text-zinc-800 whitespace-pre-line leading-relaxed block">
+                    Q. {question} <span className="text-red-500">*</span>
+                  </FormLabel>
+                </div>
+                
                 <FormControl>
                   <Textarea
-                    placeholder="주관식 정답을 입력해주세요."
-                    className="resize-none h-[200px]"
+                    placeholder="내용을 입력해주세요 (최소 10자 이상)"
+                    className="min-h-[240px] p-4 text-base resize-none focus-visible:ring-blue-500 bg-white border-zinc-200"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
         </div>
-        <Button className="w-full mt-10" type="submit">
-          정답 제출
-        </Button>
+        
+        <div className="mt-8">
+          <Button 
+            className="w-full h-12 text-base font-bold bg-blue-600 hover:bg-blue-700 transition-all shadow-md" 
+            type="submit"
+            disabled={isPending}
+          >
+            {isPending ? "제출 중..." : "정답 제출하기"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

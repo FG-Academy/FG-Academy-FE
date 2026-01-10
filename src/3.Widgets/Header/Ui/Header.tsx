@@ -21,16 +21,18 @@ function NavItem({
   children,
   variant,
   onClick,
+  className,
 }: {
   href: string;
   children: ReactNode;
   variant: Variant;
   onClick?: () => void;
+  className?: string;
 }) {
   const base = variant === "mobile" ? "w-full text-left" : "mr-5";
   return (
     <Link
-      className={`${base} hover:text-blue-900`}
+      className={`${base} hover:text-blue-900 ${className || ""}`}
       href={href}
       onClick={onClick}
     >
@@ -88,11 +90,16 @@ function AuthedLinks({
       {/* <NavItem href="/qna?page=1" variant={variant}>
         질문게시판
       </NavItem> */}
-      <NavItem href="/" variant={variant} onClick={onLogout}>
-        로그아웃
-      </NavItem>
       <NavItem href="/me/profile" variant={variant}>
         회원정보
+      </NavItem>
+      <NavItem
+        href="/"
+        variant={variant}
+        onClick={onLogout}
+        className="text-red-600"
+      >
+        로그아웃
       </NavItem>
     </>
   );

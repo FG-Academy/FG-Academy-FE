@@ -3,11 +3,10 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import useDurationStore from "@/store/useDurationStore";
 import { useSecondsStore } from "@/store/useTimerStore";
 import { enrollmentQueries } from "@/5.entities/enrollment";
-import { Skeleton } from "@/6.shared/ui";
 
 interface LectureHeaderProps {
   courseId: number;
@@ -15,7 +14,7 @@ interface LectureHeaderProps {
 }
 
 export function LectureHeader({ courseId, lectureId }: LectureHeaderProps) {
-  const { data: course } = useQuery(
+  const { data: course } = useSuspenseQuery(
     enrollmentQueries.myCourseLectures(courseId)
   );
 
@@ -24,38 +23,43 @@ export function LectureHeader({ courseId, lectureId }: LectureHeaderProps) {
   const { duration } = useDurationStore((state) => state);
   const seconds = useSecondsStore((state) => state.seconds);
 
-  if (!course) {
-    return <Skeleton className="w-full h-[56px] rounded-full" />;
-  }
-
   const currentLecture = course.lectures.find((l) => l.lectureId === lectureId);
 
   return (
-    <div
+    <header
       id="header"
-      className="text-sm md:text-base relative flex flex-row items-center space-x-4 bg-blue-500 text-white"
+      className="shrink-0 h-16 z-20 flex flex-row items-center justify-between px-4 border-b border-zinc-800 bg-zinc-950 text-zinc-100"
     >
-      <Link
-        href="/me/course"
-        className="flex flex-row rounded-r-lg h-full space-x-2 p-4 items-center justify-start bg-blue-700"
-      >
-        <ChevronLeft />
-        <div className="text-nowrap">대시보드</div>
-      </Link>
-      <div className="flex flex-row justify-between items-center w-full space-x-1">
-        <div className="relative flex overflow-x-hidden">
-          <span className="break-words">
-            {currentLecture?.lectureNumber}강: {currentLecture?.lectureTitle}
+      <div className="flex items-center gap-4 overflow-hidden">
+        <Link
+          href="/me/course"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-400 transition-colors rounded-md hover:text-white hover:bg-zinc-800/50 whitespace-nowrap"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span>나가기</span>
+        </Link>
+        
+        <div className="h-4 w-px bg-zinc-800 mx-2 hidden md:block" />
+        
+        <h1 className="text-sm md:text-base font-medium truncate text-zinc-200">
+          <span className="text-zinc-500 mr-2">
+            {currentLecture?.lectureNumber?.toString().padStart(2, '0')}
+          </span>
+          {currentLecture?.lectureTitle}
+        </h1>
+      </div>
+
+      {!(pathname.includes("multiple") || pathname.includes("descriptive")) && (
+        <div className="flex items-center gap-2 px-3 py-1.5 ml-4 text-xs font-medium tracking-wide rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400">
+          <span className={seconds >= duration ? "text-emerald-500" : "text-white"}>
+            {Math.floor(seconds / 60).toString().padStart(2, '0')}:{Math.floor(seconds % 60).toString().padStart(2, '0')}
+          </span>
+          <span className="text-zinc-600">/</span>
+          <span>
+            {Math.floor(duration / 60).toString().padStart(2, '0')}:{Math.floor(duration % 60).toString().padStart(2, '0')}
           </span>
         </div>
-        {!(
-          pathname.includes("multiple") || pathname.includes("descriptive")
-        ) && (
-          <div className="text-center text-nowrap px-4">
-            {Math.floor(seconds / 60)}분/{Math.floor(duration / 60)}분
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </header>
   );
 }
