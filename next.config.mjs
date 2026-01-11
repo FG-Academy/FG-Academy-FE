@@ -4,28 +4,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "8080",
-        pathname: "/**",
-      },
-      {
-        protocol: "http",
-        hostname: "host.docker.internal",
+        protocol: "https",
+        hostname: "*.s3.*.amazonaws.com",
         port: "",
         pathname: "/**",
-      },
-      {
-        protocol: "http",
-        hostname: "fgcacademy.co.kr",
-        port: "",
-        pathname: "/asset/**",
       },
       {
         protocol: "https",
-        hostname: "fgcacademy.co.kr",
+        hostname: "*.s3.amazonaws.com",
         port: "",
-        pathname: "/asset/**",
+        pathname: "/**",
       },
     ],
   },
