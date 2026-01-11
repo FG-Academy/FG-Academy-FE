@@ -48,12 +48,17 @@ jobs:
 
             cd ${{ env.INFRA_DIR }}
 
-            echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" > .env
+            sudo rm -f .env
+            touch .env
+            chmod 600 .env
+            echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
             echo "MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}" >> .env
             echo "MYSQL_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
 
             # .env.frontend 파일 재생성 (백엔드와 동일한 내용 유지 권장)
-            rm -f .env.frontend
+            sudo rm -f .env.frontend  # 👈 여기도 sudo 추가!
+            sudo touch .env.frontend
+            sudo chmod 600 .env.frontend
 
             echo "NODE_ENV=production" >> .env.frontend
             echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env.frontend
