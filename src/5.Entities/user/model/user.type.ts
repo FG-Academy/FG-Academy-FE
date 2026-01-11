@@ -100,7 +100,7 @@ export const courseCurriculumOptions = [
   { value: "심화과정" },
   { value: "기초과정" },
   { value: "리더과정" },
-  { value: "1세미나" },
+  { value: "세미나" },
 ];
 
 export interface User {
