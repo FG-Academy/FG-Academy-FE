@@ -58,6 +58,7 @@ shared   shared     shared     shared
 ```
 
 **index.ts 패턴:**
+
 ```typescript
 export { AuthProvider } from "./AuthProvider";
 export { ReactQueryProviders } from "./ReactQueryProvider";
@@ -78,6 +79,7 @@ export { ReactQueryProviders } from "./ReactQueryProvider";
 ```
 
 **예시 슬라이스:**
+
 - `main/` - 메인 페이지
 - `course/` - 강의 목록 페이지
 - `course-detail/` - 강의 상세 페이지
@@ -89,13 +91,15 @@ export { ReactQueryProviders } from "./ReactQueryProvider";
 - `my-course/` - 내 강의 페이지
 
 **index.ts 패턴:**
+
 ```typescript
 export { MainPageContent, MainLayout } from "./ui/MainPage";
 ```
 
 **Next.js App Router 연동:**
+
 ```
-app/(main)/course/page.tsx → import { CoursePage } from "@/2.pages/course"
+app/(main)/course/page.tsx → import { CoursePage } from "@/2.Pages/course"
 ```
 
 ---
@@ -115,12 +119,14 @@ app/(main)/course/page.tsx → import { CoursePage } from "@/2.pages/course"
 ```
 
 **예시 슬라이스:**
+
 - `header/` - 헤더 컴포넌트
 - `footer/` - 푸터 컴포넌트
 - `course-detail/` - 강의 상세 위젯
 - `my-quiz/` - 내 퀴즈 위젯
 
 **index.ts 패턴:**
+
 ```typescript
 // 외부에는 메인 위젯만 노출
 export { MyQuizWidget } from "./ui/MyQuizWidget";
@@ -149,6 +155,7 @@ export { MyQuizWidget } from "./ui/MyQuizWidget";
 ```
 
 **예시 슬라이스:**
+
 - `login-user/` - 로그인 기능
 - `signup-user/` - 회원가입 기능
 - `enroll-course/` - 강의 수강신청
@@ -159,6 +166,7 @@ export { MyQuizWidget } from "./ui/MyQuizWidget";
 - `reset-password/` - 비밀번호 재설정
 
 **index.ts 패턴:**
+
 ```typescript
 // UI
 export { LoginForm } from "./ui/LoginForm";
@@ -193,6 +201,7 @@ export { LoginSchema, type LoginFormValues } from "./model/login.schema";
 ```
 
 **예시 슬라이스:**
+
 - `course/` - 강의
 - `lecture/` - 강의 강좌
 - `quiz/` - 퀴즈
@@ -202,6 +211,7 @@ export { LoginSchema, type LoginFormValues } from "./model/login.schema";
 - `question/` - 질문
 
 **index.ts 패턴 (카테고리별 주석 사용):**
+
 ```typescript
 // API
 export { quizQueries } from "./api/quiz.queries";
@@ -255,6 +265,7 @@ export { QuizStatCard } from "./ui/QuizStatCard";
 ```
 
 **index.ts 패턴:**
+
 ```typescript
 // ui/index.ts
 export * from "./shadcn";
@@ -279,7 +290,7 @@ import { Button, Form } from "@/6.shared/ui";
 import { CourseList, courseQueries } from "@/5.entities/course";
 import { LoginForm } from "@/4.features/login-user";
 import { MyQuizWidget } from "@/3.widgets/my-quiz";
-import { MainPageContent } from "@/2.pages/main";
+import { MainPageContent } from "@/2.Pages/main";
 import { AuthProvider } from "@/1.app/providers";
 
 // 동일 슬라이스 내부 (상대 경로)
@@ -312,17 +323,17 @@ import { CourseSchema } from "../model/course.schema";
 
 ## 4. 네이밍 컨벤션
 
-| 유형 | 네이밍 | 예시 |
-|------|--------|------|
-| 폴더명 | kebab-case | `course-detail/`, `login-user/` |
-| 컴포넌트 파일 | PascalCase | `CourseList.tsx`, `LoginForm.tsx` |
-| API 함수 파일 | kebab-case | `get-courses.ts`, `create-question.ts` |
-| Hook 파일 | kebab-case + use 접두사 | `use-signup-mutation.ts` |
-| 타입 파일 | kebab-case + `.type` | `course.type.ts` |
-| 상수 파일 | kebab-case + `.constants` | `quiz.constants.ts` |
-| Query 파일 | kebab-case + `.queries` | `course.queries.ts` |
-| 스키마 파일 | kebab-case + `.schema` | `login.schema.ts` |
-| Store 파일 | kebab-case + `.store` | `signup.store.ts` |
+| 유형          | 네이밍                    | 예시                                   |
+| ------------- | ------------------------- | -------------------------------------- |
+| 폴더명        | kebab-case                | `course-detail/`, `login-user/`        |
+| 컴포넌트 파일 | PascalCase                | `CourseList.tsx`, `LoginForm.tsx`      |
+| API 함수 파일 | kebab-case                | `get-courses.ts`, `create-question.ts` |
+| Hook 파일     | kebab-case + use 접두사   | `use-signup-mutation.ts`               |
+| 타입 파일     | kebab-case + `.type`      | `course.type.ts`                       |
+| 상수 파일     | kebab-case + `.constants` | `quiz.constants.ts`                    |
+| Query 파일    | kebab-case + `.queries`   | `course.queries.ts`                    |
+| 스키마 파일   | kebab-case + `.schema`    | `login.schema.ts`                      |
+| Store 파일    | kebab-case + `.store`     | `signup.store.ts`                      |
 
 ---
 
@@ -434,12 +445,12 @@ export { QuizCard } from "./ui/QuizCard";
 
 ### 코드 분리 기준
 
-| 기준 | 레이어 |
-|------|--------|
-| 비즈니스 도메인 데이터/조회 | `entities` |
-| 사용자 액션 (생성/수정/삭제) | `features` |
-| 여러 entities/features 조합 UI | `widgets` |
-| 전역 공유 리소스 | `shared` |
+| 기준                           | 레이어     |
+| ------------------------------ | ---------- |
+| 비즈니스 도메인 데이터/조회    | `entities` |
+| 사용자 액션 (생성/수정/삭제)   | `features` |
+| 여러 entities/features 조합 UI | `widgets`  |
+| 전역 공유 리소스               | `shared`   |
 
 ### 레거시 코드 위치 (마이그레이션 필요)
 

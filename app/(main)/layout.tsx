@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { MainLayout } from "@/2.pages/main";
 import "../globals.css";
+import { MainLayout } from "@/2.pages/main";
 
 export const metadata: Metadata = {
   title: "꽃동산 아카데미",
