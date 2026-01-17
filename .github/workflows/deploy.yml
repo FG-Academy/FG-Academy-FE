@@ -57,8 +57,8 @@ jobs:
 
             # .env.frontend 파일 재생성 (백엔드와 동일한 내용 유지 권장)
             sudo rm -f .env.frontend  # 👈 여기도 sudo 추가!
-            sudo touch .env.frontend
-            sudo chmod 600 .env.frontend
+            touch .env.frontend
+            chmod 600 .env.frontend
 
             echo "NODE_ENV=production" >> .env.frontend
             echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env.frontend
