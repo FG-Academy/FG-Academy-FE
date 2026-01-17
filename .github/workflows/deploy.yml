@@ -1,0 +1,71 @@
+name: Deploy Frontend with Secrets
+
+on:
+  push:
+    branches: ["main"]
+
+env:
+  ECR_REPOSITORY: fg-academy-fe # 프론트엔드 ECR 이름 확인
+  AWS_REGION: ap-northeast-2
+  INFRA_DIR: /home/ubuntu/FG-Academy-CICD
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          # Dockerfile에 ARG가 필요하다면 --build-arg 추가 필요
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Deploy to EC2 and Update .env
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            aws ecr get-login-password --region ${{ env.AWS_REGION }} | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+
+            cd ${{ env.INFRA_DIR }}
+
+            sudo rm -f .env
+            touch .env
+            chmod 600 .env
+            echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> .env
+            echo "MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}" >> .env
+            echo "MYSQL_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+
+            # .env.frontend 파일 재생성 (백엔드와 동일한 내용 유지 권장)
+            sudo rm -f .env.frontend  # 👈 여기도 sudo 추가!
+            sudo touch .env.frontend
+            sudo chmod 600 .env.frontend
+
+            echo "NODE_ENV=production" >> .env.frontend
+            echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env.frontend
+            echo "AUTH_TRUST_HOST=${{ secrets.AUTH_TRUST_HOST }}" >> .env.frontend
+            echo "SERVER_API_URL=${{ secrets.SERVER_API_URL }}" >> .env.frontend
+
+            # 프론트엔드 배포
+            sudo docker compose pull frontend
+            sudo docker compose up -d frontend
+            sudo docker image prune -f

@@ -1,6 +1,5 @@
 // Importing create function from the Zustand library
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 
 interface DurationStoreInterface {
   duration: number;
