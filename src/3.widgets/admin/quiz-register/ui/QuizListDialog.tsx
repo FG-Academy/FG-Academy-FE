@@ -67,15 +67,22 @@ export function QuizListDialog() {
       <div className="flex-1 -mx-6 px-6">
         <div className="space-y-4 pb-4">
           {quizList.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-xl bg-muted/30">
-              <div className="bg-muted rounded-full p-4 mb-3">
-                <Plus className="w-6 h-6 text-muted-foreground" />
-              </div>
-              <h3 className="font-semibold text-lg">등록된 퀴즈가 없습니다</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                새로운 퀴즈를 추가하여 학습 경험을 향상시켜보세요.
-              </p>
-            </div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-xl bg-muted/30 cursor-pointer hover:border-primary/50 hover:bg-muted/50 transition-colors">
+                  <div className="bg-muted rounded-full p-4 mb-3">
+                    <Plus className="w-6 h-6 text-muted-foreground" />
+                  </div>
+                  <h3 className="font-semibold text-lg">등록된 퀴즈가 없습니다</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    새로운 퀴즈를 추가하여 학습 경험을 향상시켜보세요.
+                  </p>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden gap-0">
+                <QuizForm mode="create" lectureId={lectureId} />
+              </DialogContent>
+            </Dialog>
           ) : (
             quizList.map((quiz, index) => (
               <Card
